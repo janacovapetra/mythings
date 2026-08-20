@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GoMerch — Obsahový hub</title>
+<meta name="description" content="Obsahový hub GoMerch — report, plán obsahu, banka nápadov, story hry a natáčací deň pre Instagram @go_merch.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2F2D2E;
+  --ink-soft:#5C585A;
+  --paper:#F7F6F8;
+  --paper-2:#E8E1EF;
+  --rule:#D3CADB;
+  --purple:#7D53DE;
+  --purple-deep:#5A34B0;
+  --volt:#D7F75B;
+  --ok:#7D53DE;
+
+  --display:'Anton', 'Arial Narrow', Impact, sans-serif;
+  --body:'Barlow', 'Helvetica Neue', Arial, sans-serif;
+  --mono:'Space Mono', 'Courier New', monospace;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--paper)}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- registration mark ---------- */
+.reg{width:22px;height:22px;flex:0 0 22px;display:block}
+.reg circle,.reg line{stroke:var(--ink);stroke-width:1.2;fill:none}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+
+/* ---------- hero ---------- */
+header.hero{
+  border-bottom:2px solid var(--ink);
+  padding:38px 0 0;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 38px,rgba(125,83,222,.07) 38px 39px);
+}
+.hero-top{display:flex;align-items:flex-start;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink-soft);
+}
+.sep-title{position:relative;margin:14px 0 6px;line-height:.84}
+.sep-title span{
+  display:block;font-family:var(--display);
+  font-size:clamp(52px,11vw,132px);letter-spacing:-.01em;text-transform:uppercase;
+}
+.sep-title .l1{color:var(--purple);position:absolute;top:0;left:0;transform:translate(-5px,3px);mix-blend-mode:multiply;opacity:.9}
+.sep-title .l2{color:var(--volt);position:absolute;top:0;left:0;transform:translate(4px,-2px);mix-blend-mode:multiply;opacity:.9}
+.sep-title .l3{color:var(--ink);position:relative}
+.hero-sub{max-width:52ch;font-size:17px;color:var(--ink-soft);padding-bottom:26px}
+.hero-sub b{color:var(--ink)}
+
+.swatches{display:flex;height:10px;margin-top:4px}
+.swatches i{flex:1}
+
+/* ---------- nav ---------- */
+nav.tabs{
+  position:sticky;top:0;z-index:50;
+  background:var(--paper);border-bottom:1px solid var(--rule);
+}
+.tabs-inner{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.tabs-inner::-webkit-scrollbar{display:none}
+.tab{
+  appearance:none;background:none;border:0;cursor:pointer;
+  font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  padding:16px 20px 14px;color:var(--ink-soft);white-space:nowrap;
+  border-bottom:3px solid transparent;transition:color .15s,border-color .15s;
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--purple-deep);font-weight:700}
+.tab:focus-visible{outline:2px solid var(--purple);outline-offset:-4px}
+
+/* ---------- panels ---------- */
+.panel{display:none;padding:44px 0 90px}
+.panel.is-on{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+h2.sec{
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--display);font-size:clamp(26px,4vw,40px);
+  text-transform:uppercase;letter-spacing:.005em;line-height:1;
+  padding-bottom:14px;border-bottom:2px solid var(--ink);margin-bottom:8px;
+}
+.sec-note{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-bottom:30px;letter-spacing:.04em}
+
+h3.sub{
+  font-family:var(--display);text-transform:uppercase;font-size:20px;
+  letter-spacing:.01em;margin:42px 0 14px;padding-left:14px;
+  border-left:5px solid var(--purple);line-height:1.15;
+}
+h3.sub.m{border-left-color:var(--purple-deep)}
+h3.sub.y{border-left-color:var(--volt)}
+
+p.lead{max-width:70ch;margin-bottom:16px}
+p.lead + p.lead{margin-top:-6px}
+
+/* ---------- stat strip ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:8px}
+.stat{background:var(--paper);padding:18px 16px}
+.stat .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:6px}
+.stat .v{font-family:var(--display);font-size:34px;line-height:1}
+.stat .d{font-size:12.5px;color:var(--ink-soft);margin-top:4px;font-family:var(--mono)}
+.stat.hi{background:var(--volt)}
+.stat.hi .k{color:var(--ink)}
+.stat.hi .d{color:var(--ink)}
+
+/* ---------- bars ---------- */
+.bars{margin:18px 0 6px;max-width:560px}
+.bar-row{display:grid;grid-template-columns:96px 1fr 52px;gap:12px;align-items:center;margin-bottom:9px;font-size:14px}
+.bar-row .lbl{font-family:var(--mono);font-size:12px}
+.bar-track{height:12px;background:var(--paper-2);border:1px solid var(--rule)}
+.bar-fill{height:100%;background:var(--ink)}
+.bar-fill.c{background:var(--purple)}
+.bar-fill.m{background:var(--purple-deep)}
+.bar-row .num{font-family:var(--mono);font-size:12px;text-align:right}
+
+/* ---------- callout ---------- */
+.call{border:2px solid var(--ink);padding:20px 22px;margin:26px 0;background:#fff;position:relative}
+.call::before{
+  content:attr(data-tag);position:absolute;top:-10px;left:16px;background:var(--ink);color:var(--paper);
+  font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:2px 9px;
+}
+.call.warn{border-color:var(--ink);border-style:dashed}
+.call.warn::before{background:var(--volt);color:var(--ink)}
+.call.good{border-color:var(--purple)}
+.call.good::before{background:var(--purple)}
+.call p{max-width:74ch}
+.call p + p{margin-top:10px}
+
+/* ---------- table ---------- */
+.tbl{width:100%;border-collapse:collapse;margin:14px 0 8px;font-size:14.5px}
+.tbl th{
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  text-align:left;padding:9px 12px;background:var(--ink);color:var(--paper);font-weight:400;
+}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+.tbl tr:nth-child(even) td{background:rgba(232,225,239,.55)}
+.tbl td.w{font-family:var(--mono);font-size:12px;white-space:nowrap}
+.tbl-scroll{overflow-x:auto}
+.pill{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--ink)}
+.pill.reach{background:var(--purple);color:#fff;border-color:var(--purple)}
+.pill.trust{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.pill.sell{background:var(--volt);border-color:var(--ink)}
+.pill.story{background:transparent}
+
+/* ---------- idea chips (pantone) ---------- */
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:16px;margin-top:18px}
+.chip{background:#fff;border:1px solid var(--rule);display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+.chip:hover{transform:translateY(-2px);box-shadow:5px 5px 0 rgba(125,83,222,.18)}
+.chip .swatch{height:64px;position:relative}
+.chip .swatch .no{
+  position:absolute;bottom:7px;right:10px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.1em;color:rgba(255,255,255,.85)
+}
+.chip.y .swatch .no{color:rgba(20,17,15,.6)}
+.chip .body{padding:15px 16px 17px;flex:1;display:flex;flex-direction:column}
+.chip h4{font-family:var(--display);text-transform:uppercase;font-size:16.5px;line-height:1.15;letter-spacing:.01em;margin-bottom:8px}
+.chip .why{font-size:13.5px;color:var(--ink-soft);flex:1}
+.chip .hook{
+  font-family:var(--mono);font-size:12px;line-height:1.5;background:var(--paper-2);
+  border-left:3px solid var(--ink);padding:9px 11px;margin-top:12px;cursor:pointer;position:relative;
+}
+.chip .hook:hover{background:var(--volt);color:var(--ink)}
+.chip .hook::after{content:'kopírovať';position:absolute;top:6px;right:8px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);opacity:0}
+.chip .hook:hover::after{opacity:1}
+.chip .hook.copied{background:var(--purple);color:#fff;border-left-color:var(--purple)}
+.chip .hook.copied::after{content:'skopírované ✓';opacity:1;color:#fff}
+.chip .foot{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+
+/* ---------- filter ---------- */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0 4px}
+.filt{
+  appearance:none;cursor:pointer;background:transparent;border:1px solid var(--ink);
+  font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:6px 13px;
+}
+.filt[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.filt:focus-visible{outline:2px solid var(--purple);outline-offset:2px}
+
+/* ---------- checklist ---------- */
+.check{list-style:none;margin:12px 0}
+.check li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--rule)}
+.check input{width:17px;height:17px;margin-top:3px;accent-color:var(--purple-deep);flex:0 0 17px;cursor:pointer}
+.check label{cursor:pointer;font-size:15px}
+.check input:checked + label{text-decoration:line-through;color:var(--ink-soft)}
+
+/* ---------- story games ---------- */
+.games{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-top:18px}
+.game{border:1px solid var(--ink);background:#fff;padding:0;display:flex;flex-direction:column}
+.game .gh{background:var(--ink);color:var(--paper);padding:11px 15px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.game .gh .t{font-family:var(--display);text-transform:uppercase;font-size:15px;letter-spacing:.02em}
+.game .gh .fmt{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;white-space:nowrap}
+.game .gb{padding:14px 15px 16px;font-size:14px;flex:1}
+.game .gb .how{color:var(--ink-soft);margin-bottom:10px}
+.game .gb .say{font-family:var(--mono);font-size:12px;background:var(--paper-2);padding:8px 10px;border-left:3px solid var(--purple)}
+
+/* ---------- generator ---------- */
+.gen{border:2px solid var(--ink);background:#fff;padding:26px;margin:26px 0;text-align:center}
+.gen .out{
+  font-family:var(--display);text-transform:uppercase;font-size:clamp(19px,3.2vw,30px);
+  line-height:1.16;min-height:2.3em;display:flex;align-items:center;justify-content:center;
+  padding:6px 4px;max-width:26ch;margin:0 auto 18px;
+}
+.gen button{
+  appearance:none;cursor:pointer;background:var(--purple);color:#fff;border:0;
+  font-family:var(--mono);font-size:12px;letter-spacing:.13em;text-transform:uppercase;padding:12px 26px;
+}
+.gen button:hover{background:var(--ink)}
+.gen button:focus-visible{outline:2px solid var(--purple);outline-offset:3px}
+
+/* ---------- misc ---------- */
+ul.dots{margin:10px 0 10px 20px}
+ul.dots li{margin-bottom:7px;max-width:74ch}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:26px;margin-top:8px}
+.mono{font-family:var(--mono);font-size:13px}
+footer{border-top:2px solid var(--ink);padding:22px 0 44px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-soft);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+
+
+/* ---------- edit mode ---------- */
+.editbar{
+  position:fixed;right:18px;bottom:18px;z-index:200;display:flex;gap:8px;align-items:center;
+  background:var(--ink);padding:9px 10px;box-shadow:0 4px 18px rgba(47,45,46,.28);flex-wrap:wrap;max-width:calc(100vw - 36px);
+}
+.editbar button{
+  appearance:none;cursor:pointer;border:1px solid rgba(247,246,248,.35);background:transparent;color:var(--paper);
+  font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:8px 13px;
+}
+.editbar button:hover{background:rgba(247,246,248,.14)}
+.editbar button.on{background:var(--volt);color:var(--ink);border-color:var(--volt);font-weight:700}
+.editbar button.pri{background:var(--purple);border-color:var(--purple)}
+.editbar button.pri:hover{background:var(--purple-deep);border-color:var(--purple-deep)}
+.editbar button:focus-visible{outline:2px solid var(--volt);outline-offset:2px}
+.editbar .hint{font-family:var(--mono);font-size:10px;color:rgba(247,246,248,.65);letter-spacing:.05em;padding:0 4px}
+
+body.editing [contenteditable="true"]{
+  outline:1px dashed var(--purple);outline-offset:2px;border-radius:2px;min-height:1em;
+}
+body.editing [contenteditable="true"]:focus{
+  outline:2px solid var(--purple);background:rgba(215,247,91,.28);
+}
+body.editing .chip .hook{cursor:text}
+body.editing .chip:hover{transform:none;box-shadow:none}
+
+.addbtn{
+  appearance:none;cursor:pointer;background:transparent;border:1px dashed var(--purple);color:var(--purple);
+  font-family:var(--mono);font-size:11px;letter-spacing:.09em;text-transform:uppercase;padding:9px 16px;margin-top:14px;display:none;
+}
+body.editing .addbtn{display:inline-block}
+.addbtn:hover{background:var(--purple);color:#fff}
+
+.delbtn{
+  appearance:none;cursor:pointer;background:var(--ink);color:var(--paper);border:0;
+  font-family:var(--mono);font-size:10px;line-height:1;padding:4px 7px;display:none;
+}
+body.editing .delbtn{display:inline-block}
+.delbtn:hover{background:var(--purple-deep)}
+.chip{position:relative}
+.chip .delbtn{position:absolute;top:6px;left:6px;z-index:3}
+.game{position:relative}
+.game .delbtn{position:absolute;top:-9px;right:-9px;z-index:3}
+.check li .delbtn{margin-left:auto;align-self:center}
+.tbl td .delbtn{float:right;margin-left:8px}
+
+@media(max-width:640px){
+  .stat .v{font-size:27px}
+  h3.sub{margin-top:32px}
+  .tbl{font-size:13px}
+  .tbl td,.tbl th{padding:8px 8px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+@media print{
+  nav.tabs{display:none}
+  .panel{display:block!important;page-break-before:always}
+  .chip:hover{transform:none;box-shadow:none}
+  .editbar,.addbtn,.delbtn{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="eyebrow">Obsahový hub · Interný pracovný dokument</div>
+      <div class="eyebrow">Zostavené 20. 8. 2026</div>
+    </div>
+    <h1 class="sep-title">
+      <span class="l1" aria-hidden="true">GoMerch</span>
+      <span class="l2" aria-hidden="true">GoMerch</span>
+      <span class="l3">GoMerch</span>
+    </h1>
+    <div class="swatches" aria-hidden="true">
+      <i style="background:var(--purple)"></i><i style="background:var(--volt)"></i><i style="background:var(--paper-2)"></i><i style="background:var(--ink)"></i>
+    </div>
+    <p class="hero-sub" style="padding-top:20px">
+      Plán obsahu, report a banka nápadov pre Instagram <b>@go_merch</b>.
+      Dohoda: <b>2 výstupy mesačne + priebežná aktivita</b>. Dve publiká: firmy a tvorcovia.
+      Jedenásť výrobných technológií, ktoré nikto zvonku nikdy nevidel.
+    </p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap">
+    <div class="tabs-inner" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-p="report">01 — Report</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="plan">02 — Plán obsahu</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="napady">03 — Banka nápadov</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="story">04 — Story a hry</button>
+      <button class="tab" role="tab" aria-selected="false" data-p="proces">05 — Natáčací deň</button>
+    </div>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ============ 01 REPORT ============ -->
+<section class="panel is-on" id="report">
+  <h2 class="sec">Štatistiky</h2>
+  <div class="sec-note">Instagram · posledných 30 dní · dáta z profilu @go_merch</div>
+
+  <div class="stats">
+    <div class="stat"><span class="k">Diváci spolu</span><span class="v">3 924</span><span class="d">všetok obsah</span></div>
+    <div class="stat"><span class="k">Reels</span><span class="v">6 400</span><span class="d">väčšina nesledujúci</span></div>
+    <div class="stat"><span class="k">Príspevky</span><span class="v">1 900</span><span class="d">3,4× menej než reels</span></div>
+    <div class="stat"><span class="k">Návštevy profilu</span><span class="v">557</span><span class="d">z obsahu</span></div>
+    <div class="stat hi"><span class="k">Preklik z bia</span><span class="v">17,4 %</span><span class="d">97 z 557 — veľmi vysoké</span></div>
+  </div>
+
+  <h3 class="sub">Čo dáta hovoria</h3>
+
+  <div class="call good" data-tag="Funguje">
+    <p><b>Reels sú jediný formát, ktorý rastie.</b> 6 400 divákov oproti 1 900 pri statických príspevkoch, a väčšinu tvoria ľudia, ktorí profil nesledujú. Algoritmus obsah roznáša ďalej — to sa pri príspevkoch nedeje.</p>
+    <p><b>Grape video je zatiaľ najúspešnejší obsah</b> (5 tis. pozretí). Potvrdilo, že formát „toto zajtra uvidíš naživo" funguje: konkrétny termín, konkrétne miesto, vizuálne veľká vec.</p>
+    <p><b>17,4 % preklik z bia je nadpriemer.</b>&nbsp;</p>
+  </div>
+
+  <div class="call warn" data-tag="Pozor">
+    <p><b>Ťuknutia na firemnú adresu: 0.</b> Pri 97 preklikoch na odkaz to znamená, že cesta ku kontaktu vedie inam, než profil ponúka. Skontrolovať, čo presne je v biu a či to vedie na správnu stránku.</p>
+    <p><b>Česko tvorí 42,3 % publika.</b> Skoro polovica. Ak vieme obslúžiť českého klienta, patrí to do bia a občas aj do textu — títo ľudia možno netušia, že môžu objednať. Ak nie, časť dosahu nikdy nič neprinesie.</p>
+  </div>
+
+  <div class="grid2">
+    <div>
+      <h3 class="sub m">Vek publika</h3>
+      <div class="bars">
+        <div class="bar-row"><span class="lbl">13–17</span><span class="bar-track"><span class="bar-fill" style="width:5%"></span></span><span class="num">2,3 %</span></div>
+        <div class="bar-row"><span class="lbl">18–24</span><span class="bar-track"><span class="bar-fill m" style="width:77%"></span></span><span class="num">33,2 %</span></div>
+        <div class="bar-row"><span class="lbl">25–34</span><span class="bar-track"><span class="bar-fill m" style="width:100%"></span></span><span class="num">43,0 %</span></div>
+        <div class="bar-row"><span class="lbl">35–44</span><span class="bar-track"><span class="bar-fill" style="width:30%"></span></span><span class="num">13,1 %</span></div>
+        <div class="bar-row"><span class="lbl">45–54</span><span class="bar-track"><span class="bar-fill" style="width:14%"></span></span><span class="num">6,2 %</span></div>
+        <div class="bar-row"><span class="lbl">55+</span><span class="bar-track"><span class="bar-fill" style="width:5%"></span></span><span class="num">2,3 %</span></div>
+      </div>
+      <p class="mono" style="color:var(--ink-soft);margin-top:10px">76 % publika má 18–34 rokov.</p>
+    </div>
+    <div>
+      <h3 class="sub">Krajiny</h3>
+      <div class="bars">
+        <div class="bar-row"><span class="lbl">Slovensko</span><span class="bar-track"><span class="bar-fill c" style="width:100%"></span></span><span class="num">49,0 %</span></div>
+        <div class="bar-row"><span class="lbl">Česko</span><span class="bar-track"><span class="bar-fill c" style="width:86%"></span></span><span class="num">42,3 %</span></div>
+        <div class="bar-row"><span class="lbl">Ostatné</span><span class="bar-track"><span class="bar-fill" style="width:18%"></span></span><span class="num">8,7 %</span></div>
+      </div>
+      <p class="mono" style="color:var(--ink-soft);margin-top:10px">Pomer pohlaví je vyrovnaný: 52,6 % ženy / 47,4 % muži.</p>
+    </div>
+  </div>
+
+  <h3 class="sub y">Kedy publikovať</h3>
+  <p class="lead">Sledovatelia sú najaktívnejší <b>medzi 18. a 21. hodinou</b>, najsilnejšie v <b>nedeľu, pondelok a stredu</b>. Aktivita začína stúpať okolo 9:00 a drží sa až do 21:00 — ranné publikovanie nemá zmysel.</p>
+
+  <div class="call" data-tag="Záver">
+    <p>Publikum je mladšie, než býva firemný rozhodovateľ. Sedí skôr na tvorcov a na ľudí, ktorí merch nosia, než na nákupcu vo firme. To nie je chyba — ale znamená to, že <b>firemná línia porastie pomalšie a potrebuje iný typ obsahu</b> než ten, ktorý dnes robí dosah.</p>
+    <p>Preto plán nižšie stavia na dvoch paralelných linkách: <b>široký obsah pre dosah</b> (výroba, technológie, vizuálna podívaná) a <b>úzky obsah pre dôveru</b> (ako si vybrať dodávateľa, čo sa kazí, koľko to trvá).</p>
+  </div>
+
+  <h3 class="sub">Čo sledovať pri ďalších videách</h3>
+  <p class="lead">Počet pozretí je najmenej užitočné číslo. Tieto tri hovoria viac:</p>
+  <ul class="dots">
+    <li><b>Dopozeranosť</b> — koľko % ľudí ostane do konca. Jediné číslo, ktoré prezradí, či scenár funguje.</li>
+    <li><b>Uloženia a zdieľania</b> — firma si užitočné video pošle kolegovi. To je signál dôvery, nie zábavy.</li>
+    <li><b>Podiel nesledujúcich divákov</b> — ukazuje, či obsah opúšťa existujúcu bublinu.</li>
+  </ul>
+</section>
+
+<!-- ============ 02 PLÁN ============ -->
+<section class="panel" id="plan">
+  <h2 class="sec"><svg class="reg" viewBox="0 0 22 22"><circle cx="11" cy="11" r="6.5"></circle><line x1="11" y1="0" x2="11" y2="22"></line><line x1="0" y1="11" x2="22" y2="11"></line></svg>Plán obsahu</h2>
+  <div class="sec-note">2 hlavné výstupy mesačne + priebežná aktivita v stories</div>
+
+  <div class="call" data-tag="Princíp">
+    <p>1-2x do mesiaca točenie, videá môžem točiť ja z prostredia firmy ako zákulisie, čo sa deje, čo kto pripravuje, na čom pracuje a pýtať sa ľudí, druhý formát</p>
+  </div>
+
+  <h3 class="sub">mesačný obsah August</h3>
+  <div class="tbl-scroll">
+  <table class="tbl">
+    <thead><tr><th style="width:110px">Týždeň</th><th>Čo sa deje</th><th style="width:130px">Cieľ</th></tr></thead>
+    <tbody>
+      <tr><td class="w">Týždeň 1</td><td><b>Toto bude stáť na Grape - reel</b></td><td><span class="pill trust">dôvera</span></td></tr>
+      <tr><td class="w">Týždeň 2</td><td><b>Príprava a výsledok - Velo stage - reel</b></td><td><span class="pill reach">dosah</span></td></tr>
+      <tr><td class="w">Týždeň 3</td><td><b>Aktivita.</b> Story séria alebo hra zo sekcie 04.</td><td><span class="pill story">vzťah</span></td></tr>
+      <tr><td class="w">Týždeň 4</td><td><b>Výroba tričiek - reel</b></td><td><span class="pill trust">dôvera</span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 class="sub m">Prvé tri mesiace — konkrétne</h3>
+  <div class="tbl-scroll">
+  <table class="tbl">
+    <thead><tr><th style="width:88px">Mesiac</th><th>Video A · dosah</th><th>Video B · dôvera</th><th>Aktivita</th></tr></thead>
+    <tbody>
+      <tr>
+        <td class="w">1</td>
+        <td><b>Ako sa pletie ponožka.</b> Stroj, ktorý nikto nevidel. Zoom-out formát bez rozprávania.</td>
+        <td><b>Prežije to pranie?</b> Prečo potlač praská a čo s tým — 30 °C, naruby.</td>
+        <td>Kvíz: uhádni technológiu z detailu</td>
+      </tr>
+      <tr>
+        <td class="w">2</td>
+        <td><b>Laser vs. výšivka vs. sieťotlač</b> na tom istom logu. Tri technológie, jeden motív.</td>
+        <td><b>Čo poslať tlačiarni</b>, aby nebol problém. Formáty, rozlíšenie, spadávka.</td>
+        <td>Hlasovanie: ktorá verzia vyhrá</td>
+      </tr>
+      <tr>
+        <td class="w">3</td>
+        <td><b>Od rolky po hotový stánok.</b> Veľkoformátová tlač, before/after, mierka.</td>
+        <td><b>Koľko to reálne trvá.</b> Čo sa stihne za 14 dní a čo už nie.</td>
+        <td>Hádaj cenu · Spýtaj sa výroby</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <h3 class="sub y">Rozdelenie podľa publika</h3>
+  <p class="lead">DVA RÔZNE FORMÁTY VIDEÍ A ROZDIELNE INSIGHTY.</p>
+  <div class="grid2">
+    <div>
+      <h3 class="sub" style="margin-top:10px">Firmy a značky</h3>
+      <p class="lead">Riešia: stihne sa to, bude to vyzerať dobre, nezostanem s tým sám. Chcú vidieť <b>kontrolu, kapacitu a predvídavosť</b>.</p>
+      <ul class="dots">
+        <li>Veľkoformátová tlač, stánky, backdropy</li>
+        <li>Firemné darčeky, gravírovanie, krabice</li>
+        <li>Termíny, podklady, čo sa kazí</li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="sub m" style="margin-top:10px">Tvorcovia a ich fanúšikovia</h3>
+      <p class="lead">Riešia: nezničí mi to meno, budú to fanúšikovia nosiť. Chcú vidieť <b>kvalitu, materiál a výdrž</b>.</p>
+      <ul class="dots">
+        <li>Textil, strihy, gramáž, pranie</li>
+        <li>Ako vzniká kolekcia od nápadu po balenie</li>
+        <li>42 tvorcov na platforme = 42 príbehov</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 NÁPADY ============ -->
+<section class="panel" id="napady">
+  <h2 class="sec"><svg class="reg" viewBox="0 0 22 22"><circle cx="11" cy="11" r="6.5"></circle><line x1="11" y1="0" x2="11" y2="22"></line><line x1="0" y1="11" x2="22" y2="11"></line></svg>Banka nápadov</h2>
+  <div class="sec-note">Klikni na hook a skopíruje sa · filtruj podľa cieľa</div>
+
+  <div class="filters" role="group" aria-label="Filter nápadov">
+    <button class="filt" data-f="all" aria-pressed="true">Všetko</button>
+    <button class="filt" data-f="reach" aria-pressed="false">Dosah</button>
+    <button class="filt" data-f="trust" aria-pressed="false">Dôvera</button>
+    <button class="filt" data-f="sell" aria-pressed="false">Predaj</button>
+  </div>
+
+  <div class="chips" id="chipGrid">
+
+    <article class="chip" data-t="reach">
+      <div class="swatch" style="background:var(--purple)"><span class="no">01 / DOSAH</span></div>
+      <div class="body">
+        <h4>Ako sa pletie ponožka</h4>
+        <p class="why">Pletací stroj je hypnotický a takmer nikto ho nikdy nevidel. Žiadne rozprávanie, len stroj a zvuk. Toto je najsilnejší nevyužitý materiál, ktorý v dielni je.</p>
+        <div class="hook">„Toto je jediný stroj, ktorý vyrobí ponožku od začiatku do konca. Bez jediného švu."</div>
+        <div class="foot"><span class="pill reach">dosah</span><span class="pill story">bez slov</span></div>
+      </div>
+    </article>
+
+    <article class="chip" data-t="reach">
+      <div class="swatch" style="background:var(--purple)"><span class="no">04 / DOSAH</span></div>
+      <div class="body">
+        <h4>Všetko, čo si na festivale nevšimneš</h4>
+        <p class="why">Pásky na ruku, smerovky, cenníky, backdrop, plachty, nálepky. Po tomto videu človek festival už nikdy neuvidí rovnako — a to je pocit, ktorý sa zdieľa.</p>
+        <div class="hook">„Pôjdeš na festival a nevšimneš si ani jednu z týchto vecí. Pritom sú tam všade."</div>
+        <div class="foot"><span class="pill reach">dosah</span><span class="pill story">sezónne</span></div>
+      </div>
+    </article>
+
+    <article class="chip" data-t="reach">
+      <div class="swatch" style="background:var(--purple)"><span class="no">05 / DOSAH</span></div>
+      <div class="body">
+        <h4>Laser gravíruje fľašu</h4>
+        <p class="why">Iskry, presnosť, vôňa spáleniny. Krátke, satisfying, ideálne na slučku. Najlacnejšie video na natočenie z celého zoznamu.</p>
+        <div class="hook">„Toto trvá jedenásť sekúnd. A nedá sa to vygumovať."</div>
+        <div class="foot"><span class="pill reach">dosah</span><span class="pill story">loop</span></div>
+      </div>
+    </article>
+
+    <article class="chip" data-t="reach">
+      <div class="swatch" style="background:var(--purple)"><span class="no">06 / DOSAH</span></div>
+      <div class="body">
+        <h4>Vyšívací stroj v akcii</h4>
+        <p class="why">Desiatky ihiel naraz, motív vzniká pred očami. Zrýchlené na 20 sekúnd. Klasický satisfying obsah, ktorý funguje roky.</p>
+        <div class="hook">„Devätnásťtisíc stehov. Pozeraj do konca."</div>
+        <div class="foot"><span class="pill reach">dosah</span><span class="pill story">loop</span></div>
+      </div>
+    </article>
+
+    <article class="chip" data-t="trust">
+      <div class="swatch" style="background:var(--ink)"><span class="no">07 / DÔVERA</span></div>
+      <div class="body">
+        <h4>Prežije to pranie?</h4>
+        <p class="why">Najčastejšia obava pri merchi. Ukázať, prečo potlač praská, čo to spôsobuje a ako sa tomu dá predísť. Konkrétne: 30 °C, naruby.</p>
+        <div class="hook">„Merch nezabije cena. Zabije ho piate pranie."</div>
+        <div class="foot"><span class="pill trust">dôvera</span><span class="pill story">ukladá sa</span></div>
+      </div>
+    </article>
+
+    <article class="chip" data-t="trust">
+      <div class="swatch" style="background:var(--ink)"><span class="no">08 / DÔVERA</span></div>
+      <div class="body">
+        <h4>Čo poslať tlačiarni</h4>
+        <p class="why">Formát, rozlíšenie, spadávka, prevod do kriviek. Čistá hodnota — presne ten typ videa, ktorý si človek uloží a pošle kolegovi.</p>
+        <div class="hook">„Deväťdesiat percent problémov v tlači vzniká skôr, než sa čokoľvek vytlačí."</div>
+        <div class="foot"><span class="pill trust">dôvera</span><span class="pill story">ukladá sa</span></div>
+      </div>
+    </article>
+
+    <article class="chip" data-t="trust">
+      <div class="swatch" style="background:var(--ink)"><span class="no">09 / DÔVERA</span></div>
+      <div class="body">
+        <h4>Tri otázky pred objednávkou</h4>
+        <p class="why">Ako si overiť dodávateľa skôr, než zaplatíš. Materiál, odolnosť, reklamácia. Callout formát — funguje najlepšie pre firemné publikum.</p>
+        <div class="hook">„Väčšina firiem si vyberá tlačiareň podľa ceny za kus. Preto polovica firemného merchu skončí v skrini."</div>
+        <div class="foot"><span class="pill trust">dôvera</span><span class="pill story">B2B</span></div>
+      </div>
+    </article>
+
+    <article class="chip" data-t="trust">
+      <div class="swatch" style="background:var(--ink)"><span class="no">10 / DÔVERA</span></div>
+      <div class="body">
+        <h4>Prečo monitor klame</h4>
+        <p class="why">Monitor svieti, tlač nie. Ukázať rovnaký odtieň na obrazovke a na materiáli. Vysvetľuje, prečo sa robia nátlačky — a prečo je to znak kvality, nie zdržanie.</p>
+        <div class="hook">„Toto je tá istá farba. Na monitore a na tričku. Preto sa vždy robí vzorka."</div>
+        <div class="foot"><span class="pill trust">dôvera</span><span class="pill story">edukácia</span></div>
+      </div>
+    </article>
+
+    <article class="chip" data-t="trust">
+      <div class="swatch" style="background:var(--ink)"><span class="no">11 / DÔVERA</span></div>
+      <div class="body">
+        <h4>Čo sa stane, keď je chyba</h4>
+        <p class="why">Ukázať zle vytlačený kus a čo s ním výroba spraví. Priznanie chyby buduje dôveru viac než tvrdenie o dokonalosti. Čo sa deje so zle vytlačenými kusmi?</p>
+        <div class="hook">„Toto tričko nikdy neopustí halu."</div>
+        <div class="foot"><span class="pill trust">dôvera</span><span class="pill story">priznanie</span></div>
+      </div>
+    </article>
+
+    <article class="chip" data-t="trust">
+      <div class="swatch" style="background:var(--ink)"><span class="no">12 / DÔVERA</span></div>
+      <div class="body">
+        <h4>14 dní — čo sa zmestí</h4>
+        <p class="why">Rozložiť dodaciu lehotu na reálne kroky: podklady, nátlačok, výroba, kontrola, balenie. Vysvetľuje cenu expresu bez toho, aby ho predávalo.</p>
+        <div class="hook">„Objednávka trvá štrnásť dní. Tlač z toho je jeden."</div>
+        <div class="foot"><span class="pill trust">dôvera</span><span class="pill story">B2B</span></div>
+      </div>
+    </article>
+
+    <article class="chip y" data-t="sell">
+      <div class="swatch" style="background:var(--volt)"><span class="no">14 / PREDAJ</span></div>
+      <div class="body">
+        <h4>Kolekcia od nuly</h4>
+        <p class="why">Séria na 3 diely: nápad → vzorka → hotová kolekcia. Otvorené slučky medzi dielmi. Priamo ukazuje službu pre tvorcov.</p>
+        <div class="hook">„Za tri týždne z toho bude kolekcia. Dnes je to jeden súbor."</div>
+        <div class="foot"><span class="pill sell">predaj</span><span class="pill story">séria</span></div>
+      </div>
+    </article>
+
+    <article class="chip y" data-t="sell">
+      <div class="swatch" style="background:var(--volt)"><span class="no">15 / PREDAJ</span></div>
+      <div class="body">
+        <h4>Balenie objednávky</h4>
+        <p class="why">Toto sa deje s tričkom predtým ako odíde objednávka.</p>
+        <div class="hook">„Takto vyzerá tvoja objednávka päť minút predtým, než odíde."</div>
+        <div class="foot"><span class="pill sell">predaj</span><span class="pill story">loop</span></div>
+      </div>
+    </article>
+
+    <article class="chip y" data-t="sell">
+      <div class="swatch" style="background:var(--volt)"><span class="no">16 / PREDAJ</span></div>
+      <div class="body">
+        <h4>Tvorca vo výrobe</h4>
+        <p class="why">Pozvi jedného zo 42 tvorcov do dielne a nechaj ho vidieť vlastný merch vzniknúť. Jeho reakcia je obsah. A on to zdieľa svojmu publiku.</p>
+        <div class="hook">„Prvýkrát vidí, ako vzniká jeho vlastné tričko."</div>
+        <div class="foot"><span class="pill sell">predaj</span><span class="pill story">spolupráca</span></div>
+      </div>
+    </article>
+
+  </div>
+
+  <button type="button" class="addbtn" data-add="chip">+ Pridať nápad</button>
+
+  <h3 class="sub y">Generátor hookov</h3>
+  <div class="gen">
+    <div class="out" id="genOut">Deväťdesiat percent problémov v tlači vzniká skôr, než sa čokoľvek vytlačí.</div>
+    <button id="genBtn" type="button">Ďalší hook</button>
+  </div>
+</section>
+
+<!-- ============ 04 STORY ============ -->
+<section class="panel" id="story">
+  <h2 class="sec"><svg class="reg" viewBox="0 0 22 22"><circle cx="11" cy="11" r="6.5"></circle><line x1="11" y1="0" x2="11" y2="22"></line><line x1="0" y1="11" x2="22" y2="11"></line></svg>Story a hry</h2>
+  <div class="sec-note">Priebežná aktivita · všetko sa dá urobiť z materiálu z jedného natáčacieho dňa</div>
+
+  <div class="call" data-tag="Prečo">
+    <p>Stories majú dnes 428 divákov — najmenej zo všetkých formátov. Pritom je to jediné miesto, kde sa dá s ľuďmi <b>hovoriť obojsmerne</b>. Odpoveď v ankete alebo v otázke je signál, ktorý algoritmus číta, a zároveň je to najlacnejší spôsob, ako zistiť, čo publikum reálne zaujíma.</p>
+    <p>Cieľ nie je publikovať denne. Cieľ je <b>2–3 story bloky do týždňa</b>, z ktorých aspoň jeden má interaktívny prvok.</p>
+  </div>
+
+  <div class="games">
+
+    <div class="game">
+      <div class="gh"><span class="t">Uhádni technológiu</span><span class="fmt">Kvíz</span></div>
+      <div class="gb">
+        <p class="how">Makro detail potlače alebo výšivky. Štyri možnosti: sieťotlač, výšivka, flex, sublimácia. Odpoveď v ďalšej story s vysvetlením rozdielu.</p>
+        <p class="say">Séria na 4 diely, jeden týždenne. Ľudia sa naučia rozdiely a pri objednávke už vedia, čo chcú.</p>
+      </div>
+    </div>
+
+    <div class="game">
+      <div class="gh"><span class="t">Hádaj cenu</span><span class="fmt">Slider</span></div>
+      <div class="gb">
+        <p class="how">Ukáž hotový produkt, nechaj ľudí posunúť slider. O deň neskôr zverejni rozpätie a vysvetli, čo cenu tvorí.</p>
+        <p class="say">Najvyššia miera odpovedí zo všetkých formátov. Ceny vždy vopred odsúhlasiť.</p>
+      </div>
+    </div>
+
+    <div class="game">
+      <div class="gh"><span class="t">Ktoré je naše?</span><span class="fmt">Anketa A/B</span></div>
+      <div class="gb">
+        <p class="how">Dve tričká vedľa seba — jedno z bežného e-shopu, jedno z vlastnej výroby. Po hlasovaní ukáž detail švu a potlače.</p>
+        <p class="say">Predáva kvalitu bez toho, aby o nej hovorila. Divák si rozdiel nájde sám.</p>
+      </div>
+    </div>
+
+    <div class="game">
+      <div class="gh"><span class="t">Nájdi chybu</span><span class="fmt">Anketa</span></div>
+      <div class="gb">
+        <p class="how">Dva takmer identické výtlačky, jeden má chybu. Ľudia hľadajú. Odpoveď ukáže, aká presná musí kontrola byť.</p>
+        <p class="say">Ukazuje kontrolu kvality zábavnou formou namiesto tvrdenia o nej.</p>
+      </div>
+    </div>
+
+    <div class="game">
+      <div class="gh"><span class="t">Spýtaj sa výroby</span><span class="fmt">Otázky</span></div>
+      <div class="gb">
+        <p class="how">Box na otázky, odpovede natočené priamo v hale — krátke, jedna otázka jedna story. Raz mesačne.</p>
+        <p class="say">Zásobáreň nápadov na videá. Čo sa pýtajú najčastejšie, z toho urob celé video.</p>
+      </div>
+    </div>
+
+    <div class="game">
+      <div class="gh"><span class="t">Vyber ďalší dizajn</span><span class="fmt">Anketa</span></div>
+      <div class="gb">
+        <p class="how">Dve verzie návrhu, publikum rozhodne. Výsledok sa reálne vyrobí a ukáže v ďalšom videu.</p>
+        <p class="say">Funguje len vtedy, ak sa výsledok naozaj vyrobí. Inak to ľudia druhýkrát nezoberú vážne.</p>
+      </div>
+    </div>
+
+    <div class="game">
+      <div class="gh"><span class="t">Koľko kusov?</span><span class="fmt">Slider</span></div>
+      <div class="gb">
+        <p class="how">Záber na stoh hotových tričiek alebo krabíc. Hádaj počet. Odpoveď odhalí kapacitu výroby bez chvastania.</p>
+        <p class="say">Číslo je dôkaz. Toto je najjemnejší spôsob, ako ho povedať.</p>
+      </div>
+    </div>
+
+    <div class="game">
+      <div class="gh"><span class="t">Prežije / neprežije</span><span class="fmt">Anketa</span></div>
+      <div class="gb">
+        <p class="how">Tričko pred praním a otázka, či potlač vydrží. Potom reálny test a výsledok.</p>
+        <p class="say">Priamo odpovedá na najväčšiu obavu pri merchi. Dá sa opakovať s rôznymi technológiami.</p>
+      </div>
+    </div>
+
+    <div class="game">
+      <div class="gh"><span class="t">Deň vo výrobe</span><span class="fmt">Takeover</span></div>
+      <div class="gb">
+        <p class="how">Jeden deň, jeden človek z výroby, 6–8 story. Od rána po expedíciu. Surové, nespracované.</p>
+        <p class="say">Ľudia sledujú ľudí, nie firmy. Toto je najrýchlejšia cesta k tomu, aby značka mala tvár.</p>
+      </div>
+    </div>
+
+    <div class="game">
+      <div class="gh"><span class="t">Emoji slider</span><span class="fmt">Slider</span></div>
+      <div class="gb">
+        <p class="how">Hotový produkt a otázka „ako veľmi ho chceš". Nulová námaha, okamžitý signál záujmu.</p>
+        <p class="say">Použi pred uvedením novej kolekcie. Výsledok napovie, či o to bude záujem.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <button type="button" class="addbtn" data-add="game">+ Pridať aktivitu</button>
+
+  <h3 class="sub m">Pravidlá pre CTA</h3>
+  <p class="lead">Tri zložené výzvy v jednom videu zabijú všetky tri. Rozdeľ ich na tri miesta:</p>
+  <div class="tbl-scroll">
+  <table class="tbl">
+    <thead><tr><th style="width:150px">Kde</th><th>Aká</th><th>Prečo</th></tr></thead>
+    <tbody>
+      <tr><td class="w">Vo videu</td><td>Otvára ďalšiu slučku — „ukážem, ako to dopadlo"</td><td>Neuzatvára pozornosť, ťahá na ďalšie video</td></tr>
+      <tr><td class="w">V popise</td><td>Obchodná — „napíš nám skôr, viac sa dá zachrániť"</td><td>Kto číta popis, už má záujem</td></tr>
+      <tr><td class="w">V komentári</td><td>Otázka na diskusiu</td><td>Komentáre zvyšujú dosah</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="lead" style="margin-top:14px">Prvých <b>15 minút po publikovaní</b> venuj odpovedaniu na komentáre a správy. Je to najlacnejšia vec, ktorá reálne funguje.</p>
+</section>
+
+<!-- ============ 05 PROCES ============ -->
+<section class="panel" id="proces">
+  <h2 class="sec"><svg class="reg" viewBox="0 0 22 22"><circle cx="11" cy="11" r="6.5"></circle><line x1="11" y1="0" x2="11" y2="22"></line><line x1="0" y1="11" x2="22" y2="11"></line></svg>Natáčací deň</h2>
+  <div class="sec-note">1-2x mesačne</div>
+
+  <h3 class="sub">Zoznam záberov — odškrtávaj</h3>
+  <ul class="check">
+    <li><input type="checkbox" id="c1"><label for="c1"><b>Makro detail stroja v pohybe</b> — hlava tlače, ihly, laser. Toto býva prvý obraz videa.</label></li>
+    <li><input type="checkbox" id="c2"><label for="c2"><b>Moment, keď vzniká motív</b> — logo sa objaví, výšivka dorastie. „Aha" obraz.</label></li>
+    <li><input type="checkbox" id="c3"><label for="c3"><b>Ruky na materiáli</b> — chytiť, prejsť dlaňou, otočiť. Dodáva hmatový rozmer.</label></li>
+    <li><input type="checkbox" id="c4"><label for="c4"><b>Mierka</b> — človek vedľa hotovej veci. Bez človeka divák nechápe veľkosť.</label></li>
+    <li><input type="checkbox" id="c5"><label for="c5"><b>Široký záber haly</b> — kontext, dôkaz reálnej výroby.</label></li>
+    <li><input type="checkbox" id="c6"><label for="c6"><b>Timelapse</b> — 2–3 minúty zo statívu, potom zrýchliť.</label></li>
+    <li><input type="checkbox" id="c7"><label for="c7"><b>Before / after</b> — prázdny materiál a ten istý po výrobe, z rovnakého uhla.</label></li>
+    <li><input type="checkbox" id="c8"><label for="c8"><b>Kontrola kvality</b> — niekto meria, kontroluje, odkladá chybný kus.</label></li>
+    <li><input type="checkbox" id="c9"><label for="c9"><b>Balenie a expedícia</b> — koniec príbehu, dobrý záverečný obraz.</label></li>
+    <li><input type="checkbox" id="c10"><label for="c10"><b>Hovoriaci človek — tri uhly</b> — čelný, z boku, cez rameno na stroj.</label></li>
+  </ul>
+
+  <button type="button" class="addbtn" data-add="check">+ Pridať záber do zoznamu</button>
+
+  <h3 class="sub m">Rozhovor namiesto scenára</h3>
+  <p class="lead">Pre Tibora, ktorý si nerád pripravuje scenáre a rozpráva autenticky, otázky na reflexiu :)</p>
+  <ul class="dots">
+    <li>Čomu veríš o merchi alebo tlači, s čím väčšina ľudí nesúhlasí?</li>
+    <li>Čo sa najčastejšie pokazí?</li>
+    <li>Kedy si naposledy videl cudzí výrobok a povedal si si „toto je zle"? Čo tam bolo?</li>
+    <li>Čo sa stane, keď príde zadanie na poslednú chvíľu?</li>
+    <li>Koľko kusov / metrov / hodín? — konkrétne číslo</li>
+    <li>Čo by si odkázal niekomu, kto objednáva prvýkrát?</li>
+  </ul>
+
+  <h3 class="sub y">Typy videí</h3>
+  <div class="tbl-scroll">
+  <table class="tbl">
+    <thead><tr><th style="width:190px">Typ</th><th>Ako</th></tr></thead>
+    <tbody>
+      <tr><td class="w">„Čo sa deje vo firme"</td><td>Otázky na zamestnancov čo robia, ich odpoveď potom krátka ukážka čo sa tam deje, otázky sa budú prispôsobovať prostrediu, ľuďom, aktuálnej činnosti, niekedy budú o práci, vždy niečo čo buduje dôveru a zároveň baví publikum. Na videu budem rozprávať a pýtať sa ja, budú to také mini vlogy z prostredia max do 30-40 sekúnd, nebude to trápny formát ako, keď sa Refresher pýta koľko čo stálo :D</td></tr>
+      <tr><td class="w">Technické, odborné s Tiborom</td><td>Ak je nejaká téma, zákazka alebo rôzne témy, ktoré budujú dôveru tie sa točia s Tiborom.</td></tr>
+      <tr><td class="w">Humor</td><td>Vznikne z nejakých autentických záberov, z odpadových materiálov alebo z prostredia, možno nejaká scénka, niečo čo vznikne už z videí predtým.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+</main>
+
+<footer class="wrap">
+  <span>GoMerch · obsahový hub · interný dokument</span>
+  <span>Otvor v prehliadači kedykoľvek · Ctrl/Cmd + P pre PDF</span>
+</footer>
+
+
+<div class="editbar" id="editbar">
+  <span class="hint" id="editHint">Prezeranie</span>
+  <button type="button" id="btnEdit">Upraviť</button>
+  <button type="button" id="btnSave" class="pri">Stiahnuť</button>
+</div>
+
+<script>
+(function(){
+  // tabs
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.setAttribute('aria-selected','false'); });
+      panels.forEach(function(p){ p.classList.remove('is-on'); });
+      t.setAttribute('aria-selected','true');
+      var el = document.getElementById(t.dataset.p);
+      if(el) el.classList.add('is-on');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // filters
+  var filts = Array.prototype.slice.call(document.querySelectorAll('.filt'));
+  var chips = Array.prototype.slice.call(document.querySelectorAll('#chipGrid .chip'));
+  filts.forEach(function(f){
+    f.addEventListener('click', function(){
+      filts.forEach(function(x){ x.setAttribute('aria-pressed','false'); });
+      f.setAttribute('aria-pressed','true');
+      var v = f.dataset.f;
+      chips.forEach(function(c){
+        c.style.display = (v==='all' || c.dataset.t===v) ? '' : 'none';
+      });
+    });
+  });
+
+  // copy hook
+  function copyText(txt, ok){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(ok).catch(function(){ fallback(txt, ok); });
+    } else { fallback(txt, ok); }
+  }
+  function fallback(txt, ok){
+    var ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); }catch(e){}
+    document.body.removeChild(ta);
+    if(ok) ok();
+  }
+  window.__gmCopyText = copyText;
+
+  document.querySelectorAll('.chip .hook').forEach(function(h){
+    h.addEventListener('click', function(){
+      if(editing) return;
+      copyText(h.textContent.trim(), function(){
+        h.classList.add('copied');
+        setTimeout(function(){ h.classList.remove('copied'); }, 1400);
+      });
+    });
+  });
+
+
+  // ================= EDIT MODE =================
+  var EDITABLE = ['h3.sub','p.lead','.sec-note','.hero-sub','.call p','.tbl td','.tbl th',
+    '.check label','.chip h4','.chip .why','.chip .hook','.game .gh .t','.game .gh .fmt',
+    '.game .gb .how','.game .gb .say','ul.dots li','.stat .k','.stat .v','.stat .d',
+    '.bar-row .lbl','.bar-row .num','.pill','footer span','.tab'];
+
+  var editing = false;
+  var body = document.body;
+  var btnEdit = document.getElementById('btnEdit');
+  var btnSave = document.getElementById('btnSave');
+  var hint = document.getElementById('editHint');
+
+  function eachEditable(fn){
+    EDITABLE.forEach(function(sel){
+      document.querySelectorAll(sel).forEach(fn);
+    });
+  }
+
+  function setEdit(on){
+    editing = on;
+    body.classList.toggle('editing', on);
+    eachEditable(function(el){
+      if(on){ el.setAttribute('contenteditable','true'); el.setAttribute('spellcheck','false'); }
+      else { el.removeAttribute('contenteditable'); el.removeAttribute('spellcheck'); }
+    });
+    // headings with an svg inside: keep only the text node editable
+    document.querySelectorAll('h2.sec').forEach(function(h){
+      if(on){ h.setAttribute('contenteditable','true'); h.setAttribute('spellcheck','false'); }
+      else { h.removeAttribute('contenteditable'); h.removeAttribute('spellcheck'); }
+    });
+    btnEdit.classList.toggle('on', on);
+    btnEdit.textContent = on ? 'Hotovo' : 'Upraviť';
+    hint.textContent = on ? 'Klikni do textu a píš' : 'Prezeranie';
+    ensureDelButtons(on);
+  }
+
+  function mkDel(){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'delbtn'; b.textContent = '✕';
+    b.title = 'Odstrániť';
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      var host = b.closest('.chip, .game, .check li, .tbl tbody tr');
+      if(host && confirm('Odstrániť túto položku?')) host.remove();
+    });
+    return b;
+  }
+
+  function ensureDelButtons(on){
+    if(!on) return;
+    document.querySelectorAll('#chipGrid .chip, .games .game, .check li, .tbl tbody tr').forEach(function(host){
+      if(host.querySelector(':scope > .delbtn')) return;
+      if(host.matches('.tbl tbody tr')){
+        var td = host.querySelector('td:last-child');
+        if(td && !td.querySelector('.delbtn')) td.insertBefore(mkDel(), td.firstChild);
+      } else {
+        host.appendChild(mkDel());
+      }
+    });
+  }
+
+  btnEdit.addEventListener('click', function(){ setEdit(!editing); });
+
+  // ---- add new items ----
+  var CHIP_TPL = '<div class="swatch" style="background:var(--purple)"><span class="no">NOVÝ / DOSAH</span></div>'+
+    '<div class="body"><h4>Názov nápadu</h4>'+
+    '<p class="why">Krátke vysvetlenie, prečo tento nápad funguje a pre koho je.</p>'+
+    '<div class="hook">Sem napíš hook.</div>'+
+    '<div class="foot"><span class="pill reach">dosah</span></div></div>';
+
+  var GAME_TPL = '<div class="gh"><span class="t">Názov aktivity</span><span class="fmt">Anketa</span></div>'+
+    '<div class="gb"><p class="how">Ako to funguje a čo sa ukáže divákovi.</p>'+
+    '<p class="say">Poznámka, na čo si dať pozor.</p></div>';
+
+  document.querySelectorAll('.addbtn').forEach(function(b){
+    b.addEventListener('click', function(){
+      var kind = b.dataset.add, el;
+      if(kind === 'chip'){
+        el = document.createElement('article');
+        el.className = 'chip'; el.dataset.t = 'reach'; el.innerHTML = CHIP_TPL;
+        document.getElementById('chipGrid').appendChild(el);
+      } else if(kind === 'game'){
+        el = document.createElement('div');
+        el.className = 'game'; el.innerHTML = GAME_TPL;
+        document.querySelector('.games').appendChild(el);
+      } else if(kind === 'check'){
+        var ul = document.querySelector('.check');
+        var id = 'c' + Date.now();
+        el = document.createElement('li');
+        el.innerHTML = '<input type="checkbox" id="'+id+'"><label for="'+id+'">Nový záber</label>';
+        ul.appendChild(el);
+      }
+      if(!editing) setEdit(true); else { setEdit(false); setEdit(true); }
+      if(el) el.scrollIntoView({block:'center', behavior:'smooth'});
+    });
+  });
+
+  // ---- export ----
+  function buildExportHTML(){
+    var wasEditing = editing;
+    if(wasEditing) setEdit(false);
+
+    var clone = document.documentElement.cloneNode(true);
+    clone.querySelectorAll('.delbtn').forEach(function(x){ x.remove(); });
+    clone.querySelectorAll('[contenteditable]').forEach(function(x){ x.removeAttribute('contenteditable'); });
+    clone.querySelectorAll('[spellcheck]').forEach(function(x){ x.removeAttribute('spellcheck'); });
+    clone.querySelectorAll('input[type="checkbox"]').forEach(function(x){
+      var live = document.getElementById(x.id);
+      if(live && live.checked) x.setAttribute('checked','checked'); else x.removeAttribute('checked');
+    });
+    // reset panels so the saved copy opens on the first tab
+    clone.querySelectorAll('.panel').forEach(function(p,i){ p.classList.toggle('is-on', i===0); });
+    clone.querySelectorAll('.tab').forEach(function(t,i){ t.setAttribute('aria-selected', i===0 ? 'true':'false'); });
+    clone.querySelectorAll('.chip').forEach(function(c){ c.style.display=''; });
+
+    if(wasEditing) setEdit(true);
+    return '<!DOCTYPE html>\n' + clone.outerHTML;
+  }
+  window.__gmBuildExportHTML = buildExportHTML;
+
+  function stamp(){
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  window.__gmStamp = stamp;
+
+  btnSave.addEventListener('click', function(){
+    var blob = new Blob([buildExportHTML()], {type:'text/html;charset=utf-8'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'gomerch-hub-' + stamp() + '.html';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1500);
+  });
+
+  // warn before leaving with unsaved edits
+  var touched = false;
+  document.addEventListener('input', function(){ touched = true; });
+  window.addEventListener('beforeunload', function(e){
+    if(touched){ e.preventDefault(); e.returnValue = ''; }
+  });
+
+  // hook generator
+  var HOOKS = [
+    'Toto o [počet] dní uvidíš naživo. Dnes je to ešte materiál.',
+    'Väčšina ľudí si myslí, že najťažšia je grafika. Nie je.',
+    'Toto trvá [počet] sekúnd. A nedá sa to vrátiť späť.',
+    'Merch nezabije cena. Zabije ho piate pranie.',
+    'Toto je [počet] kusov. Hádaj, za ako dlho.',
+    'Existuje [počet] spôsobov, ako dostať logo na tričko. Toto je najstarší.',
+    'Toto na festivale prejdeš bez povšimnutia. Pritom to niekto musel vyrobiť.',
+    'Deväťdesiat percent problémov v tlači vzniká skôr, než sa čokoľvek vytlačí.',
+    'Toto tričko nikdy neopustí halu. A preto o nás vieš.',
+    'Ak ti potlač po troch praniach popraskala, nebola to chyba pračky.',
+    'Toto je stroj, ktorý vyrobí celú vec bez jediného švu.',
+    'Objednávka trvá štrnásť dní. Výroba z toho je jeden.',
+    'To isté logo. Tri technológie. Hádaj, ktorá vydrží.',
+    'Prestaň vyberať tlačiareň podľa ceny za kus.',
+    'Toto vyzerá jednoducho. Trvalo to [počet] hodín.'
+  ];
+  var out = document.getElementById('genOut');
+  var btn = document.getElementById('genBtn');
+  var last = -1;
+  if(btn && out){
+    btn.addEventListener('click', function(){
+      var i = last;
+      while(i === last && HOOKS.length > 1){ i = Math.floor(Math.random()*HOOKS.length); }
+      last = i;
+      out.textContent = HOOKS[i];
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
