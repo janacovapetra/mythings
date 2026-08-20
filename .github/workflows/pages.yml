@@ -1,0 +1,39 @@
+name: Publikovanie stránky na GitHub Pages
+
+on:
+  push:
+    branches: [claude/public-webpage-url-qw00o5]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Stiahnutie repozitára
+        uses: actions/checkout@v4
+
+      - name: Nastavenie Pages (zapne ich, ak ešte nie sú)
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Zabalenie stránky
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Nasadenie
+        id: deployment
+        uses: actions/deploy-pages@v4
