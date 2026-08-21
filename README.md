@@ -32,3 +32,7 @@ Stránka sa po každej zmene sama nasadí na GitHub Pages cez workflow
   (29. 8. 2026, Bunky na Lookach). Verejná adresa: `.../minifestival/`.
   Odškrtávací zoznam, kto čo nesie, časová os doobeda, režim **Upraviť** a tlač do PDF.
   Zmeny sa ukladajú do prehliadača návštevníka, takže po návrate na stránku ostávajú.
+
+Pages nasadzuje iba tú vetvu, ktorá je v nastaveniach repozitára zvolená ako zdroj
+stránky (teraz `claude/public-webpage-url-qw00o5`). Nová stránka sa na verejnú adresu
+dostane až po zlúčení do tejto vetvy — alebo po prepnutí zdroja v *Settings → Pages*.
