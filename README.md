@@ -25,3 +25,10 @@ Stránka sa po každej zmene sama nasadí na GitHub Pages cez workflow
   **Stiahnuť** sa uloží kópia stránky aj so zmenami (zmeny sa neukladajú samy,
   po zatvorení karty sú preč)
 - `Ctrl/Cmd + P` vytlačí alebo uloží celý hub do PDF vrátane všetkých záložiek
+
+## Ďalšie stránky
+
+- `minifestival/index.html` — plán stanovíšť minifestivalu Kolektiv × Bača Customs
+  (29. 8. 2026, Bunky na Lookach). Verejná adresa: `.../minifestival/`.
+  Odškrtávací zoznam, kto čo nesie, časová os doobeda, režim **Upraviť** a tlač do PDF.
+  Zmeny sa ukladajú do prehliadača návštevníka, takže po návrate na stránku ostávajú.

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Minifestival na Lookach</title>
+<meta name="description" content="Plán šiestich stanovíšť minifestivalu Kolektiv × Bača Customs — čo na nich bude, čo treba priniesť a kto to nesie.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+/* ---------- tokeny ---------- */
+:root{
+  --ground:#EDEDE3;
+  --card:#FAFAF4;
+  --sunk:#F1F1E6;
+  --ink:#1B2A1E;
+  --ink-2:#4B5A49;
+  --ink-3:#7B8878;
+  --rule:#D3D5C3;
+  --rule-2:#E1E2D4;
+  --plate:#223B2A;
+  --plate-ink:#EFEFE3;
+  --plate-dim:#A9BCA7;
+  --signal:#A8501A;
+
+  --c-gold:#8A5A00;
+  --c-green:#2E6B3B;
+  --c-blue:#1E5C93;
+  --c-rust:#A8501A;
+  --c-olive:#5C6B1B;
+  --c-crimson:#A32F35;
+
+  --shadow:0 1px 0 rgba(27,42,30,.05), 0 10px 26px -18px rgba(27,42,30,.45);
+
+  --f-disp:'Archivo Narrow','Arial Narrow',Helvetica,sans-serif;
+  --f-body:'Source Serif 4',Georgia,'Times New Roman',serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#141B15;
+    --card:#1C241C;
+    --sunk:#222B21;
+    --ink:#E8EBDD;
+    --ink-2:#B2BCAA;
+    --ink-3:#83907C;
+    --rule:#33422F;
+    --rule-2:#2A3628;
+    --plate:#2C4632;
+    --plate-ink:#F0F2E4;
+    --plate-dim:#9DB29B;
+    --signal:#E08C4E;
+
+    --c-gold:#D9A93C;
+    --c-green:#6FB57B;
+    --c-blue:#69A8DD;
+    --c-rust:#E08C4E;
+    --c-olive:#AFC055;
+    --c-crimson:#E2757A;
+
+    --shadow:0 1px 0 rgba(0,0,0,.3), 0 12px 28px -20px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#141B15;
+  --card:#1C241C;
+  --sunk:#222B21;
+  --ink:#E8EBDD;
+  --ink-2:#B2BCAA;
+  --ink-3:#83907C;
+  --rule:#33422F;
+  --rule-2:#2A3628;
+  --plate:#2C4632;
+  --plate-ink:#F0F2E4;
+  --plate-dim:#9DB29B;
+  --signal:#E08C4E;
+
+  --c-gold:#D9A93C;
+  --c-green:#6FB57B;
+  --c-blue:#69A8DD;
+  --c-rust:#E08C4E;
+  --c-olive:#AFC055;
+  --c-crimson:#E2757A;
+
+  --shadow:0 1px 0 rgba(0,0,0,.3), 0 12px 28px -20px rgba(0,0,0,.9);
+}
+
+/* ---------- základ ---------- */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:17px;
+  line-height:1.6;
+  font-optical-sizing:auto;
+}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+ul,ol{margin:0;padding:0;list-style:none}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px;border-radius:2px}
+
+/* ---------- lišta ---------- */
+.bar{
+  position:sticky;top:0;z-index:30;
+  background:var(--plate);
+  color:var(--plate-ink);
+  display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;
+  padding:9px 18px;
+  border-bottom:3px solid var(--signal);
+}
+.bar .brand{
+  font-family:var(--f-disp);font-weight:700;font-size:14px;
+  letter-spacing:.09em;text-transform:uppercase;
+}
+.bar .prog{display:flex;align-items:center;gap:9px;margin-right:auto;font-family:var(--f-mono);font-size:12px;color:var(--plate-dim)}
+.bar .prog b{color:var(--plate-ink);font-weight:500;font-variant-numeric:tabular-nums}
+.gbar{width:74px;height:5px;border-radius:99px;background:rgba(255,255,255,.16);overflow:hidden}
+.gbar::after{content:"";display:block;height:100%;width:var(--p,0%);background:var(--signal);transition:width .25s ease}
+.bar button{
+  font-family:var(--f-disp);font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;
+  background:transparent;border:1.5px solid rgba(240,242,228,.35);
+  padding:5px 13px;border-radius:3px;cursor:pointer;
+}
+.bar button:hover{background:rgba(240,242,228,.12);border-color:var(--plate-ink)}
+.bar button[aria-pressed="true"]{background:var(--signal);border-color:var(--signal);color:#fff}
+.only-edit{display:none}
+body.edit .only-edit{display:inline-block}
+
+/* ---------- stránka ---------- */
+.wrap{max-width:1000px;margin:0 auto;padding:46px 22px 96px}
+
+.eyebrow{
+  font-family:var(--f-mono);font-size:12px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--signal);
+  display:block;margin-bottom:14px;
+}
+h1{
+  font-family:var(--f-disp);font-weight:700;
+  font-size:clamp(38px,6.4vw,66px);line-height:.98;letter-spacing:-.015em;
+}
+h1 .x{color:var(--ink-3);font-weight:500}
+.facts{display:flex;flex-wrap:wrap;gap:7px;margin-top:20px}
+.facts li{
+  font-family:var(--f-mono);font-size:12.5px;
+  border:1.5px solid var(--rule);border-radius:3px;
+  padding:3px 10px;background:var(--card);color:var(--ink-2);
+}
+.lede{
+  font-size:20px;line-height:1.5;color:var(--ink-2);
+  max-width:60ch;margin-top:24px;
+}
+
+/* ---------- časová os ---------- */
+.timeline{
+  margin-top:38px;padding:22px 24px 20px;
+  background:var(--card);border:1.5px solid var(--rule);border-radius:4px;
+  box-shadow:var(--shadow);
+}
+.timeline > h2{
+  font-family:var(--f-mono);font-size:11px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);
+  margin-bottom:18px;
+}
+.rail{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative}
+.rail::before{
+  content:"";position:absolute;left:5px;right:5px;top:5px;height:1.5px;
+  background:repeating-linear-gradient(90deg,var(--rule) 0 6px,transparent 6px 11px);
+}
+.rail li{position:relative;padding-top:22px}
+.rail li::before{
+  content:"";position:absolute;top:0;left:0;width:11px;height:11px;border-radius:50%;
+  background:var(--card);border:2.5px solid var(--ink-3);
+}
+.rail li.fixed::before{background:var(--signal);border-color:var(--signal)}
+.rail .t{display:block;font-family:var(--f-mono);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+.rail .l{display:block;font-size:14.5px;color:var(--ink-2);line-height:1.35;margin-top:1px}
+.railnote{margin-top:16px;font-size:14.5px;color:var(--ink-3);font-style:italic}
+
+/* ---------- stanovište ---------- */
+.stn{
+  margin-top:24px;background:var(--card);
+  border:1.5px solid var(--rule);border-radius:4px;overflow:hidden;
+  box-shadow:var(--shadow);
+}
+.t-gold{--blaze:var(--c-gold)}
+.t-green{--blaze:var(--c-green)}
+.t-blue{--blaze:var(--c-blue)}
+.t-rust{--blaze:var(--c-rust)}
+.t-olive{--blaze:var(--c-olive)}
+.t-crimson{--blaze:var(--c-crimson)}
+
+.plate{
+  background:var(--plate);color:var(--plate-ink);
+  display:flex;align-items:center;gap:16px;
+  padding:14px 22px;
+}
+.blaze{
+  flex:none;width:15px;height:36px;border-radius:1px;
+  background:linear-gradient(var(--plate-ink) 0 10px, var(--blaze) 10px 26px, var(--plate-ink) 26px 36px);
+}
+.no{
+  font-family:var(--f-mono);font-size:13px;font-weight:600;
+  color:var(--plate-dim);letter-spacing:.05em;
+}
+.ttl{flex:1;min-width:0}
+.pil{
+  font-family:var(--f-mono);font-size:10.5px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--plate-dim);
+}
+.plate h2{
+  font-family:var(--f-disp);font-weight:600;font-size:25px;
+  line-height:1.12;letter-spacing:-.005em;margin-top:1px;
+}
+.when{
+  flex:none;font-family:var(--f-mono);font-size:12.5px;
+  border:1.5px solid rgba(240,242,228,.3);border-radius:3px;
+  padding:3px 9px;color:var(--plate-ink);white-space:nowrap;
+}
+.bd{padding:22px 22px 20px}
+.purpose{color:var(--ink-2);max-width:64ch}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px;align-items:start}
+
+.pan{background:var(--sunk);border:1.5px solid var(--rule-2);border-radius:4px;padding:15px 17px 11px}
+.pan > h3{
+  font-family:var(--f-mono);font-size:11px;font-weight:600;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--blaze,var(--ink-2));
+  display:flex;align-items:baseline;gap:8px;margin-bottom:10px;
+}
+.cnt{
+  margin-left:auto;font-weight:400;letter-spacing:.03em;
+  color:var(--ink-3);font-variant-numeric:tabular-nums;
+}
+.list{display:flex;flex-direction:column}
+.row{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:5px 0;font-size:15.5px;line-height:1.45;
+  border-bottom:1px solid transparent;
+}
+.row + .row{border-top:1px solid var(--rule-2)}
+.txt{flex:1;min-width:0}
+.sub{display:block;font-size:13.5px;color:var(--ink-3);font-style:italic;line-height:1.35}
+.dot{
+  flex:none;width:7px;height:7px;margin:8px 0 0;
+  background:var(--blaze,var(--ink-3));
+  transform:rotate(45deg);
+}
+.row input[type=checkbox]{
+  appearance:none;-webkit-appearance:none;flex:none;
+  width:17px;height:17px;margin:5px 0 0;
+  border:2px solid var(--blaze,var(--ink-3));border-radius:2px;
+  background:transparent;cursor:pointer;position:relative;
+}
+.row input[type=checkbox]:checked{background:var(--blaze,var(--ink-3))}
+.row input[type=checkbox]:checked::after{
+  content:"";position:absolute;left:4px;top:0;
+  width:5px;height:10px;border:solid var(--card);
+  border-width:0 2.5px 2.5px 0;transform:rotate(42deg);
+}
+.row input[type=checkbox]:checked ~ .txt{color:var(--ink-3);text-decoration:line-through;text-decoration-thickness:1px}
+.tag{
+  flex:none;align-self:center;
+  font-family:var(--f-mono);font-size:10.5px;font-weight:500;
+  letter-spacing:.08em;text-transform:uppercase;
+  color:var(--blaze,var(--ink-2));
+  border:1.5px solid var(--blaze,var(--rule));border-radius:99px;
+  padding:1px 8px;white-space:nowrap;
+}
+.del{
+  flex:none;align-self:center;display:none;
+  background:none;border:0;cursor:pointer;color:var(--ink-3);
+  font-size:17px;line-height:1;padding:1px 4px;
+}
+body.edit .del{display:block}
+.del:hover{color:var(--signal)}
+.add{
+  display:none;background:none;border:0;cursor:pointer;padding:9px 0 3px;
+  font-family:var(--f-mono);font-size:11.5px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--blaze,var(--ink-2));
+}
+body.edit .add{display:block}
+.add:hover{text-decoration:underline}
+.newstn{
+  display:none;width:100%;margin-top:24px;padding:16px;
+  font-family:var(--f-disp);font-size:14px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);
+  background:none;border:2px dashed var(--rule);border-radius:4px;cursor:pointer;
+}
+body.edit .newstn{display:block}
+.newstn:hover{border-color:var(--plate);color:var(--ink)}
+
+/* ---------- záver ---------- */
+.closing{margin-top:52px}
+.closing > h2{
+  font-family:var(--f-disp);font-weight:700;font-size:30px;letter-spacing:-.01em;
+  padding-bottom:9px;border-bottom:2.5px solid var(--ink);
+}
+.closing > h2 + .two{margin-top:20px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.two .pan{background:var(--card);border-color:var(--rule)}
+
+.blocked{
+  background:var(--plate);color:var(--plate-ink);
+  border-radius:4px;padding:20px 22px;
+  border-left:6px solid var(--signal);
+  display:flex;flex-direction:column;gap:11px;
+}
+.blocked h3{
+  font-family:var(--f-mono);font-size:11px;font-weight:600;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--signal);
+}
+.blocked p{font-size:15.5px;line-height:1.5;color:var(--plate-ink)}
+.blocked b{font-family:var(--f-disp);font-weight:700;letter-spacing:.02em}
+
+footer{
+  margin-top:52px;padding-top:18px;border-top:1.5px solid var(--rule);
+  font-size:14px;color:var(--ink-3);max-width:70ch;
+}
+
+@media (max-width:760px){
+  body{font-size:16px}
+  .wrap{padding:32px 15px 72px}
+  .cols,.two{grid-template-columns:1fr}
+  .rail{grid-template-columns:1fr;gap:0}
+  .rail::before{left:5px;right:auto;top:6px;bottom:6px;height:auto;width:1.5px;
+    background:repeating-linear-gradient(180deg,var(--rule) 0 6px,transparent 6px 11px)}
+  .rail li{padding:0 0 16px 24px}
+  .rail li::before{top:4px}
+  .rail li:last-child{padding-bottom:0}
+  .plate{flex-wrap:wrap;gap:12px}
+  .when{order:3;width:100%}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+@media print{
+  .bar,.del,.add,.newstn{display:none!important}
+  body{background:#fff;color:#000;font-size:11pt}
+  .wrap{max-width:none;padding:0}
+  .stn,.timeline{break-inside:avoid;box-shadow:none;border-color:#999}
+  .plate,.blocked{background:#eee!important;color:#000!important}
+  .pil,.no,.when,.plate h2{color:#000!important}
+}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <span class="brand">Stanovištia</span>
+  <span class="prog">Pripravené <b id="gcnt">0 / 0</b><span class="gbar" id="gbar" role="img" aria-label="Postup príprav"></span></span>
+  <button id="editBtn" aria-pressed="false">Upraviť</button>
+  <button class="only-edit" id="addStnBtn">+ stanovište</button>
+  <button class="only-edit" id="resetBtn">Vrátiť pôvodné</button>
+  <button id="printBtn">Tlačiť</button>
+</div>
+
+<div class="wrap" id="doc">
+
+<header>
+  <span class="eyebrow" data-e>Plán stanovíšť · pracovný dokument</span>
+  <h1 data-e>Minifestival Kolektiv <span class="x">×</span> Bača Customs</h1>
+  <ul class="facts">
+    <li data-e>29. augusta 2026</li>
+    <li data-e>8:00 – 12:00</li>
+    <li data-e>Bunky na Lookach, Trenčín</li>
+    <li data-e>6 stanovíšť</li>
+  </ul>
+  <p class="lede" data-e>Šesť stanovíšť, jedna myšlienka: vyrob si niečo, postaraj sa o svoje telo a nechaj sa pri tom stretnúť s ľuďmi. Nikto nemusí nič vedieť dopredu — všetko je vysvetlené na mieste.</p>
+</header>
+
+<section class="timeline">
+  <h2>Priebeh doobeda</h2>
+  <ol class="rail">
+    <li><span class="t" data-e>8:00</span><span class="l" data-e>Príchod a check-in</span></li>
+    <li class="fixed"><span class="t" data-e>8:20</span><span class="l" data-e>Joga pod plachtou, 75 minút</span></li>
+    <li class="fixed"><span class="t" data-e>9:50</span><span class="l" data-e>Brunch, všetci sa zídu</span></li>
+    <li><span class="t" data-e>12:00</span><span class="l" data-e>Koniec a balenie</span></li>
+  </ol>
+  <p class="railnote" data-e>Pevné časy sú len dva — joga a brunch. Poskladaj telo, Bača Customs aj hry bežia celé doobeda a chodí sa na ne voľne.</p>
+</section>
+
+<section class="stn t-gold">
+  <div class="plate">
+    <span class="blaze" aria-hidden="true"></span>
+    <span class="no" data-e>00</span>
+    <div class="ttl"><p class="pil" data-e>Príchod</p><h2 data-e>Privítaj sa</h2></div>
+    <span class="when" data-e>od 8:00</span>
+  </div>
+  <div class="bd">
+    <p class="purpose" data-e>Prvé tri minúty rozhodujú, či sa človek uvoľní alebo zostane v strehu. Tu sa odbaví check-in, dostane mapku a hneď vidí, kam môže ísť sám.</p>
+    <div class="cols">
+      <div class="pan"><h3>Čo tam bude</h3>
+        <ul class="list">
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Check-in podľa zoznamu prihlásených</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Mapka stanovíšť<span class="sub">aby sa nikto nemusel pýtať</span></span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Tabuľa s programom dňa</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>QR na web a rozvrh Kolektivu</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="dot">+ pridať</button></div>
+      <div class="pan pan-check"><h3>Čo potrebujeme <span class="cnt">0/0</span></h3>
+        <ul class="list">
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Banner Kolektiv</span><span class="tag" data-e>Kolektiv</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Tabuľa s názvom festivalu</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Vytlačený zoznam prihlásených</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Mapka stanovíšť, A3 v obale</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>QR kód na rozvrh, vytlačený</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Letáky z Korzo eventu</span><span class="tag" data-e>Kolektiv</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Stolík alebo drevená debna</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Vlajočky nad vstup</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="check">+ pridať</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="stn t-green">
+  <div class="plate">
+    <span class="blaze" aria-hidden="true"></span>
+    <span class="no" data-e>01</span>
+    <div class="ttl"><p class="pil" data-e>Postaraj sa o svoje telo</p><h2 data-e>Joga s Kolektivom</h2></div>
+    <span class="when" data-e>8:20 – 9:35</span>
+  </div>
+  <div class="bd">
+    <p class="purpose" data-e>Hodina pod plachtou. Vedie Mirka. Jediné stanovište s pevným časom, všetko ostatné beží voľne.</p>
+    <div class="cols">
+      <div class="pan"><h3>Čo tam bude</h3>
+        <ul class="list">
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Vedená hodina, 75 minút</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Podložky aj pre tých, čo si nedoniesli</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Voda a poháre po celý čas</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Tichá zóna, najďalej od hier</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="dot">+ pridať</button></div>
+      <div class="pan pan-check"><h3>Čo potrebujeme <span class="cnt">0/0</span></h3>
+        <ul class="list">
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Podložky + náhradné</span><span class="tag" data-e>Kolektiv</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Deky na prikrytie</span><span class="tag" data-e>Kolektiv</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Koberec alebo kilim pod stan</span><span class="tag" data-e>Kolektiv</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Kanvica, poháre, kanister s vodou</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Činelky alebo miska na záver</span><span class="tag" data-e>Kolektiv</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Tabuľka „joga“ na palici</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="check">+ pridať</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="stn t-blue">
+  <div class="plate">
+    <span class="blaze" aria-hidden="true"></span>
+    <span class="no" data-e>02</span>
+    <div class="ttl"><p class="pil" data-e>Postaraj sa o svoje telo</p><h2 data-e>Poskladaj telo</h2></div>
+    <span class="when" data-e>celé doobeda</span>
+  </div>
+  <div class="bd">
+    <p class="purpose" data-e>Interaktívne náučné telo pre zvedavé archetypy. Silueta v životnej veľkosti, ku ktorej ľudia priraďujú orgány a svaly. Funguje bez dozoru a je to jediná vec na festivale, ktorú nemá nikto iný.</p>
+    <div class="cols">
+      <div class="pan"><h3>Čo tam bude</h3>
+        <ul class="list">
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Silueta cca 170 cm, postavená o palice</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Ľahká sada<span class="sub">srdce, pľúca, žalúdok, mozog — pre deti</span></span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Ťažšia sada<span class="sub">bránica, panvové dno, sedací sval — pre dospelých</span></span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Kontrola na zadnej strane dielu<span class="sub">správne miesto a jedna veta, čo tá časť robí</span></span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="dot">+ pridať</button></div>
+      <div class="pan pan-check"><h3>Čo potrebujeme <span class="cnt">0/0</span></h3>
+        <ul class="list">
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Silueta na preglejke alebo kartóne</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Vyrezané diely, obe sady</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Suchý zips v rolke</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Popisky na zadné strany dielov</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>2 palice a vzpery na postavenie</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Tabuľka a zalaminované pravidlá</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="check">+ pridať</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="stn t-rust">
+  <div class="plate">
+    <span class="blaze" aria-hidden="true"></span>
+    <span class="no" data-e>03</span>
+    <div class="ttl"><p class="pil" data-e>Vyrob si</p><h2 data-e>Bača Customs</h2></div>
+    <span class="when" data-e>celé doobeda</span>
+  </div>
+  <div class="bd">
+    <p class="purpose" data-e>DIY workshop. Miroslav si chystá vlastný obsah — materiál, náradie aj to, čo bude robiť sám. Pre nás je dôležité, aby stanovište vyzeralo ako súčasť festivalu, nie ako stánok vedľa.</p>
+    <div class="cols">
+      <div class="pan"><h3>Čo tam bude</h3>
+        <ul class="list">
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Pracovný stôl, na ktorom sa dá reálne robiť</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Aktivita pre deti aj dospelých</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Hmatová hádanka<span class="sub">5 predmetov pod plachtou, háda sa materiál</span></span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Ukážka hotových vecí</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="dot">+ pridať</button></div>
+      <div class="pan pan-check"><h3>Čo potrebujeme <span class="cnt">0/0</span></h3>
+        <ul class="list">
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Kozy a doska ako stôl</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Náradie a materiál na workshop</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Kraftový papier ako obrus</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Debny na materiál a odpad</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Plachta a 5 predmetov na hádanku</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Vlhčené utierky, handra</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Tabuľka a QR na jeho profil</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="check">+ pridať</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="stn t-olive">
+  <div class="plate">
+    <span class="blaze" aria-hidden="true"></span>
+    <span class="no" data-e>04</span>
+    <div class="ttl"><p class="pil" data-e>Zabav sa</p><h2 data-e>Petang a cornhole</h2></div>
+    <span class="when" data-e>celé doobeda</span>
+  </div>
+  <div class="bd">
+    <p class="purpose" data-e>Dve hry vedľa seba na štrkovej ploche. Nikto pri nich nestojí a nevysvetľuje — pravidlá visia na palici a QR vedie na dvadsaťsekundové video.</p>
+    <div class="cols">
+      <div class="pan"><h3>Čo tam bude</h3>
+        <ul class="list">
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Petang, hrá sa do 13 bodov</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Cornhole z jednej dosky<span class="sub">dve hádzacie čiary — 5 m dospelí, 3 m deti</span></span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Pavúk dvojíc na kartóne<span class="sub">ľudia sa zapisujú sami</span></span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Pravidlá na tabuli pri každej hre</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="dot">+ pridať</button></div>
+      <div class="pan pan-check"><h3>Čo potrebujeme <span class="cnt">0/0</span></h3>
+        <ul class="list">
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Sada petangových gulí</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Cornhole doska a vrecúška</span><span class="tag" data-e>kúpené</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Povraz na hádzacie čiary</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Kartón a hrubá fixka na pavúka</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>2 tabuľky a zalaminované pravidlá</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Video s pravidlami k obom hrám</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="check">+ pridať</button></div>
+    </div>
+  </div>
+</section>
+
+<section class="stn t-crimson">
+  <div class="plate">
+    <span class="blaze" aria-hidden="true"></span>
+    <span class="no" data-e>05</span>
+    <div class="ttl"><p class="pil" data-e>Občerstvi sa</p><h2 data-e>Brunch</h2></div>
+    <span class="when" data-e>od 9:50</span>
+  </div>
+  <div class="bd">
+    <p class="purpose" data-e>Keď sa všetci zídu z ostatných stanovíšť. Toto je moment, kvôli ktorému ľudia neodídu hneď po joge — a jediná položka, ktorá vás bude reálne stáť peniaze.</p>
+    <div class="cols">
+      <div class="pan"><h3>Čo tam bude</h3>
+        <ul class="list">
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Spoločný stôl alebo piknik na dekách</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Menu a alergény na tabuli</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Bylinkový čaj a voda</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><span class="dot"></span><span class="txt" data-e>Živá hudba, ak sa nájde hráč</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="dot">+ pridať</button></div>
+      <div class="pan pan-check"><h3>Čo potrebujeme <span class="cnt">0/0</span></h3>
+        <ul class="list">
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Jedlo — dodávateľ a počet porcií</span><span class="tag" data-e>otvorené</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Dlhý stôl alebo piknik deky</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Kraftový obrus</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Taniere, príbory, poháre, servítky</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Kartičky s alergénmi</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Termosky, kanvice, bylinky</span><span class="tag" data-e>Kolektiv</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Sušené kvety do plechoviek</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>3 vrecia na odpad</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+          <li class="row"><input type="checkbox"><span class="txt" data-e>Tabuľka „občerstvi sa“ a menu</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        </ul><button class="add" data-mode="check">+ pridať</button></div>
+    </div>
+  </div>
+</section>
+
+<div id="end"></div>
+<button class="newstn" id="newStnBtn">+ pridať ďalšie stanovište</button>
+
+<section class="closing">
+  <h2 data-e>Spoločné pre všetky stanovištia</h2>
+  <div class="two">
+    <div class="pan pan-check t-green"><h3>Konštrukcia tabuliek <span class="cnt">0/0</span></h3>
+      <ul class="list">
+        <li class="row"><input type="checkbox"><span class="txt" data-e>8 zaostrených paličiek, 160 cm</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><input type="checkbox"><span class="txt" data-e>7 komaxitových tabuliek s názvami</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><input type="checkbox"><span class="txt" data-e>Esá a upínacie pásky</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><input type="checkbox"><span class="txt" data-e>Laminovacie fólie alebo euroobaly</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><input type="checkbox"><span class="txt" data-e>Vŕtačka na mieste</span><span class="tag" data-e>Bača</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+      </ul><button class="add" data-mode="check">+ pridať</button></div>
+    <div class="pan pan-check t-rust"><h3>Zázemie a poistky <span class="cnt">0/0</span></h3>
+      <ul class="list">
+        <li class="row"><input type="checkbox"><span class="txt" data-e>Lekárnička</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><input type="checkbox"><span class="txt" data-e>Plachta pre prípad dažďa</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><input type="checkbox"><span class="txt" data-e>Powerbanka na telefón</span><span class="tag" data-e>Ty</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><input type="checkbox"><span class="txt" data-e>Malý reproduktor ako záloha za hudbu</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><input type="checkbox"><span class="txt" data-e>Vrecia na zbalenie materiálu</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+      </ul><button class="add" data-mode="check">+ pridať</button></div>
+  </div>
+
+  <h2 style="margin-top:44px" data-e>Čo ešte nie je rozhodnuté</h2>
+  <div class="two">
+    <div class="blocked">
+      <h3>Blokuje propagáciu</h3>
+      <p data-e>Kým tieto veci nie sú jasné, nedá sa zverejniť registrácia ani naceniť brunch.</p>
+      <p data-e><b>Kapacity</b> — koľko ľudí na jogu, koľko porcií na brunch, koľko detí na workshop.</p>
+      <p data-e><b>Cena</b> — koľko platí jeden človek a čo všetko je v tom zahrnuté.</p>
+      <p data-e><b>Jedlo</b> — kto ho zabezpečí a dokedy od nás potrebuje presný počet.</p>
+    </div>
+    <div class="pan t-crimson"><h3>Otvorené otázky</h3>
+      <ul class="list">
+        <li class="row"><span class="dot"></span><span class="txt" data-e>Cena za osobu a čo je v nej zahrnuté</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><span class="dot"></span><span class="txt" data-e>Kto zabezpečuje jedlo a dokedy potrebuje počet</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><span class="dot"></span><span class="txt" data-e>Súhlas a koordinácia s Trenčín 2026</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><span class="dot"></span><span class="txt" data-e>Voda, elektrina a WC na mieste</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><span class="dot"></span><span class="txt" data-e>Hudobník — odpoveď treba do 24. 8.</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+        <li class="row"><span class="dot"></span><span class="txt" data-e>Jeden spoločný registračný formulár</span><button class="del" aria-label="Odstrániť položku">×</button></li>
+      </ul><button class="add" data-mode="dot">+ pridať</button></div>
+  </div>
+</section>
+
+<footer>
+  <p>Pracovný dokument — pošli link komukoľvek z tímu. Odškrtnuté položky a úpravy textu sa ukladajú v tomto prehliadači, takže ich po návrate nájdeš tam, kde si ich nechala. Neprenášajú sa medzi zariadeniami ani k ostatným. Tlačidlom <b>Tlačiť</b> sa dá celý plán uložiť do PDF.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY = 'mf-lookach-v2';
+  var doc = document.getElementById('doc');
+  var editBtn = document.getElementById('editBtn');
+  var gcnt = document.getElementById('gcnt');
+  var gbar = document.getElementById('gbar');
+
+  /* --- obnova uloženej verzie --- */
+  try{
+    var stored = localStorage.getItem(KEY);
+    if(stored) doc.innerHTML = stored;
+  }catch(e){}
+
+  var timer = null;
+  function save(){
+    if(timer) clearTimeout(timer);
+    timer = setTimeout(function(){
+      try{
+        doc.querySelectorAll('input[type=checkbox]').forEach(function(c){
+          if(c.checked) c.setAttribute('checked',''); else c.removeAttribute('checked');
+        });
+        var clone = doc.cloneNode(true);
+        clone.querySelectorAll('[contenteditable]').forEach(function(el){ el.removeAttribute('contenteditable'); });
+        localStorage.setItem(KEY, clone.innerHTML);
+      }catch(e){}
+    }, 350);
+  }
+
+  /* --- počítadlá --- */
+  function counts(){
+    var done = 0, total = 0;
+    doc.querySelectorAll('.pan-check').forEach(function(pan){
+      var boxes = pan.querySelectorAll('input[type=checkbox]');
+      var d = 0;
+      boxes.forEach(function(b){
+        if(b.checked) d++;
+        var t = b.parentElement.querySelector('.txt');
+        if(t) b.setAttribute('aria-label', t.textContent.trim());
+      });
+      done += d; total += boxes.length;
+      var el = pan.querySelector('.cnt');
+      if(el) el.textContent = d + '/' + boxes.length;
+    });
+    gcnt.textContent = done + ' / ' + total;
+    gbar.style.setProperty('--p', total ? (done / total * 100) + '%' : '0%');
+    gbar.setAttribute('aria-label', 'Pripravené ' + done + ' z ' + total + ' položiek');
+  }
+
+  /* --- režim úprav --- */
+  function isEdit(){ return document.body.classList.contains('edit'); }
+  function setEdit(on){
+    document.body.classList.toggle('edit', on);
+    editBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    editBtn.textContent = on ? 'Hotovo' : 'Upraviť';
+    doc.querySelectorAll('[data-e]').forEach(function(el){
+      if(on) el.setAttribute('contenteditable','true'); else el.removeAttribute('contenteditable');
+    });
+  }
+  editBtn.addEventListener('click', function(){ setEdit(!isEdit()); });
+  document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    if(window.confirm('Vrátiť stránku do pôvodného stavu? Všetky tvoje úpravy a odškrtnutia sa zmažú.')){
+      try{ localStorage.removeItem(KEY); }catch(e){}
+      window.location.reload();
+    }
+  });
+
+  /* --- riadky --- */
+  var DEL = '<button class="del" aria-label="Odstrániť položku">×</button>';
+  function addRow(btn){
+    var ul = btn.parentElement.querySelector('.list');
+    var li = document.createElement('li');
+    li.className = 'row';
+    li.innerHTML = (btn.dataset.mode === 'check' ? '<input type="checkbox">' : '<span class="dot"></span>')
+      + '<span class="txt" data-e contenteditable="true">Nová položka</span>' + DEL;
+    ul.appendChild(li);
+    var txt = li.querySelector('.txt');
+    txt.focus();
+    var r = document.createRange(); r.selectNodeContents(txt);
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    counts(); save();
+  }
+
+  var PALETTE = ['t-gold','t-green','t-blue','t-rust','t-olive','t-crimson'];
+  function addStation(){
+    var n = doc.querySelectorAll('.stn').length;
+    var s = document.createElement('section');
+    s.className = 'stn ' + PALETTE[n % PALETTE.length];
+    s.innerHTML =
+      '<div class="plate"><span class="blaze" aria-hidden="true"></span>'
+      + '<span class="no" data-e contenteditable="true">' + String(n).padStart(2,'0') + '</span>'
+      + '<div class="ttl"><p class="pil" data-e contenteditable="true">Pilier</p>'
+      + '<h2 data-e contenteditable="true">Názov stanovišťa</h2></div>'
+      + '<span class="when" data-e contenteditable="true">čas</span></div>'
+      + '<div class="bd"><p class="purpose" data-e contenteditable="true">Načo to tam je a pre koho.</p><div class="cols">'
+      + '<div class="pan"><h3>Čo tam bude</h3><ul class="list">'
+      + '<li class="row"><span class="dot"></span><span class="txt" data-e contenteditable="true">Nová položka</span>' + DEL + '</li>'
+      + '</ul><button class="add" data-mode="dot">+ pridať</button></div>'
+      + '<div class="pan pan-check"><h3>Čo potrebujeme <span class="cnt">0/0</span></h3><ul class="list">'
+      + '<li class="row"><input type="checkbox"><span class="txt" data-e contenteditable="true">Nová položka</span>' + DEL + '</li>'
+      + '</ul><button class="add" data-mode="check">+ pridať</button></div>'
+      + '</div></div>';
+    document.getElementById('end').before(s);
+    s.scrollIntoView({behavior:'smooth', block:'center'});
+    counts(); save();
+  }
+  document.getElementById('addStnBtn').addEventListener('click', addStation);
+  document.getElementById('newStnBtn').addEventListener('click', addStation);
+
+  /* --- delegované akcie --- */
+  doc.addEventListener('click', function(e){
+    var del = e.target.closest('.del');
+    if(del){ del.closest('.row').remove(); counts(); save(); return; }
+    var add = e.target.closest('.add');
+    if(add){ addRow(add); return; }
+    if(isEdit()) return;
+    var row = e.target.closest('.row');
+    if(row && !e.target.matches('input[type=checkbox]')){
+      var box = row.querySelector('input[type=checkbox]');
+      if(box){ box.checked = !box.checked; counts(); save(); }
+    }
+  });
+  doc.addEventListener('change', function(e){
+    if(e.target.matches('input[type=checkbox]')){ counts(); save(); }
+  });
+  doc.addEventListener('input', function(e){
+    if(e.target.closest('[data-e]')) save();
+  });
+
+  counts();
+})();
+</script>
+</body>
+</html>
