@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="sk"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Riadiaci panel Kolektívu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --side:#232821; --side-2:#2F362C; --side-txt:#EFEDE4; --side-mut:#98A08D;
+  --bg:#F2EEE7; --card:#FFFFFF; --ink:#1E211C; --mut:#6E7566;
+  --line:#E4DDD0; --line-2:#D3CABA;
+  --acc:#8C977D; --acc-dk:#5A6450; --acc-soft:#EDF0E8;
+  --tan:#AC8D71; --tan-dk:#8B6B4E; --tan-soft:#F6EFE6;
+  --ok:#5A6450; --ok-soft:#EDF0E8; --warn:#8B6B4E; --warn-soft:#F6EFE6;
+  --r:6px;
+  --fd:'Fraunces',Georgia,serif;
+  --fb:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --fm:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:8px 10px;width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible,[contenteditable]:focus{outline:2px solid var(--acc-dk);outline-offset:1px}
+textarea{resize:vertical;min-height:70px;line-height:1.5}
+.mono{font-family:var(--fm)}
+
+.shell{display:flex;min-height:100vh}
+aside{width:270px;flex:0 0 270px;background:var(--side);color:var(--side-txt);padding:26px 0 30px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.wordmark{padding:0 26px 4px}
+.wordmark h1{font-family:var(--fd);font-size:30px;font-weight:400;letter-spacing:-.01em}
+.wordmark h1 span{color:var(--acc)}
+.wordmark p{color:var(--side-mut);font-size:13px;margin-top:4px;line-height:1.4}
+nav{margin-top:20px;padding:0 14px}
+.navgroup{font-family:var(--fm);font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--side-mut);padding:16px 12px 7px}
+nav a{display:flex;gap:13px;align-items:baseline;padding:10px 12px;border-radius:var(--r);color:rgba(239,237,228,.82);text-decoration:none;font-size:15px;line-height:1.3}
+nav a:hover{background:rgba(239,237,228,.07);color:var(--side-txt)}
+nav a[aria-current="true"]{background:var(--side-2);color:#fff;font-weight:600;box-shadow:inset 3px 0 0 var(--acc)}
+nav a i{font-style:normal;font-family:var(--fm);font-size:11px;color:var(--side-mut);flex:0 0 18px}
+nav a[aria-current="true"] i{color:var(--acc)}
+.sidefoot{margin:24px 26px 0;padding-top:18px;border-top:1px solid rgba(239,237,228,.14);color:var(--side-mut);font-size:12.5px;line-height:1.55}
+.sidefoot b{color:var(--side-txt)}
+
+main{flex:1;min-width:0}
+.topbar{background:var(--card);border-bottom:1px solid var(--line);padding:18px 34px;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;position:sticky;top:0;z-index:30}
+.topbar h2{font-family:var(--fd);font-size:26px;font-weight:400;letter-spacing:-.01em}
+.topbar .sub{color:var(--mut);font-size:13.5px;margin-top:2px}
+.acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{padding:8px 13px;border-radius:100px;font-size:13px;font-weight:600}
+.chip.saved{background:var(--ok-soft);color:var(--ok)}
+.chip.dirty{background:var(--warn-soft);color:var(--warn)}
+.btn{padding:9px 14px;border:1px solid var(--line-2);border-radius:var(--r);font-size:13.5px;font-weight:600;background:#fff;min-height:40px}
+.btn:hover{border-color:var(--ink)}
+.btn.dark{background:var(--side);border-color:var(--side);color:#fff}
+.btn.dark:hover{background:var(--acc-dk);border-color:var(--acc-dk)}
+.btn.on{background:var(--acc-dk);border-color:var(--acc-dk);color:#fff}
+
+.page{padding:32px 34px 90px;max-width:1240px}
+.eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--acc-dk);margin-bottom:10px}
+.page h3{font-family:var(--fd);font-size:32px;font-weight:400;letter-spacing:-.015em;margin-bottom:9px}
+.lede{color:var(--mut);font-size:16px;max-width:66ch;margin-bottom:24px;line-height:1.55}
+h4.sec{font-family:var(--fd);font-size:22px;font-weight:400;margin:38px 0 6px}
+.hint{color:var(--mut);font-size:14px;margin-bottom:16px;max-width:64ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px}
+.card+.card{margin-top:14px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(258px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.note{background:var(--acc-soft);border-left:3px solid var(--acc);border-radius:0 var(--r) var(--r) 0;padding:12px 15px;font-size:14.5px;line-height:1.5}
+.note.tan{background:var(--tan-soft);border-left-color:var(--tan)}
+.note b{font-weight:700}
+.editnote{background:#F0F3EC;border:1px solid #DCE2D3;border-radius:var(--r);padding:13px 16px;font-size:14.5px;color:#48513F;margin-bottom:22px}
+[contenteditable="true"]{background:#FCFBF6;box-shadow:inset 0 -1px 0 var(--line-2);border-radius:3px;padding:1px 3px;margin:0 -3px}
+[contenteditable="true"]:empty::before{content:attr(data-ph);color:#B7B2A4}
+.x{color:var(--line-2);font-size:16px;line-height:1;padding:3px 6px;border-radius:4px}
+.x:hover{color:var(--tan-dk);background:var(--tan-soft)}
+.addbtn{border:1px dashed var(--line-2);border-radius:var(--r);padding:11px 14px;font-size:13.5px;font-weight:600;color:var(--mut);min-height:42px}
+.addbtn:hover{border-color:var(--acc-dk);color:var(--acc-dk);border-style:solid}
+.pill{display:inline-block;font-family:var(--fm);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:100px;border:1px solid var(--line-2);color:var(--mut);white-space:nowrap}
+.pill.dark{background:var(--side);border-color:var(--side);color:#fff}
+.pill.acc{background:var(--acc);border-color:var(--acc);color:#fff}
+.pill.soft{background:var(--acc-soft);border-color:var(--acc-soft);color:var(--acc-dk)}
+.pill.tanp{background:var(--tan-soft);border-color:var(--tan-soft);color:var(--tan-dk)}
+.pill.okp{background:var(--ok-soft);border-color:var(--ok-soft);color:var(--ok)}
+.pill.rub{color:#fff;border:none}
+
+/* ---- myšlienky ---- */
+.idea{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--acc);border-radius:0 10px 10px 0;padding:22px 24px;display:grid;grid-template-columns:44px 1fr;gap:0 16px}
+.idea.alt{border-left-color:var(--tan)}
+.idea+.idea{margin-top:12px}
+.idea .n{font-family:var(--fm);font-size:12px;color:var(--mut);padding-top:8px}
+.idea .q{font-family:var(--fd);font-size:clamp(20px,2.5vw,27px);font-weight:400;line-height:1.22;letter-spacing:-.015em;margin-bottom:10px}
+.idea .b{font-size:15px;color:var(--ink);opacity:.85;margin-bottom:12px;max-width:62ch}
+.idea .s{font-family:var(--fm);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);display:block;margin-bottom:12px}
+.idea .u{border-top:1px solid var(--line);padding-top:11px;display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}
+.idea .u em{font-style:normal;font-family:var(--fm);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut)}
+.pull{background:var(--side);color:var(--side-txt);border-radius:10px;padding:34px 32px;margin-top:16px}
+.pull .q{font-family:var(--fd);font-size:clamp(22px,3.2vw,34px);font-weight:400;line-height:1.15;letter-spacing:-.02em;color:#fff;max-width:20ch;margin-bottom:14px}
+.pull .b{font-size:14.5px;opacity:.8;max-width:54ch}
+.pull .st{display:flex;gap:18px;align-items:baseline;border-top:1px solid rgba(239,237,228,.25);margin-top:24px;padding-top:20px;flex-wrap:wrap}
+.pull .st b{font-family:var(--fd);font-size:40px;font-weight:400;line-height:1;color:#fff}
+.pull .st span{font-size:13px;opacity:.75;max-width:46ch}
+
+/* ---- rubriky ---- */
+.rub{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:0;overflow:hidden}
+.rub+.rub{margin-top:12px}
+.rub .thread{height:5px}
+.rub .in{padding:20px 22px}
+.rub .hd{display:flex;gap:10px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.rub .nm{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase}
+.rub .what{font-family:var(--fd);font-size:20px;line-height:1.3;margin-bottom:10px;max-width:48ch}
+.rub .bd{color:var(--mut);font-size:14.5px;line-height:1.6;max-width:66ch}
+.rub .tg{margin-top:12px}
+input[type=color].col{width:26px;height:26px;padding:0;border:1px solid var(--line-2);flex:0 0 26px}
+input[type=color].col::-webkit-color-swatch-wrapper{padding:0}
+input[type=color].col::-webkit-color-swatch{border:0}
+
+/* ---- plán ---- */
+.mtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.mtab{padding:9px 16px;border:1px solid var(--line-2);border-radius:100px;background:#fff;font-size:14px;font-weight:600}
+.mtab[aria-pressed="true"]{background:var(--side);border-color:var(--side);color:#fff}
+.week{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.week-h{background:var(--side);color:#fff;padding:13px 20px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.week-h h5{font-family:var(--fd);font-size:18px;font-weight:400}
+.week-h .r{display:flex;gap:14px;align-items:center;color:rgba(255,255,255,.75);font-size:13px}
+.item{padding:17px 20px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr 180px;gap:16px}
+.item:last-child{border-bottom:none}
+.item .typ{margin-bottom:8px;display:flex;gap:6px;flex-wrap:wrap}
+.item .ttl{font-size:16.5px;font-weight:600;line-height:1.35}
+.item .hook{border-left:3px solid var(--acc);padding:2px 0 2px 13px;margin:11px 0;font-size:15px}
+.item .desc{color:var(--mut);font-size:14.5px}
+.item .cta{color:var(--mut);font-size:14px;margin-top:6px}
+.item .right{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+
+/* ---- tabuľka ---- */
+.twrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:1000px;font-size:14px}
+th{background:#FAF7F1;text-align:left;padding:11px 12px;font-family:var(--fm);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);border-bottom:1px solid var(--line);white-space:nowrap}
+th.num,td.num{text-align:right}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#FCFAF6}
+td.name{font-weight:600;min-width:210px}
+td.name small{display:block;font-weight:400;color:var(--mut);font-size:12.5px;margin-top:2px}
+.ratio{font-family:var(--fm);font-size:13px;font-weight:700;white-space:nowrap}
+.ratio.up{color:var(--ok)}
+.ratio.dn{color:var(--tan-dk)}
+.ratio.mid{color:var(--mut)}
+.mini{width:78px;padding:6px 8px;font-size:13.5px;text-align:right}
+.boostrow td{background:#FAF5EC}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:17px 18px}
+.stat .lab{font-family:var(--fm);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);margin-bottom:9px}
+.stat .val{font-family:var(--fd);font-size:34px;font-weight:400;line-height:1;letter-spacing:-.02em}
+.stat .val.empty{font-family:var(--fb);font-size:15px;font-weight:500;color:#B7B2A4}
+.stat .fin{font-size:13px;color:var(--mut);margin-top:9px}
+.stat.key{border-color:var(--tan);box-shadow:inset 0 3px 0 var(--tan)}
+.stat.key .val{color:var(--tan-dk)}
+
+/* ---- hodnotenie ---- */
+.score{display:flex;gap:5px}
+.score button{width:29px;height:29px;border:1px solid var(--line-2);border-radius:5px;font-size:13px;font-weight:700;color:var(--mut);background:#fff}
+.score button[aria-pressed="true"]{background:var(--acc-dk);border-color:var(--acc-dk);color:#fff}
+.srow{display:grid;grid-template-columns:118px 1fr;gap:12px;align-items:center;padding:9px 0;border-bottom:1px dotted var(--line)}
+.srow:last-of-type{border-bottom:none}
+.srow .lab{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.insight{background:var(--side);color:var(--side-txt);border-radius:10px;padding:22px 24px}
+.insight h5{font-family:var(--fd);font-size:19px;font-weight:400;color:#fff;margin-bottom:12px}
+.insight p{font-size:14.5px;line-height:1.6;color:rgba(239,237,228,.82)}
+.insight p+p{margin-top:9px}
+.insight b{color:#fff}
+
+/* ---- zoznamy ---- */
+.task{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)}
+.task:last-of-type{border-bottom:none}
+.task input[type=checkbox]{width:19px;height:19px;flex:0 0 19px;margin-top:3px;accent-color:var(--acc-dk)}
+.task .body{flex:1;min-width:0}
+.task .meta{color:var(--mut);font-size:13px;margin-top:4px;display:flex;gap:9px;flex-wrap:wrap}
+.task.done .body>div:first-child{color:var(--mut);text-decoration:line-through}
+.line{display:flex;gap:10px;align-items:flex-start;padding:11px 0 11px 18px;border-bottom:1px solid var(--line);position:relative}
+.line:last-of-type{border-bottom:none}
+.line:before{content:"";position:absolute;left:0;top:20px;width:8px;height:1px;background:var(--acc)}
+.line.strike:before{background:var(--tan)}
+.line.strike .t{color:var(--mut);text-decoration:line-through}
+.line .t{flex:1;font-size:14.5px}
+.sw{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-top:18px}
+.sw i{display:block;height:54px;border-radius:6px;border:1px solid var(--line);margin-bottom:7px}
+.sw b{font-size:13px}
+.sw code{display:block;font-family:var(--fm);font-size:11.5px;color:var(--mut)}
+.sw em{font-style:normal;font-size:12.5px;color:var(--mut);line-height:1.4;display:block;margin-top:3px}
+.emptyst{padding:24px 0;color:var(--mut);font-size:14.5px}
+.addform{display:grid;grid-template-columns:1fr 168px 130px auto;gap:10px;align-items:start}
+
+/* ---- fotky v rubrikách ---- */
+.imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;margin-top:16px}
+.thumb{position:relative;border-radius:8px;overflow:hidden;background:var(--bg);border:1px solid var(--line)}
+.thumb img{display:block;width:100%;height:104px;object-fit:cover;cursor:zoom-in}
+.thumb .cap{font-size:11.5px;line-height:1.35;color:var(--mut);padding:6px 8px;min-height:24px}
+.thumb .rm{position:absolute;top:5px;right:5px;background:rgba(30,33,28,.72);color:#fff;border-radius:50%;width:22px;height:22px;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center}
+.thumb .rm:hover{background:var(--tan-dk)}
+.upl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.upl label{border:1px dashed var(--line-2);border-radius:var(--r);padding:9px 14px;font-size:13.5px;font-weight:600;color:var(--mut);cursor:pointer}
+.upl label:hover{border-color:var(--acc-dk);color:var(--acc-dk);border-style:solid}
+.upl small{color:var(--mut);font-size:12.5px}
+.lb{position:fixed;inset:0;background:rgba(30,33,28,.9);z-index:200;display:flex;align-items:center;justify-content:center;padding:28px;cursor:zoom-out}
+.lb img{max-width:100%;max-height:100%;border-radius:8px}
+.usage{font-family:var(--fm);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.usage.hot{color:var(--tan-dk);font-weight:500}
+
+@media (max-width:1000px){
+  .shell{flex-direction:column}
+  aside{width:100%;flex:none;height:auto;position:static;padding:18px 0}
+  .wordmark{padding:0 18px}
+  nav{display:flex;gap:6px;overflow-x:auto;padding:14px 18px 4px;margin:0;-webkit-overflow-scrolling:touch}
+  .navgroup{display:none}
+  nav a{white-space:nowrap;border:1px solid rgba(239,237,228,.2);padding:9px 13px}
+  nav a i{display:none}
+  .sidefoot{display:none}
+  .topbar{padding:16px 18px;position:static}
+  .page{padding:22px 18px 70px}
+  .item{grid-template-columns:1fr}
+  .item .right{flex-direction:row;align-items:center;justify-content:flex-start;flex-wrap:wrap}
+  .addform{grid-template-columns:1fr}
+  .page h3{font-size:26px}
+  .idea{grid-template-columns:1fr;padding:20px}
+  .idea .n{padding-top:0;margin-bottom:6px}
+}
+@media print{
+  aside,.acts,.addbtn,.x,.mtabs,.editnote,.score{display:none!important}
+  .topbar{position:static}
+  body{background:#fff}
+  .card,.week,.stat,.twrap,.idea{break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<script id="seed" type="application/json">{"v":1,"updated":1787559425727,"month":"2026-09","kto":{"h":"Nie sme tréneri. Sme sprievodcovia.","p1":"Tréner ti povie, čo máš robiť, a meria, či si to urobila. Sprievodca pozná terén, ide s tebou a vysvetľuje, prečo je cesta taká, aká je.","p2":"Kolektív nepredáva výkon ani premenu. Predáva miesto, čas a ľudí - presne tie tri veci, ktoré z bežného dňa vypadli a bez ktorých sa telo nehýbe.","follows":[{"id":"wtad6ce","t":"Prečo lekcie, a nie appka","d":"Pohyb prestal vznikať sám od seba. Musí mať miesto a čas, inak sa doň nezmestí."},{"id":"hifw1em","t":"Prečo v skupine","d":"Keď sa prihlásiš, rozhodneš sa raz. Keď cvičíš sama, rozhoduješ sa každé ráno znova."},{"id":"fkvihcu","t":"Prečo lektorky, a nie video","d":"Telo sa učí od iných tiel. Imitáciou, od niekoho, komu veríš. Obrazovka to nenahradí."},{"id":"97j6rtv","t":"Prečo je jedlo program","d":"Spolu bolo kedysi súčasťou roboty, nie odmenou po nej. Preto nie je bonus."}],"doing":[{"id":"fz2nrvu","t":"Vysvetľujeme, prečo je to ťažké — namiesto toho, aby sme tlačili."},{"id":"vovqwc6","t":"Hovoríme „takto to funguje, poď“, nie „musíš“."},{"id":"hyc8k6v","t":"Píšeme jednej žene, nie davu."},{"id":"dgh67zx","t":"Každé tvrdenie má oporu v niektorej z myšlienok."},{"id":"lzfb78g","t":"Necháme ticho. Nie každý post musí niečo žiadať."}],"notdoing":[{"id":"d20c1tw","t":"Predtým / potom a transformácie tela."},{"id":"48hvkym","t":"Motivačné citáty a „ty to zvládneš“."},{"id":"rwmn353","t":"Trendové zvuky, tanečné reels, skákajúce titulky."},{"id":"euicgb1","t":"Hovoriace hlavy do kamery."},{"id":"iw0vvxt","t":"Obsah, po ktorom sa človek cíti previnilo."}],"note":"Posledný bod je najdôležitejší. Väčšina obsahu o cvičení funguje na hanbe. Náš funguje na odobratí viny — a práve preto sa dá robiť dlhodobo.","visual":[{"id":"vz7mm2m","t":"Archív","d":"Socháň, Muybridge, staré anatomické tabuľky. Šedá, zrno, papier. Vždy v páre s dneškom."},{"id":"cb4r4ua","t":"Príroda","d":"Les, pole, hmla. Tlmená zelená, veľa vzduchu. Telo je v krajine malé."},{"id":"bjnzyqy","t":"Telo zblízka","d":"Ruky, chodidlá, chrbát, roh podložky. Teplé svetlo, plytká hĺbka. Nikdy celá postava v póze."}],"vrules":[{"id":"s8z3i2h","t":"Text ide vždy priamo na fotku, nikdy do grafickej šablóny."},{"id":"wrio1sv","t":"Jedno písmo, jedna veľkosť, zarovnané na kraj. Feed drží farba a materiál, nie rám."},{"id":"5r1ygpx","t":"Každý tretí príspevok je archívny — to je vec, ktorú nemá nikto iný na Slovensku."}]},"thesis":"Kedysi sa telo hýbalo, lebo bolo treba. Dnes sa musíme rozhodnúť — a Kolektív je miesto, kde to rozhodnutie nemusíš robiť každý deň znova.","ideas":[{"id":"kg3umjq","q":"Kedysi sa telo hýbalo, lebo bolo treba. Dnes sa musíme rozhodnúť.","b":"Pohyb nebol položka v kalendári. Bol vedľajším produktom toho, že bolo treba niečo urobiť.","s":"Východisko · text TELO","use":"Vtedy / Dnes"},{"id":"uoo87xq","q":"Telo sa učí od iných tiel.","b":"Ako chodíš, sedíš, dvíhaš veci — naučila si sa to imitáciou. Od ľudí, ktorým si dôverovala. Obrazovka to nenahradí.","s":"Marcel Mauss, antropológ · 1934","use":"Technika tela"},{"id":"23bonpv","q":"Nie si lenivá. Šetríš energiu.","b":"Robíš presne to, na čo sme sa vyvinuli. Preto to nefunguje na vôľu — funguje to na prostredie.","s":"Daniel Lieberman, evolučný antropológ · 2020","use":"Nie si lenivá"},{"id":"ug8pxhi","q":"Nežijeme v nedostatku. Žijeme v prebytku.","b":"A v prebytku sa najľahšie stratí to, čo nikoho nenaháňa a nikam sa neposúva. Napríklad vlastné telo.","s":"Hartmut Rosa, sociológ · sociálna akcelerácia","use":"Nie si lenivá"},{"id":"u50k01g","q":"Nechýba nám čas. Chýba nám pozornosť.","b":"V roku 2004 sme na jednej obrazovke vydržali 2,5 minúty. Dnes 47 sekúnd. „Nemám čas na seba“ väčšinou znamená nemám kapacitu sa rozhodnúť.","s":"Gloria Mark, UC Irvine · 2023","use":"47 sekúnd"},{"id":"lmpwzyg","q":"Telo nie je vec, ktorú máme. Je to spôsob, akým sme.","b":"Preťaženú pozornosť neopravíš ďalším premýšľaním. Von z tej slučky vedie telo — dych, záťaž, únava.","s":"Thomas Csordas, antropológ · 1990","use":"Krajina, nie chyba"},{"id":"cwb51d0","q":"Vôľa nie je nekonečná zásoba. Prihlásiš sa raz — a je rozhodnuté.","b":"„Budem viac cvičiť“ nezaberie. „V sobotu o deviatej som tam“ zaberie, lebo nemá dieru, do ktorej by sa dalo prepadnúť.","s":"Gollwitzer 1999 · Holt-Lunstad 2010","use":"Nie si lenivá"},{"id":"owc07rt","q":"Veľká zmena nastáva maličkými krokmi.","b":"Keď človek pochopí, že to nie je o vôli, prestane čakať na veľké rozhodnutie. A vtedy vzniká návyk.","s":"Záver · kam celý obsah smeruje","use":"Všetky rubriky"}],"pull":{"q":"Kedy si sa naposledy hýbala bez toho, aby si to musela naplánovať?","b":"Otázka, ktorou sa dá zakončiť takmer každý post — a jediná, na ktorú si čitateľka musí odpovedať sama.","stat":"31 %","note":"dospelých na svete nespĺňa odporúčané minimum pohybu. V roku 2000 to bolo 23 %. — Lancet Global Health · WHO, 2024"},"rubs":[{"id":"vtedy","n":"Vtedy / Dnes","c":"#5A6450","what":"Historická fotka vedľa tvojej. To isté gesto, sto rokov medzi nimi.","body":"Predklon nad potokom a predklon na podložke. Rotácia pri kosení a rotácia v ásane. Text pod tým je jedna veta — nie vysvetlenie, len postavenie vedľa seba. Vlajková rubrika: opakovateľná donekonečna, nepotrebuje Mirku ani natáčanie.","tags":"Carousel, Archív, Socháň · SNG, 2× mesačne","imgs":[]},{"id":"mirka","n":"Mirka hovorí","c":"#8C977D","what":"Hlas bez tváre. Voiceover na obraz lesa, rúk, dychu.","body":"Nahráva sa diktafónom, nie kamerou — jedno sedenie na hodinu, bez scenára. Z toho sa vyberajú 20—40 sekundové fragmenty. Mirka nikdy nemusí byť „na kameru“ a premýšľanie v hlase je dôveryhodnejšie než plynulý výkon.","tags":"Reel, Voiceover, Titulky, 2× mesačne","imgs":[]},{"id":"tech","n":"Technika tela","c":"#6E7566","what":"Od koho si sa to naučila? Marcel Mauss, 1934.","body":"Detail rúk, chodidiel, spôsobu sedenia. Text kladie jedinú otázku: toto si sa nenaučila sama — od koho? Sem patrí archív: Muybridgeove sekvencie pohybu (1887, voľné dielo) a anatomické atlasy 19. storočia.","tags":"Post, Detail, Muybridge, 1× mesačne","imgs":[]},{"id":"leniva","n":"Nie si lenivá","c":"#AC8D71","what":"Prostredie, nie vôľa. Lieberman, Rosa, sekcia 08.","body":"Nie tipy a nie motivácia — presný opak. Odoberanie viny: šetríš energiu, robíš to, na čo sme sa vyvinuli. Jediná rubrika, ktorá priamo predáva lekcie, a pritom nevyzerá ako predaj.","tags":"Post, Text, Nosný, 1—2× mesačne","imgs":[]},{"id":"zac","n":"Ako som začala","c":"#8B6B4E","what":"Lektorky. Jedna fotka vonku, jedna veta.","body":"Z dotazníka do skupiny lektoriek. Pravidlo: nikdy hovoriaca hlava. Portrét v prírode a odpoveď ako text. Séria, ktorá sa dá dopĺňať roky a robí presne to, čo hovorí Mauss.","tags":"Post, Portrét, Dotazník, 1× mesačne","imgs":[]},{"id":"ticho","n":"47 sekúnd","c":"#B6BCA9","what":"Jeden statický záber. Dvadsať sekúnd bez strihu.","body":"Strom, pole, hladina, hmla. Bez hudby alebo len s ruchom. Jedna veta na konci. Forma je sama argumentom — robíme obsah o rozbitej pozornosti, tak nech ju nedrancuje. Algoritmus to potrestá, ľudia si to zapamätajú.","tags":"Reel, Bez strihu, Gloria Mark, 1× mesačne","imgs":[]},{"id":"kraj","n":"Krajina, nie chyba","c":"#C4A98D","what":"Petrina línia. Telo ako terén, nie ako defekt na opravu.","body":"Skolióza a to, čo s ňou roky robíš — nikdy ako „predtým a potom“. Csordas to drží odborne: telo nie je vec, ktorú máme. Najosobnejšia vec v systéme, preto sa dávkuje.","tags":"Post, Osobné, Csordas, 1× mesačne","imgs":[]}],"plan":[{"id":"09wg5t9","m":"2026-08","w":4,"typ":"CAROUSEL","rub":"vtedy","ttl":"Kedysi sa telo hýbalo, lebo bolo treba","hook":"„V sobotu si to na dve hodiny skúsime pripomenúť.“","desc":"Carousel z panelov TELO, posledný obrázok je pozvánka.","cta":"Sobota 29. 8., 9:00, Trenčín.","stav":"hotovo"},{"id":"j4r7qb9","m":"2026-08","w":4,"typ":"POST","rub":"leniva","ttl":"Prečo je dnes pohyb rozhodnutie","hook":"„Nie príď cvičiť. Príď zistiť, prečo je to dnes rozhodnutie.“","desc":"Praktické info k akcii rámované cez tézu.","cta":"Miesta sú obmedzené.","stav":"pisem"},{"id":"b6b83pd","m":"2026-08","w":4,"typ":"REEL","rub":"ticho","ttl":"Miesto, kde to bude","hook":"Bez textu. Len záber a dátum na konci.","desc":"Jeden statický záber miesta, ráno, bez ľudí, bez hudby.","cta":"29. 8.","stav":"napad"},{"id":"uuwlg92","m":"2026-08","w":4,"typ":"STORIES","rub":"","ttl":"Odpočet a zákulisie panelov","hook":"","desc":"Tlač panelov, výber fotiek, anketa: hýbeš sa cez deň bez toho, aby si to plánovala?","cta":"","stav":"napad"},{"id":"8c4wzbc","m":"2026-09","w":1,"typ":"POST","rub":"tech","ttl":"Od koho si sa naučila držať dláto?","hook":"„Toto si sa nenaučila sama.“","desc":"Fotky z akcie, ale nie ako galéria — s Maussovou otázkou.","cta":"","stav":"napad"},{"id":"u7vmosg","m":"2026-09","w":1,"typ":"POST","rub":"zac","ttl":"Tváre, ktoré prišli","hook":"Jedna veta, ktorá na akcii zaznela.","desc":"Poďakovanie bez „ďakujeme za super akciu“.","cta":"","stav":"napad"},{"id":"mot1cx8","m":"2026-09","w":1,"typ":"STORIES","rub":"","ttl":"Fotky z akcie po dňoch","hook":"","desc":"Otázka do DM: čo si si odniesla?","cta":"","stav":"napad"},{"id":"rstzjug","m":"2026-09","w":2,"typ":"POST","rub":"leniva","ttl":"Nie si lenivá. Šetríš energiu.","hook":"„Keď sa niekto nehýbe, hovoríme, že je lenivý. Pritom robí presne to, na čo sme sa vyvinuli.“","desc":"Nosný text mesiaca. Lieberman naplno.","cta":"","stav":"napad"},{"id":"vfp3s7q","m":"2026-09","w":2,"typ":"CAROUSEL","rub":"vtedy","ttl":"Predklon nad potokom / predklon na podložke","hook":"Bez textu okrem rokov.","desc":"Socháň vedľa fotky z lekcie.","cta":"","stav":"napad"},{"id":"v65sca9","m":"2026-09","w":2,"typ":"REEL","rub":"mirka","ttl":"Prečo joga nie je o tom, ako póza vyzerá","hook":"","desc":"Prvý voiceover z nahrávky. Obraz: les, ruky.","cta":"","stav":"podklady"},{"id":"slt9qwd","m":"2026-09","w":3,"typ":"POST","rub":"mirka","ttl":"Dych","hook":"„Jediná vec, ktorú vieš ovládať aj vtedy, keď nič iné nejde.“","desc":"Voiceover alebo text na fotke.","cta":"","stav":"napad"},{"id":"aam02gu","m":"2026-09","w":3,"typ":"FOTO","rub":"tech","ttl":"Takto stojíš. Kde si sa to naučila?","hook":"","desc":"Detail chodidiel na podložke.","cta":"","stav":"napad"},{"id":"6rdky4c","m":"2026-09","w":3,"typ":"STORIES","rub":"","ttl":"Rozvrh a anketa","hook":"","desc":"Koľkokrát si tento týždeň zvažovala, či pôjdeš?","cta":"","stav":"napad"},{"id":"wm9c1pa","m":"2026-09","w":4,"typ":"POST","rub":"zac","ttl":"Prvá lektorka","hook":"Jej vlastná veta, nič doplnené.","desc":"Fotka vonku, odpoveď z dotazníka.","cta":"","stav":"podklady"},{"id":"znafkeq","m":"2026-09","w":4,"typ":"CAROUSEL","rub":"vtedy","ttl":"Rotácia pri kosení / rotácia v ásane","hook":"","desc":"Archívna dvojica.","cta":"","stav":"napad"},{"id":"znnadh6","m":"2026-09","w":4,"typ":"REEL","rub":"ticho","ttl":"Les na začiatku jesene","hook":"„Telo nepotrebuje viac podnetov.“","desc":"Dvadsať sekúnd, len ruch.","cta":"","stav":"napad"},{"id":"s7edht1","m":"2026-10","w":1,"typ":"POST","rub":"tech","ttl":"Muybridge vedľa lekcie","hook":"„Pozreli sme sa niekedy, ako sa vlastne hýbeme?“","desc":"Pohyb rozložený na políčka vedľa fotky z hodiny.","cta":"","stav":"napad"},{"id":"lv2pmm4","m":"2026-10","w":1,"typ":"REEL","rub":"mirka","ttl":"Čo naozaj znamená „počúvaj svoje telo“","hook":"","desc":"Voiceover — a prečo je to zle povedané.","cta":"","stav":"napad"},{"id":"uaxnnji","m":"2026-10","w":1,"typ":"STORIES","rub":"","ttl":"Rozvrh, odpovede z DM","hook":"","desc":"","cta":"","stav":"napad"},{"id":"6l0smsl","m":"2026-10","w":2,"typ":"POST","rub":"zac","ttl":"Druhá lektorka","hook":"","desc":"","cta":"","stav":"napad"},{"id":"qrp15jc","m":"2026-10","w":2,"typ":"POST","rub":"kraj","ttl":"Telo, ktoré nie je symetrické","hook":"„Nie je to chyba na opravu. Je to terén.“","desc":"Prvýkrát skolióza. Csordas ako opora.","cta":"","stav":"napad"},{"id":"l32axvi","m":"2026-10","w":2,"typ":"REEL","rub":"mirka","ttl":"Prečo v skupine vydržíš to, čo sama nie","hook":"","desc":"Voiceover na obraz lekcie zozadu.","cta":"","stav":"napad"},{"id":"zph2mtr","m":"2026-10","w":3,"typ":"POST","rub":"leniva","ttl":"Nemáme menej času","hook":"„Len sa nám zväčšilo, koľko toho chceme za deň stihnúť.“","desc":"Rosa. Nosný text.","cta":"","stav":"napad"},{"id":"gpapp3o","m":"2026-10","w":3,"typ":"CAROUSEL","rub":"vtedy","ttl":"Chrbát pri nosení dreva / chrbát v lekcii","hook":"","desc":"","cta":"","stav":"napad"},{"id":"yylzg31","m":"2026-10","w":3,"typ":"STORIES","rub":"","ttl":"Zhrnutie mesiaca","hook":"","desc":"Čo sa tu za mesiac povedalo. Odkaz na uložené.","cta":"","stav":"napad"},{"id":"qujulg6","m":"2026-10","w":4,"typ":"POST","rub":"leniva","ttl":"Od budúceho týždňa je tma o pol piatej","hook":"„Toto je moment, keď z rytmu vypadne najviac ľudí — a nie je to o tebe.“","desc":"Najsilnejší predajný post kvartálu. Priamo na rozvrh.","cta":"Prihlás sa dopredu.","stav":"napad"},{"id":"3ror2jt","m":"2026-10","w":4,"typ":"REEL","rub":"ticho","ttl":"Hmla nad poľom","hook":"","desc":"Bez hudby.","cta":"","stav":"napad"},{"id":"wub34l9","m":"2026-10","w":4,"typ":"STORIES","rub":"","ttl":"Rozvrh na tmavé mesiace","hook":"","desc":"Pripomienka, že sa dá prihlásiť dopredu.","cta":"","stav":"napad"},{"id":"s5mo9tw","m":"2026-11","w":1,"typ":"POST","rub":"leniva","ttl":"Prihlásiš sa raz — a je rozhodnuté","hook":"„Keď cvičíš sama, rozhoduješ sa každý deň znova.“","desc":"Sekcia 08 priamo na rozvrh.","cta":"","stav":"napad"},{"id":"xhpgwki","m":"2026-11","w":1,"typ":"POST","rub":"zac","ttl":"Tretia lektorka","hook":"","desc":"","cta":"","stav":"napad"},{"id":"5892yyn","m":"2026-11","w":1,"typ":"STORIES","rub":"","ttl":"Voľné miesta na lekciách","hook":"","desc":"Pripomenúť otázku „Odkiaľ o nás vieš?“ pri prihlasovaní.","cta":"","stav":"napad"},{"id":"rvrs3p3","m":"2026-11","w":2,"typ":"POST","rub":"tech","ttl":"Ruky","hook":"","desc":"Detail a archívna fotka vedľa. Nič, čo nie je v tej dvojici.","cta":"","stav":"napad"},{"id":"002fdkk","m":"2026-11","w":2,"typ":"CAROUSEL","rub":"vtedy","ttl":"Chôdza pešo do mesta / chôdza ako jediný pohyb, ktorý zostal","hook":"","desc":"","cta":"","stav":"napad"},{"id":"hxmra8h","m":"2026-11","w":2,"typ":"REEL","rub":"mirka","ttl":"Čo telo v zime chce inak","hook":"","desc":"Voiceover.","cta":"","stav":"napad"},{"id":"7ibxt4w","m":"2026-11","w":3,"typ":"POST","rub":"ticho","ttl":"2,5 minúty v roku 2004. Dnes 47 sekúnd.","hook":"„Nechýba nám čas. Chýba nám pozornosť.“","desc":"Veľký záverečný post kvartálu. Gloria Mark.","cta":"","stav":"napad"},{"id":"aqk14zx","m":"2026-11","w":3,"typ":"POST","rub":"kraj","ttl":"Čo sa za tri mesiace zmenilo v tom, ako o tele píšem","hook":"","desc":"Osobné uzatvorenie kvartálu.","cta":"","stav":"napad"},{"id":"ova34wp","m":"2026-11","w":3,"typ":"STORIES","rub":"","ttl":"Otázka na ďalší kvartál","hook":"","desc":"O čom chcete počuť viac?","cta":"","stav":"napad"},{"id":"n300gn5","m":"2026-09","w":1,"typ":"POST","rub":"","ttl":"","hook":"","desc":"","cta":"","stav":"napad"}],"banka":[{"id":"dnrs919","n":"Dvojice Vtedy / Dnes","items":[{"id":"gq5zy3z","t":"Predklon nad potokom / predklon na podložke"},{"id":"ah05g4d","t":"Rotácia pri kosení / rotácia v ásane"},{"id":"0x3l0t2","t":"Chrbát pri nosení dreva / chrbát v lekcii"},{"id":"gcmcnbg","t":"Chôdza pešo do mesta / chôdza ako jediný pohyb, ktorý zostal"},{"id":"m1ikoyn","t":"Ruky pri praní v potoku / ruky na podložke"},{"id":"fx9x4ui","t":"Drep pri práci na poli / drep v lekcii"}]},{"id":"tm77i7r","n":"Otázky na nahrávku s Mirkou","items":[{"id":"v72z5gi","t":"Čo si o jogovom svete myslíš, ale nahlas sa to nehovorí?"},{"id":"zczsfmu","t":"Čo ľudia na prvej hodine najčastejšie nepochopia?"},{"id":"qkrgsvl","t":"Kedy si naposledy zmenila názor na niečo v cvičení?"},{"id":"ekkmykc","t":"Čo znamená „počúvaj svoje telo“ a prečo je to zle povedané?"},{"id":"8mof0hk","t":"Čo sa deje s telom, keď sa mu roky nič nepýtame?"},{"id":"qwhwgok","t":"Prečo joga a nie posilňovňa?"}]},{"id":"inz71n0","n":"Dotazník pre lektorky","items":[{"id":"f2y8o4t","t":"Ako si sa k pohybu dostala — čo bol prvý impulz?"},{"id":"lyywmmr","t":"Čo ti cvičenie zmenilo mimo tela?"},{"id":"ioenyup","t":"Od koho si sa naučila to, čo dnes učíš?"},{"id":"dy80f1w","t":"Kedy sa ti nechce a čo s tým robíš?"},{"id":"uondatk","t":"Čo by si povedala človeku, ktorý sa bojí prísť prvýkrát?"},{"id":"7kjm5iu","t":"Aké miesto vonku máš najradšej na pohyb?"}]},{"id":"q6hqai9","n":"Telo, pozornosť, prostredie","items":[{"id":"9xph0tm","t":"Prečo sa cvičenie stalo samostatnou činnosťou (Sokol, 1919, Trenčín)"},{"id":"oebic7g","t":"Prečo nefunguje predsavzatie, ale funguje termín"},{"id":"hts4ikz","t":"Čo robí tma s ochotou vyjsť z domu"},{"id":"di2ut33","t":"Prečo je brunch program a nie bonus"},{"id":"zqos0l3","t":"Čo je 31 % a prečo to číslo rastie"}]}],"analytika":[],"report":{},"ulohy":[{"id":"s0pjfdr","t":"Nahrávka s Mirkou — 60 minút, diktafón, bez kamery. Zásoba voiceoverov na 2 mesiace.","kto":"Petra + Mirka","kedy":"do 10. 9.","done":false},{"id":"prjqqgn","t":"Fotenie jogy v lese — Fujifilm, ráno alebo pred súmrakom","kto":"Petra + Mirka","kedy":"do 15. 9.","done":false},{"id":"w3b4xtd","t":"Fotenie detailov — ruky, chodidlá, chrbát, roh podložky","kto":"Petra","kedy":"pri fotení v lese","done":false},{"id":"c6npmoj","t":"Dotazník do skupiny lektoriek — 6 otázok","kto":"Petra pošle, Mirka podporí","kedy":"do 5. 9.","done":false},{"id":"nlcccu8","t":"Vybrať 12 Socháňových fotiek na dvojice Vtedy / Dnes","kto":"Petra","kedy":"do 12. 9.","done":false},{"id":"vmz3t5v","t":"Stiahnuť Muybridgeove sekvencie (voľné dielo)","kto":"Petra","kedy":"do 25. 9.","done":false},{"id":"5k9axmk","t":"Presné hex kódy a písmo Kolektívu","kto":"Mirka","kedy":"čo najskôr","done":false},{"id":"ivfs7dc","t":"Prístup do Instagram Insights / Meta Business","kto":"Mirka","kedy":"pred prvým reportom","done":false},{"id":"cv56dqp","t":"Rozvrh na november dopredu, aby sa dal plánovať obsah","kto":"Mirka","kedy":"do 15. 10.","done":false},{"id":"p3oipjl","t":"Zatriediť fotky z výstavy do archívu podľa rubrík","kto":"Petra","kedy":"do 6. 9.","done":false},{"id":"hydio2m","t":"Zaviesť otázku „Odkiaľ o nás vieš?“ pri prihlásení nového človeka","kto":"Mirka + lektorky","kedy":"od 1. 9.","done":false}],"otazky":[{"id":"7gzehzh","t":"Aký je cieľ na kvartál — viac ľudí na lekciách, alebo väčší dosah?","w":"Podľa toho sa vyhodnotí, či kvartál vyšiel.","done":false},{"id":"gp2dcio","t":"Kto schvaľuje obsah a dokedy?","w":"Bez poradia sa hotové veci prepisujú na poslednú chvíľu.","done":false},{"id":"n88h9b5","t":"Môžu lektorky pri prvom príchode nového človeka položiť otázku „Odkiaľ o nás vieš?“","w":"Jediné číslo, ktoré prepojí obsah s peniazmi.","done":false},{"id":"k2t62sg","t":"Koľko dní dopredu vieme mať rozvrh a novinky?","w":"Určuje, koľko obsahu sa dá naplánovať.","done":false},{"id":"clvtqqi","t":"Kedy sú lektorky ochotné na fotenie a dotazník?","w":"Rubrika Ako som začala bez nich nepobeží.","done":false},{"id":"esqej9v","t":"Je rozpočet na propagáciu príspevkov?","w":"Boostované príspevky sa vyraďujú z organických mediánov.","done":false},{"id":"vpxwler","t":"Patrí rubrika Krajina, nie chyba na profil Kolektívu alebo na môj?","w":"Osobná línia posilňuje dôveru, ale mení, čí je to hlas.","done":false}]}</script>
+
+<div class="shell">
+<aside>
+  <div class="wordmark">
+    <h1>kolektív<span>.</span></h1>
+    <p>Riadiaci panel obsahu · sprievodcovia</p>
+  </div>
+  <nav id="nav"><div class="navgroup">Základ</div><a href="#kto" data-p="kto" aria-current="true"><i>01</i>Kto sme</a><a href="#myslienky" data-p="myslienky"><i>02</i>Myšlienky</a><a href="#rubriky" data-p="rubriky"><i>03</i>Rubriky</a><div class="navgroup">Mesiac</div><a href="#plan" data-p="plan"><i>04</i>Plán obsahu</a><a href="#banka" data-p="banka"><i>05</i>Banka tém</a><div class="navgroup">Výkon</div><a href="#analytika" data-p="analytika"><i>06</i>Analytika</a><a href="#hodnotenie" data-p="hodnotenie"><i>07</i>Hodnotenie obsahu</a><a href="#report" data-p="report"><i>08</i>Mesačný report</a><div class="navgroup">Rast</div><a href="#ulohy" data-p="ulohy"><i>09</i>Čo treba urobiť</a><a href="#otazky" data-p="otazky"><i>10</i>Otázky pre Kolektív</a></nav>
+  <div class="sidefoot">
+    <b>Petra</b> · Brand &amp; content strategist<br>@napisnazor · Trenčín<br><br>
+    Odborný podklad: pracovný text <b>TELO</b>.<br>Historické fotografie: Pavol Socháň (1862—1941), zbierka SNG, Web umenia.<br><br>
+    <b>Otvorené pre obe.</b> Zmeny sa ukladajú do tvojho prehliadača. Ak chceš poslať svoju verziu druhej,
+    klikni <b>Export dát</b> a súbor jej pošli — ona ho otvorí cez <b>Načítať dáta</b>.
+  </div>
+</aside>
+
+<main>
+  <div class="topbar">
+    <div>
+      <h2 id="ptitle">Kto sme</h2>
+      <div class="sub" id="psub">studiokolektiv.sk · správa: Petra · September 2026</div>
+    </div>
+    <div class="acts">
+      <span class="chip saved" id="status">Uložené</span>
+      <button class="btn on" id="btnEdit">Hotovo, zavrieť úpravy</button>
+      <button class="btn dark" id="btnPage">Uložiť stránku</button>
+      <button class="btn" id="btnExport">Export dát</button>
+      <button class="btn" id="btnImport">Načítať dáta</button>
+      <button class="btn" id="btnPrint">Tlač / PDF</button>
+      <input type="file" id="fileIn" accept="application/json" hidden="">
+    </div>
+  </div>
+  <div class="page" id="page"><div class="eyebrow">Pozícia</div><h3 style="margin-bottom:20px">Sprievodcovia</h3><div class="editnote">Režim úprav je zapnutý. Každý text sa dá prepísať kliknutím.</div>
+  <div class="card">
+    <div style="font-family:var(--fd);font-size:26px;line-height:1.2;margin-bottom:14px"><span class="" data-k="kto.h" data-ph="Kto sme — jedna veta">Nie sme tréneri. Sme sprievodcovia.</span></div>
+    <p class="lede" style="margin-bottom:10px"><span class="" data-k="kto.p1" data-ph="Vysvetlenie">Tréner ti povie, čo máš robiť, a meria, či si to urobila. Sprievodca pozná terén, ide s tebou a vysvetľuje, prečo je cesta taká, aká je.</span></p>
+    <p class="lede" style="margin-bottom:0"><span class="" data-k="kto.p2" data-ph="Čo predávame">Kolektív nepredáva výkon ani premenu. Predáva miesto, čas a ľudí - presne tie tri veci, ktoré z bežného dňa vypadli a bez ktorých sa telo nehýbe.</span></p>
+  </div>
+
+  <h4 class="sec">Téza</h4>
+  <div class="note"><b><span class="" data-k="thesis" data-ph="Hlavná téza">Kedysi sa telo hýbalo, lebo bolo treba. Dnes sa musíme rozhodnúť — a Kolektív je miesto, kde to rozhodnutie nemusíš robiť každý deň znova.</span></b></div>
+
+  <h4 class="sec">Čo z toho vyplýva</h4>
+  <div class="grid g4">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:16px;line-height:1.3"><span class="" data-k="fol.t.wtad6ce" data-ph="Nadpis">Prečo lekcie, a nie appka</span></b><button class="x" data-delfol="wtad6ce">×</button></div>
+      <p style="color:var(--mut);font-size:14px;margin-top:7px"><span class="" data-k="fol.d.wtad6ce" data-ph="Vysvetlenie">Pohyb prestal vznikať sám od seba. Musí mať miesto a čas, inak sa doň nezmestí.</span></p></div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:16px;line-height:1.3"><span class="" data-k="fol.t.hifw1em" data-ph="Nadpis">Prečo v skupine</span></b><button class="x" data-delfol="hifw1em">×</button></div>
+      <p style="color:var(--mut);font-size:14px;margin-top:7px"><span class="" data-k="fol.d.hifw1em" data-ph="Vysvetlenie">Keď sa prihlásiš, rozhodneš sa raz. Keď cvičíš sama, rozhoduješ sa každé ráno znova.</span></p></div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:16px;line-height:1.3"><span class="" data-k="fol.t.fkvihcu" data-ph="Nadpis">Prečo lektorky, a nie video</span></b><button class="x" data-delfol="fkvihcu">×</button></div>
+      <p style="color:var(--mut);font-size:14px;margin-top:7px"><span class="" data-k="fol.d.fkvihcu" data-ph="Vysvetlenie">Telo sa učí od iných tiel. Imitáciou, od niekoho, komu veríš. Obrazovka to nenahradí.</span></p></div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:16px;line-height:1.3"><span class="" data-k="fol.t.97j6rtv" data-ph="Nadpis">Prečo je jedlo program</span></b><button class="x" data-delfol="97j6rtv">×</button></div>
+      <p style="color:var(--mut);font-size:14px;margin-top:7px"><span class="" data-k="fol.d.97j6rtv" data-ph="Vysvetlenie">Spolu bolo kedysi súčasťou roboty, nie odmenou po nej. Preto nie je bonus.</span></p></div>
+    <button class="addbtn" data-addfol="1">+ Pridať</button>
+  </div>
+
+  <h4 class="sec">Hlas</h4>
+  <div class="grid g2">
+    <div class="card"><b style="font-size:13px;letter-spacing:.16em;text-transform:uppercase">Robíme</b>
+      <div style="margin-top:12px"><div class="line ">
+    <span class="t"><span class="" data-k="doing.fz2nrvu" data-ph="Čo robíme">Vysvetľujeme, prečo je to ťažké — namiesto toho, aby sme tlačili.</span></span>
+    <button class="x" data-delline="doing|fz2nrvu">×</button></div><div class="line ">
+    <span class="t"><span class="" data-k="doing.vovqwc6" data-ph="Čo robíme">Hovoríme „takto to funguje, poď“, nie „musíš“.</span></span>
+    <button class="x" data-delline="doing|vovqwc6">×</button></div><div class="line ">
+    <span class="t"><span class="" data-k="doing.hyc8k6v" data-ph="Čo robíme">Píšeme jednej žene, nie davu.</span></span>
+    <button class="x" data-delline="doing|hyc8k6v">×</button></div><div class="line ">
+    <span class="t"><span class="" data-k="doing.dgh67zx" data-ph="Čo robíme">Každé tvrdenie má oporu v niektorej z myšlienok.</span></span>
+    <button class="x" data-delline="doing|dgh67zx">×</button></div><div class="line ">
+    <span class="t"><span class="" data-k="doing.lzfb78g" data-ph="Čo robíme">Necháme ticho. Nie každý post musí niečo žiadať.</span></span>
+    <button class="x" data-delline="doing|lzfb78g">×</button></div><button class="addbtn" style="margin-top:14px" data-addline="doing">+ Pridať</button></div></div>
+    <div class="card"><b style="font-size:13px;letter-spacing:.16em;text-transform:uppercase">Nerobíme</b>
+      <div style="margin-top:12px"><div class="line strike">
+    <span class="t"><span class="" data-k="notdoing.d20c1tw" data-ph="Čo nerobíme">Predtým / potom a transformácie tela.</span></span>
+    <button class="x" data-delline="notdoing|d20c1tw">×</button></div><div class="line strike">
+    <span class="t"><span class="" data-k="notdoing.48hvkym" data-ph="Čo nerobíme">Motivačné citáty a „ty to zvládneš“.</span></span>
+    <button class="x" data-delline="notdoing|48hvkym">×</button></div><div class="line strike">
+    <span class="t"><span class="" data-k="notdoing.rwmn353" data-ph="Čo nerobíme">Trendové zvuky, tanečné reels, skákajúce titulky.</span></span>
+    <button class="x" data-delline="notdoing|rwmn353">×</button></div><div class="line strike">
+    <span class="t"><span class="" data-k="notdoing.euicgb1" data-ph="Čo nerobíme">Hovoriace hlavy do kamery.</span></span>
+    <button class="x" data-delline="notdoing|euicgb1">×</button></div><div class="line strike">
+    <span class="t"><span class="" data-k="notdoing.iw0vvxt" data-ph="Čo nerobíme">Obsah, po ktorom sa človek cíti previnilo.</span></span>
+    <button class="x" data-delline="notdoing|iw0vvxt">×</button></div><button class="addbtn" style="margin-top:14px" data-addline="notdoing">+ Pridať</button></div></div>
+  </div>
+  <div class="note tan" style="margin-top:14px"><span class="" data-k="kto.note" data-ph="Poznámka">Posledný bod je najdôležitejší. Väčšina obsahu o cvičení funguje na hanbe. Náš funguje na odobratí viny — a práve preto sa dá robiť dlhodobo.</span></div>
+
+  <h4 class="sec">Vizuálny systém</h4>
+  <div class="grid g3">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:16px"><span class="" data-k="vis.t.vz7mm2m" data-ph="Vrstva">Archív</span></b><button class="x" data-delvis="vz7mm2m">×</button></div>
+      <p style="color:var(--mut);font-size:14px;margin-top:7px"><span class="" data-k="vis.d.vz7mm2m" data-ph="Popis">Socháň, Muybridge, staré anatomické tabuľky. Šedá, zrno, papier. Vždy v páre s dneškom.</span></p></div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:16px"><span class="" data-k="vis.t.cb4r4ua" data-ph="Vrstva">Príroda</span></b><button class="x" data-delvis="cb4r4ua">×</button></div>
+      <p style="color:var(--mut);font-size:14px;margin-top:7px"><span class="" data-k="vis.d.cb4r4ua" data-ph="Popis">Les, pole, hmla. Tlmená zelená, veľa vzduchu. Telo je v krajine malé.</span></p></div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:16px"><span class="" data-k="vis.t.bjnzyqy" data-ph="Vrstva">Telo zblízka</span></b><button class="x" data-delvis="bjnzyqy">×</button></div>
+      <p style="color:var(--mut);font-size:14px;margin-top:7px"><span class="" data-k="vis.d.bjnzyqy" data-ph="Popis">Ruky, chodidlá, chrbát, roh podložky. Teplé svetlo, plytká hĺbka. Nikdy celá postava v póze.</span></p></div>
+    <button class="addbtn" data-addvis="1">+ Pridať</button>
+  </div>
+  <div class="sw">
+    <div><i style="background:#8C977D"></i><b>Šalviová</b><code>#8C977D</code><em>Základ. Telo a príroda.</em></div>
+    <div><i style="background:#AC8D71"></i><b>Karamelová</b><code>#AC8D71</code><em>Archív, drevo, ruky, jeseň.</em></div>
+    <div><i style="background:#F2EEE7"></i><b>Krémová</b><code>#F2EEE7</code><em>Papier pod textom.</em></div>
+    <div><i style="background:#5A6450"></i><b>Tmavá zelená</b><code>#5A6450</code><em>Text, nie plocha.</em></div>
+    <div><i style="background:#8B6B4E"></i><b>Tmavá karamelová</b><code>#8B6B4E</code><em>Len na jedno slovo či číslo.</em></div>
+  </div>
+  <div class="card" style="margin-top:20px"><div class="line ">
+    <span class="t"><span class="" data-k="vrules.s8z3i2h" data-ph="Pravidlo">Text ide vždy priamo na fotku, nikdy do grafickej šablóny.</span></span>
+    <button class="x" data-delline="vrules|s8z3i2h">×</button></div><div class="line ">
+    <span class="t"><span class="" data-k="vrules.wrio1sv" data-ph="Pravidlo">Jedno písmo, jedna veľkosť, zarovnané na kraj. Feed drží farba a materiál, nie rám.</span></span>
+    <button class="x" data-delline="vrules|wrio1sv">×</button></div><div class="line ">
+    <span class="t"><span class="" data-k="vrules.5r1ygpx" data-ph="Pravidlo">Každý tretí príspevok je archívny — to je vec, ktorú nemá nikto iný na Slovensku.</span></span>
+    <button class="x" data-delline="vrules|5r1ygpx">×</button></div><button class="addbtn" style="margin-top:14px" data-addline="vrules">+ Pridať</button></div></div>
+</main>
+</div>
+
+<script>
+"use strict";
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const MES=["Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"];
+const mLabel=k=>MES[+k.slice(5,7)-1]+" "+k.slice(0,4);
+const STAV={napad:"Nápad",pisem:"Píšem",podklady:"Čakám na podklady",hotovo:"Hotové",vonku:"Vonku"};
+const TYPY=["POST","CAROUSEL","REEL","STORIES","FOTO"];
+
+const PAGES=[
+  {id:"kto",n:"Kto sme",g:"Základ",eb:"Pozícia",h:"Sprievodcovia"},
+  {id:"myslienky",n:"Myšlienky",g:"Základ",eb:"Jadro",h:"Myšlienky, z ktorých vychádza všetko"},
+  {id:"rubriky",n:"Rubriky",g:"Základ",eb:"Formy",h:"Rubriky"},
+  {id:"plan",n:"Plán obsahu",g:"Mesiac",eb:"Produkcia",h:"Plán obsahu"},
+  {id:"banka",n:"Banka tém",g:"Mesiac",eb:"Zásobník",h:"Banka tém"},
+  {id:"analytika",n:"Analytika",g:"Výkon",eb:"Čísla",h:"Analytika príspevkov"},
+  {id:"hodnotenie",n:"Hodnotenie obsahu",g:"Výkon",eb:"Remeslo",h:"Hook, scenár, strih"},
+  {id:"report",n:"Mesačný report",g:"Výkon",eb:"Pre Mirku",h:"Mesačný report"},
+  {id:"ulohy",n:"Čo treba urobiť",g:"Rast",eb:"Suroviny",h:"Čo treba urobiť"},
+  {id:"otazky",n:"Otázky pre Kolektív",g:"Rast",eb:"Komunikácia",h:"Otázky, ktoré treba dohodnúť"}
+];
+
+/* ================= ŠTARTOVACIE DÁTA ================= */
+const RID={vtedy:"vtedy",mirka:"mirka",tech:"tech",leniva:"leniva",zac:"zac",ticho:"ticho",kraj:"kraj"};
+
+function seedData(){
+  const P=(m,w,typ,rub,ttl,hook,desc,cta,stav)=>({id:uid(),m,w,typ,rub,ttl,hook,desc,cta,stav:stav||"napad"});
+  return {
+  v:1,updated:Date.now(),month:"2026-09",
+  kto:{
+    h:"Nie sme tréneri. Sme sprievodcovia.",
+    p1:"Tréner ti povie, čo máš robiť, a meria, či si to urobila. Sprievodca pozná terén, ide s tebou a vysvetľuje, prečo je cesta taká, aká je.",
+    p2:"Kolektív nepredáva výkon ani premenu. Predáva miesto, čas a ľudí — presne tie tri veci, ktoré z bežného dňa vypadli a bez ktorých sa telo nehýbe.",
+    follows:[
+      {id:uid(),t:"Prečo lekcie, a nie appka",d:"Pohyb prestal vznikať sám od seba. Musí mať miesto a čas, inak sa doň nezmestí."},
+      {id:uid(),t:"Prečo v skupine",d:"Keď sa prihlásiš, rozhodneš sa raz. Keď cvičíš sama, rozhoduješ sa každé ráno znova."},
+      {id:uid(),t:"Prečo lektorky, a nie video",d:"Telo sa učí od iných tiel. Imitáciou, od niekoho, komu veríš. Obrazovka to nenahradí."},
+      {id:uid(),t:"Prečo je jedlo program",d:"Spolu bolo kedysi súčasťou roboty, nie odmenou po nej. Preto nie je bonus."}
+    ],
+    doing:[
+      {id:uid(),t:"Vysvetľujeme, prečo je to ťažké — namiesto toho, aby sme tlačili."},
+      {id:uid(),t:"Hovoríme „takto to funguje, poď“, nie „musíš“."},
+      {id:uid(),t:"Píšeme jednej žene, nie davu."},
+      {id:uid(),t:"Každé tvrdenie má oporu v niektorej z myšlienok."},
+      {id:uid(),t:"Necháme ticho. Nie každý post musí niečo žiadať."}
+    ],
+    notdoing:[
+      {id:uid(),t:"Predtým / potom a transformácie tela."},
+      {id:uid(),t:"Motivačné citáty a „ty to zvládneš“."},
+      {id:uid(),t:"Trendové zvuky, tanečné reels, skákajúce titulky."},
+      {id:uid(),t:"Hovoriace hlavy do kamery."},
+      {id:uid(),t:"Obsah, po ktorom sa človek cíti previnilo."}
+    ],
+    note:"Posledný bod je najdôležitejší. Väčšina obsahu o cvičení funguje na hanbe. Náš funguje na odobratí viny — a práve preto sa dá robiť dlhodobo.",
+    visual:[
+      {id:uid(),t:"Archív",d:"Socháň, Muybridge, staré anatomické tabuľky. Šedá, zrno, papier. Vždy v páre s dneškom."},
+      {id:uid(),t:"Príroda",d:"Les, pole, hmla. Tlmená zelená, veľa vzduchu. Telo je v krajine malé."},
+      {id:uid(),t:"Telo zblízka",d:"Ruky, chodidlá, chrbát, roh podložky. Teplé svetlo, plytká hĺbka. Nikdy celá postava v póze."}
+    ],
+    vrules:[
+      {id:uid(),t:"Text ide vždy priamo na fotku, nikdy do grafickej šablóny."},
+      {id:uid(),t:"Jedno písmo, jedna veľkosť, zarovnané na kraj. Feed drží farba a materiál, nie rám."},
+      {id:uid(),t:"Každý tretí príspevok je archívny — to je vec, ktorú nemá nikto iný na Slovensku."}
+    ]
+  },
+  thesis:"Kedysi sa telo hýbalo, lebo bolo treba. Dnes sa musíme rozhodnúť — a Kolektív je miesto, kde to rozhodnutie nemusíš robiť každý deň znova.",
+  ideas:[
+    {id:uid(),q:"Kedysi sa telo hýbalo, lebo bolo treba. Dnes sa musíme rozhodnúť.",b:"Pohyb nebol položka v kalendári. Bol vedľajším produktom toho, že bolo treba niečo urobiť.",s:"Východisko · text TELO",use:"Vtedy / Dnes"},
+    {id:uid(),q:"Telo sa učí od iných tiel.",b:"Ako chodíš, sedíš, dvíhaš veci — naučila si sa to imitáciou. Od ľudí, ktorým si dôverovala. Obrazovka to nenahradí.",s:"Marcel Mauss, antropológ · 1934",use:"Technika tela"},
+    {id:uid(),q:"Nie si lenivá. Šetríš energiu.",b:"Robíš presne to, na čo sme sa vyvinuli. Preto to nefunguje na vôľu — funguje to na prostredie.",s:"Daniel Lieberman, evolučný antropológ · 2020",use:"Nie si lenivá"},
+    {id:uid(),q:"Nežijeme v nedostatku. Žijeme v prebytku.",b:"A v prebytku sa najľahšie stratí to, čo nikoho nenaháňa a nikam sa neposúva. Napríklad vlastné telo.",s:"Hartmut Rosa, sociológ · sociálna akcelerácia",use:"Nie si lenivá"},
+    {id:uid(),q:"Nechýba nám čas. Chýba nám pozornosť.",b:"V roku 2004 sme na jednej obrazovke vydržali 2,5 minúty. Dnes 47 sekúnd. „Nemám čas na seba“ väčšinou znamená nemám kapacitu sa rozhodnúť.",s:"Gloria Mark, UC Irvine · 2023",use:"47 sekúnd"},
+    {id:uid(),q:"Telo nie je vec, ktorú máme. Je to spôsob, akým sme.",b:"Preťaženú pozornosť neopravíš ďalším premýšľaním. Von z tej slučky vedie telo — dych, záťaž, únava.",s:"Thomas Csordas, antropológ · 1990",use:"Krajina, nie chyba"},
+    {id:uid(),q:"Vôľa nie je nekonečná zásoba. Prihlásiš sa raz — a je rozhodnuté.",b:"„Budem viac cvičiť“ nezaberie. „V sobotu o deviatej som tam“ zaberie, lebo nemá dieru, do ktorej by sa dalo prepadnúť.",s:"Gollwitzer 1999 · Holt-Lunstad 2010",use:"Nie si lenivá"},
+    {id:uid(),q:"Veľká zmena nastáva maličkými krokmi.",b:"Keď človek pochopí, že to nie je o vôli, prestane čakať na veľké rozhodnutie. A vtedy vzniká návyk.",s:"Záver · kam celý obsah smeruje",use:"Všetky rubriky"}
+  ],
+  pull:{
+    q:"Kedy si sa naposledy hýbala bez toho, aby si to musela naplánovať?",
+    b:"Otázka, ktorou sa dá zakončiť takmer každý post — a jediná, na ktorú si čitateľka musí odpovedať sama.",
+    stat:"31 %",
+    note:"dospelých na svete nespĺňa odporúčané minimum pohybu. V roku 2000 to bolo 23 %. — Lancet Global Health · WHO, 2024"
+  },
+  rubs:[
+    {id:RID.vtedy,n:"Vtedy / Dnes",c:"#5A6450",what:"Historická fotka vedľa tvojej. To isté gesto, sto rokov medzi nimi.",body:"Predklon nad potokom a predklon na podložke. Rotácia pri kosení a rotácia v ásane. Text pod tým je jedna veta — nie vysvetlenie, len postavenie vedľa seba. Vlajková rubrika: opakovateľná donekonečna, nepotrebuje Mirku ani natáčanie.",tags:"Carousel, Archív, Socháň · SNG, 2× mesačne",imgs:[]},
+    {id:RID.mirka,n:"Mirka hovorí",c:"#8C977D",what:"Hlas bez tváre. Voiceover na obraz lesa, rúk, dychu.",body:"Nahráva sa diktafónom, nie kamerou — jedno sedenie na hodinu, bez scenára. Z toho sa vyberajú 20—40 sekundové fragmenty. Mirka nikdy nemusí byť „na kameru“ a premýšľanie v hlase je dôveryhodnejšie než plynulý výkon.",tags:"Reel, Voiceover, Titulky, 2× mesačne",imgs:[]},
+    {id:RID.tech,n:"Technika tela",c:"#6E7566",what:"Od koho si sa to naučila? Marcel Mauss, 1934.",body:"Detail rúk, chodidiel, spôsobu sedenia. Text kladie jedinú otázku: toto si sa nenaučila sama — od koho? Sem patrí archív: Muybridgeove sekvencie pohybu (1887, voľné dielo) a anatomické atlasy 19. storočia.",tags:"Post, Detail, Muybridge, 1× mesačne",imgs:[]},
+    {id:RID.leniva,n:"Nie si lenivá",c:"#AC8D71",what:"Prostredie, nie vôľa. Lieberman, Rosa, sekcia 08.",body:"Nie tipy a nie motivácia — presný opak. Odoberanie viny: šetríš energiu, robíš to, na čo sme sa vyvinuli. Jediná rubrika, ktorá priamo predáva lekcie, a pritom nevyzerá ako predaj.",tags:"Post, Text, Nosný, 1—2× mesačne",imgs:[]},
+    {id:RID.zac,n:"Ako som začala",c:"#8B6B4E",what:"Lektorky. Jedna fotka vonku, jedna veta.",body:"Z dotazníka do skupiny lektoriek. Pravidlo: nikdy hovoriaca hlava. Portrét v prírode a odpoveď ako text. Séria, ktorá sa dá dopĺňať roky a robí presne to, čo hovorí Mauss.",tags:"Post, Portrét, Dotazník, 1× mesačne",imgs:[]},
+    {id:RID.ticho,n:"47 sekúnd",c:"#B6BCA9",what:"Jeden statický záber. Dvadsať sekúnd bez strihu.",body:"Strom, pole, hladina, hmla. Bez hudby alebo len s ruchom. Jedna veta na konci. Forma je sama argumentom — robíme obsah o rozbitej pozornosti, tak nech ju nedrancuje. Algoritmus to potrestá, ľudia si to zapamätajú.",tags:"Reel, Bez strihu, Gloria Mark, 1× mesačne",imgs:[]},
+    {id:RID.kraj,n:"Krajina, nie chyba",c:"#C4A98D",what:"Petrina línia. Telo ako terén, nie ako defekt na opravu.",body:"Skolióza a to, čo s ňou roky robíš — nikdy ako „predtým a potom“. Csordas to drží odborne: telo nie je vec, ktorú máme. Najosobnejšia vec v systéme, preto sa dávkuje.",tags:"Post, Osobné, Csordas, 1× mesačne",imgs:[]}
+  ],
+  plan:[
+    P("2026-08",4,"CAROUSEL",RID.vtedy,"Kedysi sa telo hýbalo, lebo bolo treba","„V sobotu si to na dve hodiny skúsime pripomenúť.“","Carousel z panelov TELO, posledný obrázok je pozvánka.","Sobota 29. 8., 9:00, Trenčín.","hotovo"),
+    P("2026-08",4,"POST",RID.leniva,"Prečo je dnes pohyb rozhodnutie","„Nie príď cvičiť. Príď zistiť, prečo je to dnes rozhodnutie.“","Praktické info k akcii rámované cez tézu.","Miesta sú obmedzené.","pisem"),
+    P("2026-08",4,"REEL",RID.ticho,"Miesto, kde to bude","Bez textu. Len záber a dátum na konci.","Jeden statický záber miesta, ráno, bez ľudí, bez hudby.","29. 8.","napad"),
+    P("2026-08",4,"STORIES","","Odpočet a zákulisie panelov","","Tlač panelov, výber fotiek, anketa: hýbeš sa cez deň bez toho, aby si to plánovala?","","napad"),
+
+    P("2026-09",1,"POST",RID.tech,"Od koho si sa naučila držať dláto?","„Toto si sa nenaučila sama.“","Fotky z akcie, ale nie ako galéria — s Maussovou otázkou.","","napad"),
+    P("2026-09",1,"POST",RID.zac,"Tváre, ktoré prišli","Jedna veta, ktorá na akcii zaznela.","Poďakovanie bez „ďakujeme za super akciu“.","","napad"),
+    P("2026-09",1,"STORIES","","Fotky z akcie po dňoch","","Otázka do DM: čo si si odniesla?","","napad"),
+    P("2026-09",2,"POST",RID.leniva,"Nie si lenivá. Šetríš energiu.","„Keď sa niekto nehýbe, hovoríme, že je lenivý. Pritom robí presne to, na čo sme sa vyvinuli.“","Nosný text mesiaca. Lieberman naplno.","","napad"),
+    P("2026-09",2,"CAROUSEL",RID.vtedy,"Predklon nad potokom / predklon na podložke","Bez textu okrem rokov.","Socháň vedľa fotky z lekcie.","","napad"),
+    P("2026-09",2,"REEL",RID.mirka,"Prečo joga nie je o tom, ako póza vyzerá","","Prvý voiceover z nahrávky. Obraz: les, ruky.","","podklady"),
+    P("2026-09",3,"POST",RID.mirka,"Dych","„Jediná vec, ktorú vieš ovládať aj vtedy, keď nič iné nejde.“","Voiceover alebo text na fotke.","","napad"),
+    P("2026-09",3,"FOTO",RID.tech,"Takto stojíš. Kde si sa to naučila?","","Detail chodidiel na podložke.","","napad"),
+    P("2026-09",3,"STORIES","","Rozvrh a anketa","","Koľkokrát si tento týždeň zvažovala, či pôjdeš?","","napad"),
+    P("2026-09",4,"POST",RID.zac,"Prvá lektorka","Jej vlastná veta, nič doplnené.","Fotka vonku, odpoveď z dotazníka.","","podklady"),
+    P("2026-09",4,"CAROUSEL",RID.vtedy,"Rotácia pri kosení / rotácia v ásane","","Archívna dvojica.","","napad"),
+    P("2026-09",4,"REEL",RID.ticho,"Les na začiatku jesene","„Telo nepotrebuje viac podnetov.“","Dvadsať sekúnd, len ruch.","","napad"),
+
+    P("2026-10",1,"POST",RID.tech,"Muybridge vedľa lekcie","„Pozreli sme sa niekedy, ako sa vlastne hýbeme?“","Pohyb rozložený na políčka vedľa fotky z hodiny.","","napad"),
+    P("2026-10",1,"REEL",RID.mirka,"Čo naozaj znamená „počúvaj svoje telo“","","Voiceover — a prečo je to zle povedané.","","napad"),
+    P("2026-10",1,"STORIES","","Rozvrh, odpovede z DM","","","","napad"),
+    P("2026-10",2,"POST",RID.zac,"Druhá lektorka","","","","napad"),
+    P("2026-10",2,"POST",RID.kraj,"Telo, ktoré nie je symetrické","„Nie je to chyba na opravu. Je to terén.“","Prvýkrát skolióza. Csordas ako opora.","","napad"),
+    P("2026-10",2,"REEL",RID.mirka,"Prečo v skupine vydržíš to, čo sama nie","","Voiceover na obraz lekcie zozadu.","","napad"),
+    P("2026-10",3,"POST",RID.leniva,"Nemáme menej času","„Len sa nám zväčšilo, koľko toho chceme za deň stihnúť.“","Rosa. Nosný text.","","napad"),
+    P("2026-10",3,"CAROUSEL",RID.vtedy,"Chrbát pri nosení dreva / chrbát v lekcii","","","","napad"),
+    P("2026-10",3,"STORIES","","Zhrnutie mesiaca","","Čo sa tu za mesiac povedalo. Odkaz na uložené.","","napad"),
+    P("2026-10",4,"POST",RID.leniva,"Od budúceho týždňa je tma o pol piatej","„Toto je moment, keď z rytmu vypadne najviac ľudí — a nie je to o tebe.“","Najsilnejší predajný post kvartálu. Priamo na rozvrh.","Prihlás sa dopredu.","napad"),
+    P("2026-10",4,"REEL",RID.ticho,"Hmla nad poľom","","Bez hudby.","","napad"),
+    P("2026-10",4,"STORIES","","Rozvrh na tmavé mesiace","","Pripomienka, že sa dá prihlásiť dopredu.","","napad"),
+
+    P("2026-11",1,"POST",RID.leniva,"Prihlásiš sa raz — a je rozhodnuté","„Keď cvičíš sama, rozhoduješ sa každý deň znova.“","Sekcia 08 priamo na rozvrh.","","napad"),
+    P("2026-11",1,"POST",RID.zac,"Tretia lektorka","","","","napad"),
+    P("2026-11",1,"STORIES","","Voľné miesta na lekciách","","Pripomenúť otázku „Odkiaľ o nás vieš?“ pri prihlasovaní.","","napad"),
+    P("2026-11",2,"POST",RID.tech,"Ruky","","Detail a archívna fotka vedľa. Nič, čo nie je v tej dvojici.","","napad"),
+    P("2026-11",2,"CAROUSEL",RID.vtedy,"Chôdza pešo do mesta / chôdza ako jediný pohyb, ktorý zostal","","","","napad"),
+    P("2026-11",2,"REEL",RID.mirka,"Čo telo v zime chce inak","","Voiceover.","","napad"),
+    P("2026-11",3,"POST",RID.ticho,"2,5 minúty v roku 2004. Dnes 47 sekúnd.","„Nechýba nám čas. Chýba nám pozornosť.“","Veľký záverečný post kvartálu. Gloria Mark.","","napad"),
+    P("2026-11",3,"POST",RID.kraj,"Čo sa za tri mesiace zmenilo v tom, ako o tele píšem","","Osobné uzatvorenie kvartálu.","","napad"),
+    P("2026-11",3,"STORIES","","Otázka na ďalší kvartál","","O čom chcete počuť viac?","","napad")
+  ],
+  banka:[
+    {id:uid(),n:"Dvojice Vtedy / Dnes",items:[
+      {id:uid(),t:"Predklon nad potokom / predklon na podložke"},
+      {id:uid(),t:"Rotácia pri kosení / rotácia v ásane"},
+      {id:uid(),t:"Chrbát pri nosení dreva / chrbát v lekcii"},
+      {id:uid(),t:"Chôdza pešo do mesta / chôdza ako jediný pohyb, ktorý zostal"},
+      {id:uid(),t:"Ruky pri praní v potoku / ruky na podložke"},
+      {id:uid(),t:"Drep pri práci na poli / drep v lekcii"}
+    ]},
+    {id:uid(),n:"Otázky na nahrávku s Mirkou",items:[
+      {id:uid(),t:"Čo si o jogovom svete myslíš, ale nahlas sa to nehovorí?"},
+      {id:uid(),t:"Čo ľudia na prvej hodine najčastejšie nepochopia?"},
+      {id:uid(),t:"Kedy si naposledy zmenila názor na niečo v cvičení?"},
+      {id:uid(),t:"Čo znamená „počúvaj svoje telo“ a prečo je to zle povedané?"},
+      {id:uid(),t:"Čo sa deje s telom, keď sa mu roky nič nepýtame?"},
+      {id:uid(),t:"Prečo joga a nie posilňovňa?"}
+    ]},
+    {id:uid(),n:"Dotazník pre lektorky",items:[
+      {id:uid(),t:"Ako si sa k pohybu dostala — čo bol prvý impulz?"},
+      {id:uid(),t:"Čo ti cvičenie zmenilo mimo tela?"},
+      {id:uid(),t:"Od koho si sa naučila to, čo dnes učíš?"},
+      {id:uid(),t:"Kedy sa ti nechce a čo s tým robíš?"},
+      {id:uid(),t:"Čo by si povedala človeku, ktorý sa bojí prísť prvýkrát?"},
+      {id:uid(),t:"Aké miesto vonku máš najradšej na pohyb?"}
+    ]},
+    {id:uid(),n:"Telo, pozornosť, prostredie",items:[
+      {id:uid(),t:"Prečo sa cvičenie stalo samostatnou činnosťou (Sokol, 1919, Trenčín)"},
+      {id:uid(),t:"Prečo nefunguje predsavzatie, ale funguje termín"},
+      {id:uid(),t:"Čo robí tma s ochotou vyjsť z domu"},
+      {id:uid(),t:"Prečo je brunch program a nie bonus"},
+      {id:uid(),t:"Čo je 31 % a prečo to číslo rastie"}
+    ]}
+  ],
+  analytika:[],
+  report:{},
+  ulohy:[
+    {id:uid(),t:"Nahrávka s Mirkou — 60 minút, diktafón, bez kamery. Zásoba voiceoverov na 2 mesiace.",kto:"Petra + Mirka",kedy:"do 10. 9.",done:false},
+    {id:uid(),t:"Fotenie jogy v lese — Fujifilm, ráno alebo pred súmrakom",kto:"Petra + Mirka",kedy:"do 15. 9.",done:false},
+    {id:uid(),t:"Fotenie detailov — ruky, chodidlá, chrbát, roh podložky",kto:"Petra",kedy:"pri fotení v lese",done:false},
+    {id:uid(),t:"Dotazník do skupiny lektoriek — 6 otázok",kto:"Petra pošle, Mirka podporí",kedy:"do 5. 9.",done:false},
+    {id:uid(),t:"Vybrať 12 Socháňových fotiek na dvojice Vtedy / Dnes",kto:"Petra",kedy:"do 12. 9.",done:false},
+    {id:uid(),t:"Stiahnuť Muybridgeove sekvencie (voľné dielo)",kto:"Petra",kedy:"do 25. 9.",done:false},
+    {id:uid(),t:"Presné hex kódy a písmo Kolektívu",kto:"Mirka",kedy:"čo najskôr",done:false},
+    {id:uid(),t:"Prístup do Instagram Insights / Meta Business",kto:"Mirka",kedy:"pred prvým reportom",done:false},
+    {id:uid(),t:"Rozvrh na november dopredu, aby sa dal plánovať obsah",kto:"Mirka",kedy:"do 15. 10.",done:false},
+    {id:uid(),t:"Zatriediť fotky z výstavy do archívu podľa rubrík",kto:"Petra",kedy:"do 6. 9.",done:false},
+    {id:uid(),t:"Zaviesť otázku „Odkiaľ o nás vieš?“ pri prihlásení nového človeka",kto:"Mirka + lektorky",kedy:"od 1. 9.",done:false}
+  ],
+  otazky:[
+    {id:uid(),t:"Aký je cieľ na kvartál — viac ľudí na lekciách, alebo väčší dosah?",w:"Podľa toho sa vyhodnotí, či kvartál vyšiel.",done:false},
+    {id:uid(),t:"Kto schvaľuje obsah a dokedy?",w:"Bez poradia sa hotové veci prepisujú na poslednú chvíľu.",done:false},
+    {id:uid(),t:"Môžu lektorky pri prvom príchode nového človeka položiť otázku „Odkiaľ o nás vieš?“",w:"Jediné číslo, ktoré prepojí obsah s peniazmi.",done:false},
+    {id:uid(),t:"Koľko dní dopredu vieme mať rozvrh a novinky?",w:"Určuje, koľko obsahu sa dá naplánovať.",done:false},
+    {id:uid(),t:"Kedy sú lektorky ochotné na fotenie a dotazník?",w:"Rubrika Ako som začala bez nich nepobeží.",done:false},
+    {id:uid(),t:"Je rozpočet na propagáciu príspevkov?",w:"Boostované príspevky sa vyraďujú z organických mediánov.",done:false},
+    {id:uid(),t:"Patrí rubrika Krajina, nie chyba na profil Kolektívu alebo na môj?",w:"Osobná línia posilňuje dôveru, ale mení, čí je to hlas.",done:false}
+  ]
+  };
+}
+
+
+/* ================= FOTKY ================= */
+const IMG_MAX=760, IMG_Q=.72;
+function readImage(file){
+  return new Promise((res,rej)=>{
+    if(!file.type.startsWith("image/")){rej(new Error("nie je obrázok"));return}
+    const fr=new FileReader();
+    fr.onerror=()=>rej(new Error("súbor sa nedá načítať"));
+    fr.onload=()=>{
+      const im=new Image();
+      im.onerror=()=>rej(new Error("obrázok sa nedá otvoriť"));
+      im.onload=()=>{
+        let{width:wd,height:ht}=im;
+        const sc=Math.min(1,IMG_MAX/Math.max(wd,ht));
+        wd=Math.round(wd*sc);ht=Math.round(ht*sc);
+        const cv=document.createElement("canvas");cv.width=wd;cv.height=ht;
+        const cx=cv.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,wd,ht);
+        cx.drawImage(im,0,0,wd,ht);
+        res(cv.toDataURL("image/jpeg",IMG_Q));
+      };
+      im.src=fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+function dbSize(){return Math.round(JSON.stringify(DB).length/1024)}
+function usageLine(){
+  const kb=dbSize(),hot=kb>3000;
+  return `<span class="usage ${hot?"hot":""}">Veľkosť dát: ${kb>1024?(kb/1024).toFixed(1)+" MB":kb+" kB"}${hot?" — blíži sa strop prehliadača, ulož stránku a staršie fotky vymaž":""}</span>`;
+}
+function openLB(src){
+  const o=document.createElement("div");o.className="lb";
+  o.innerHTML=`<img src="${src}" alt="">`;
+  o.addEventListener("click",()=>o.remove());
+  document.addEventListener("keydown",function k(e){if(e.key==="Escape"){o.remove();document.removeEventListener("keydown",k)}});
+  document.body.appendChild(o);
+}
+document.addEventListener("change",async e=>{
+  const t=e.target;
+  if(!t.dataset||!t.dataset.rubimg)return;
+  const r=DB.rubs.find(x=>x.id===t.dataset.rubimg);if(!r)return;
+  if(!r.imgs)r.imgs=[];
+  const files=[...t.files];t.value="";
+  for(const f of files){
+    try{const src=await readImage(f);r.imgs.push({id:uid(),src,cap:f.name.replace(/\.[^.]+$/,"")})}
+    catch(err){alert("Fotku "+f.name+" sa nepodarilo pridať: "+err.message)}
+  }
+  touch();render();
+});
+
+/* ================= STAV ================= */
+let DB=null,dirty=false,edit=false,page="kto";
+const KEY="kolektiv-panel-v1";
+function loadDB(){
+  let ls=null,sd=null;
+  try{ls=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+  try{const t=document.getElementById("seed").textContent.trim();if(t)sd=JSON.parse(t)}catch(e){}
+  if(ls&&sd)DB=(sd.updated||0)>(ls.updated||0)?sd:ls;
+  else DB=ls||sd||seedData();
+  if(!DB.ideas||!DB.rubs||!DB.plan)DB=seedData();
+  if(!DB.report)DB.report={};
+  if(!DB.analytika)DB.analytika=[];
+  DB.rubs.forEach(r=>{if(!r.imgs)r.imgs=[]});
+}
+function persist(){
+  DB.updated=Date.now();
+  try{localStorage.setItem(KEY,JSON.stringify(DB));return true}
+  catch(e){
+    if(!window.__quotaWarned){window.__quotaWarned=true;
+      alert("Úložisko prehliadača je plné — pravdepodobne kvôli fotkám. Klikni Uložiť stránku alebo Export dát, aby si o prácu neprišla, a potom vymaž pár fotiek z rubrík.")}
+    return false;
+  }
+}
+function touch(){dirty=true;setStatus();persist()}
+function setStatus(){
+  const s=document.getElementById("status");
+  s.className="chip "+(dirty?"dirty":"saved");
+  s.textContent=dirty?"Neuložené zmeny":"Uložené";
+}
+const fixOne=x=>{const n=Number(x);return (x===""||x==null||isNaN(n))?null:n};
+const rub=id=>DB.rubs.find(r=>r.id===id)||null;
+
+/* ================= NAV ================= */
+function renderNav(){
+  const nav=document.getElementById("nav");let h="",g="",i=0;
+  PAGES.forEach(p=>{
+    i++;
+    if(p.g!==g){g=p.g;h+=`<div class="navgroup">${g}</div>`}
+    h+=`<a href="#${p.id}" data-p="${p.id}" ${p.id===page?'aria-current="true"':""}><i>${String(i).padStart(2,"0")}</i>${p.n}</a>`;
+  });
+  nav.innerHTML=h;
+}
+
+/* ================= POMOCNÉ ================= */
+function ed(k,txt,ph,cls){
+  return `<span class="${cls||""}" data-k="${k}" ${edit?'contenteditable="true"':""} data-ph="${ph||""}">${esc(txt)}</span>`;
+}
+function median(a){if(!a.length)return null;const s=[...a].sort((x,y)=>x-y);const m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2}
+function ratios(p){
+  const d=fixOne(p.dosah),ulo=fixOne(p.ulo),zdi=fixOne(p.zdi),kom=fixOne(p.kom),laj=fixOne(p.laj),
+        prof=fixOne(p.prof),sled=fixOne(p.sled),cas=fixOne(p.cas),dl=fixOne(p.dlzka);
+  const pc=(x,y)=>(x!=null&&y)?x/y*100:null;
+  return {
+    udrzanie:(cas!=null&&dl)?cas/dl*100:null,
+    uloz:pc(ulo,d),zdiel:pc(zdi,d),profil:pc(prof,d),
+    sledovanie:(sled!=null&&prof)?sled/prof*100:null,
+    interakcie:(d&&[ulo,zdi,kom,laj].every(x=>x!=null))?((ulo+zdi+kom+laj)/d*100):null
+  };
+}
+const RKEYS=[["uloz","Uloženia"],["udrzanie","Udržanie"],["zdiel","Zdieľania"],["profil","Profil"],["sledovanie","Sledovanie"],["interakcie","Interakcie"]];
+function baseline(){
+  const org=DB.analytika.filter(p=>!p.boost).slice(-20).map(ratios);
+  const out={};RKEYS.forEach(([k])=>{out[k]=median(org.map(r=>r[k]).filter(v=>v!=null))});
+  return out;
+}
+function rcell(v,med){
+  if(v==null)return `<span class="ratio mid">—</span>`;
+  let cls="mid",arw="";
+  if(med!=null&&med>0){const d=(v-med)/med;if(d>=.12){cls="up";arw="▲"}else if(d<=-.12){cls="dn";arw="▼"}}
+  return `<span class="ratio ${cls}">${v.toFixed(1)} %${arw?" "+arw:""}</span>`;
+}
+function months(){
+  const set=new Set(DB.plan.map(p=>p.m));set.add(DB.month);
+  return `<div class="mtabs">${[...set].sort().map(k=>`<button class="mtab" data-m="${k}" aria-pressed="${k===DB.month}">${mLabel(k)}</button>`).join("")}
+    <button class="addbtn" data-addmonth="1" style="padding:9px 14px;border-radius:100px">+ Ďalší mesiac</button></div>`;
+}
+function lineList(arr,kind,ph,strike){
+  return arr.map(x=>`<div class="line ${strike?"strike":""}">
+    <span class="t">${ed(kind+"."+x.id,x.t,ph)}</span>
+    <button class="x" data-delline="${kind}|${x.id}">×</button></div>`).join("")
+    +`<button class="addbtn" style="margin-top:14px" data-addline="${kind}">+ Pridať</button>`;
+}
+
+/* ================= STRÁNKY ================= */
+function pgKto(){
+  const k=DB.kto;
+  return `
+  <div class="card">
+    <div style="font-family:var(--fd);font-size:26px;line-height:1.2;margin-bottom:14px">${ed("kto.h",k.h,"Kto sme — jedna veta")}</div>
+    <p class="lede" style="margin-bottom:10px">${ed("kto.p1",k.p1,"Vysvetlenie")}</p>
+    <p class="lede" style="margin-bottom:0">${ed("kto.p2",k.p2,"Čo predávame")}</p>
+  </div>
+
+  <h4 class="sec">Téza</h4>
+  <div class="note"><b>${ed("thesis",DB.thesis,"Hlavná téza")}</b></div>
+
+  <h4 class="sec">Čo z toho vyplýva</h4>
+  <div class="grid g4">
+    ${k.follows.map(f=>`<div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:16px;line-height:1.3">${ed("fol.t."+f.id,f.t,"Nadpis")}</b><button class="x" data-delfol="${f.id}">×</button></div>
+      <p style="color:var(--mut);font-size:14px;margin-top:7px">${ed("fol.d."+f.id,f.d,"Vysvetlenie")}</p></div>`).join("")}
+    <button class="addbtn" data-addfol="1">+ Pridať</button>
+  </div>
+
+  <h4 class="sec">Hlas</h4>
+  <div class="grid g2">
+    <div class="card"><b style="font-size:13px;letter-spacing:.16em;text-transform:uppercase">Robíme</b>
+      <div style="margin-top:12px">${lineList(k.doing,"doing","Čo robíme")}</div></div>
+    <div class="card"><b style="font-size:13px;letter-spacing:.16em;text-transform:uppercase">Nerobíme</b>
+      <div style="margin-top:12px">${lineList(k.notdoing,"notdoing","Čo nerobíme",true)}</div></div>
+  </div>
+  <div class="note tan" style="margin-top:14px">${ed("kto.note",k.note,"Poznámka")}</div>
+
+  <h4 class="sec">Vizuálny systém</h4>
+  <div class="grid g3">
+    ${k.visual.map(v=>`<div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:16px">${ed("vis.t."+v.id,v.t,"Vrstva")}</b><button class="x" data-delvis="${v.id}">×</button></div>
+      <p style="color:var(--mut);font-size:14px;margin-top:7px">${ed("vis.d."+v.id,v.d,"Popis")}</p></div>`).join("")}
+    <button class="addbtn" data-addvis="1">+ Pridať</button>
+  </div>
+  <div class="sw">
+    <div><i style="background:#8C977D"></i><b>Šalviová</b><code>#8C977D</code><em>Základ. Telo a príroda.</em></div>
+    <div><i style="background:#AC8D71"></i><b>Karamelová</b><code>#AC8D71</code><em>Archív, drevo, ruky, jeseň.</em></div>
+    <div><i style="background:#F2EEE7"></i><b>Krémová</b><code>#F2EEE7</code><em>Papier pod textom.</em></div>
+    <div><i style="background:#5A6450"></i><b>Tmavá zelená</b><code>#5A6450</code><em>Text, nie plocha.</em></div>
+    <div><i style="background:#8B6B4E"></i><b>Tmavá karamelová</b><code>#8B6B4E</code><em>Len na jedno slovo či číslo.</em></div>
+  </div>
+  <div class="card" style="margin-top:20px">${lineList(k.vrules,"vrules","Pravidlo")}</div>`;
+}
+
+function pgMyslienky(){
+  return `<p class="lede">Ak sa pri poste nedá ukázať, z ktorej z nich vychádza, nejde von. Toto je celá stratégia — zvyšok panelu je len jej rozpis.</p>
+  ${DB.ideas.map((it,i)=>`<div class="idea ${i%2?"alt":""}">
+    <div class="n">${String(i+1).padStart(2,"0")}</div>
+    <div>
+      <div style="display:flex;justify-content:space-between;gap:10px"><div class="q">${ed("idea.q."+it.id,it.q,"Myšlienka — jedna veta")}</div><button class="x" data-delidea="${it.id}">×</button></div>
+      <div class="b">${ed("idea.b."+it.id,it.b,"Vysvetlenie — jedna až dve vety")}</div>
+      <span class="s">${ed("idea.s."+it.id,it.s,"Zdroj — meno, odbor, rok")}</span>
+      <div class="u"><em>V obsahu</em><b>${ed("idea.use."+it.id,it.use,"Rubrika")}</b></div>
+    </div></div>`).join("")}
+  <button class="addbtn" style="margin-top:14px" data-addidea="1">+ Pridať myšlienku</button>
+  <div class="pull">
+    <div class="q">${ed("pull.q",DB.pull.q,"Záverečná otázka")}</div>
+    <div class="b">${ed("pull.b",DB.pull.b,"Poznámka")}</div>
+    <div class="st"><b>${ed("pull.stat",DB.pull.stat,"31 %")}</b><span>${ed("pull.note",DB.pull.note,"Čo to číslo hovorí + zdroj")}</span></div>
+  </div>`;
+}
+
+function pgRubriky(){
+  return `<p class="lede">Rubrika nie je téma na jeden post — je to forma, ktorá sa dá opakovať, kým ju ľudia nespoznajú podľa prvého obrázka. Preto sa tri mesiace nemenia. Ak niečo po prvom mesiaci zjavne nefunguje, vymení sa jedna, nie celý systém.</p>
+  <p style="margin-bottom:20px">${usageLine()}</p>
+  ${DB.rubs.map((r,i)=>`<div class="rub">
+    <div class="thread" style="background:${esc(r.c)}"></div>
+    <div class="in">
+      <div class="hd">
+        <span class="mono" style="font-size:12px;color:var(--mut)">${String(i+1).padStart(2,"0")}</span>
+        <input type="color" class="col" value="${esc(r.c)}" data-rubcol="${r.id}" aria-label="Farba vlákna">
+        <span class="nm">${ed("rub.n."+r.id,r.n,"Názov rubriky")}</span>
+        <button class="x" style="margin-left:auto" data-delrub="${r.id}">×</button>
+      </div>
+      <div class="what">${ed("rub.what."+r.id,r.what,"O čom to je — jedna veta")}</div>
+      <div class="bd">${ed("rub.body."+r.id,r.body,"Ako sa to robí")}</div>
+      <div class="tg"><span class="pill">${ed("rub.tags."+r.id,r.tags,"Formát, zdroj, frekvencia")}</span></div>
+      ${(r.imgs&&r.imgs.length)?`<div class="imgs">${r.imgs.map(im=>`<div class="thumb">
+        <img src="${im.src}" alt="${esc(im.cap)}" data-lb="${im.id}">
+        <button class="rm" data-delimg="${r.id}|${im.id}" aria-label="Odstrániť fotku">×</button>
+        <div class="cap">${ed("rimg."+r.id+"."+im.id,im.cap,"popis")}</div>
+      </div>`).join("")}</div>`:""}
+      <div class="upl">
+        <label>+ Nahrať fotky<input type="file" accept="image/*" multiple hidden data-rubimg="${r.id}"></label>
+        <small>${(r.imgs&&r.imgs.length)||0} nahratých · zmenšia sa automaticky</small>
+      </div>
+    </div></div>`).join("")}
+  <button class="addbtn" style="margin-top:16px" data-addrub="1">+ Pridať rubriku</button>`;
+}
+
+function pgPlan(){
+  const items=DB.plan.filter(p=>p.m===DB.month);
+  let h=months();
+  for(let w=1;w<=5;w++){
+    const it=items.filter(x=>x.w===w);
+    if(!it.length&&w>4)continue;
+    const done=it.filter(x=>x.stav==="vonku"||x.stav==="hotovo").length;
+    h+=`<div class="week"><div class="week-h"><h5>Týždeň ${w}</h5>
+      <div class="r"><span>${done}/${it.length} hotových</span><button class="btn" data-additem="${w}" style="padding:6px 11px;font-size:12.5px">+ Položka</button></div></div>`;
+    if(!it.length)h+=`<div class="emptyst" style="padding:20px">Zatiaľ nič.</div>`;
+    h+=it.map(x=>{
+      const r=rub(x.rub);
+      return `<div class="item">
+      <div>
+        <div class="typ"><span class="pill ${x.typ==="REEL"?"dark":"soft"}">${esc(x.typ)}</span>
+          ${r?`<span class="pill rub" style="background:${esc(r.c)}">${esc(r.n)}</span>`:`<span class="pill">bez rubriky</span>`}</div>
+        <div class="ttl">${ed("item.ttl."+x.id,x.ttl,"Názov príspevku")}</div>
+        <div class="hook" ${r?`style="border-left-color:${esc(r.c)}"`:""}>${ed("item.hook."+x.id,x.hook,"Hook — prvá veta, ktorú človek uvidí")}</div>
+        <div class="desc">${ed("item.desc."+x.id,x.desc,"Ako to natočiť alebo odfotiť")}</div>
+        <div class="cta">CTA: ${ed("item.cta."+x.id,x.cta,"výzva na akciu")}</div>
+      </div>
+      <div class="right">
+        <select data-stav="${x.id}" aria-label="Stav">${Object.entries(STAV).map(([k,v])=>`<option value="${k}" ${k===x.stav?"selected":""}>${v}</option>`).join("")}</select>
+        <select data-typ="${x.id}" aria-label="Formát">${TYPY.map(t=>`<option value="${t}" ${t===x.typ?"selected":""}>${t}</option>`).join("")}</select>
+        <select data-rubsel="${x.id}" aria-label="Rubrika"><option value="">— bez rubriky —</option>${DB.rubs.map(r2=>`<option value="${r2.id}" ${r2.id===x.rub?"selected":""}>${esc(r2.n)}</option>`).join("")}</select>
+        <button class="x" data-delitem="${x.id}">× zmazať</button>
+      </div></div>`;}).join("");
+    h+=`</div>`;
+  }
+  return h;
+}
+
+function pgBanka(){
+  return `<p class="lede">Zásobník, z ktorého sa plní plán. Keď je téma použitá, prenesie sa do plánu — tu môže zostať, dvojice a otázky sa dajú použiť viackrát.</p>`+
+  DB.banka.map(c=>`
+    <h4 class="sec">${ed("bkat."+c.id,c.n,"Kategória")} ${edit?`<button class="x" data-delkat="${c.id}">×</button>`:""}</h4>
+    <div class="grid g3">
+      ${c.items.map(i=>`<div class="card" style="padding:15px 16px;display:flex;gap:10px;align-items:flex-start">
+        <span style="flex:1;font-size:15px;line-height:1.4">${ed("btema."+i.id,i.t,"Téma")}</span>
+        <button class="x" data-deltema="${c.id}|${i.id}">×</button></div>`).join("")}
+      <button class="addbtn" data-addtema="${c.id}">+ Pridať tému</button>
+    </div>`).join("")+
+    `<div style="margin-top:26px"><button class="addbtn" data-addkat="1">+ Pridať kategóriu</button></div>`;
+}
+
+function pgAnalytika(){
+  const med=baseline(),ps=DB.analytika;
+  const NUM=[["dosah","Dosah"],["videnia","Videnia"],["cas","Čas (s)"],["dlzka","Dĺžka (s)"],["ulo","Uloženia"],["zdi","Zdieľania"],["kom","Komentáre"],["laj","Páči sa"],["prof","Profil"],["sled","Sledovania"]];
+  let h=`<p class="lede">Uloženie znamená <b>chcem sa k tomu vrátiť</b> — pri obsahu, ktorý stojí na myšlienke, je to jediné číslo, ktoré meria to, čo naozaj robíme. Lajk meria len súhlas. Mediány sa počítajú z posledných 20 organických príspevkov; boostované sa vyraďujú.</p>
+  <div class="grid g3" style="margin-bottom:26px">
+    ${RKEYS.map(([k,n],i)=>`<div class="stat ${i===0?"key":""}"><div class="lab">Medián — ${n}</div>
+      <div class="val ${med[k]==null?"empty":""}">${med[k]==null?"chýbajú dáta":med[k].toFixed(1)+" %"}</div>
+      <div class="fin">z posledných organických príspevkov</div></div>`).join("")}
+  </div>
+  <div class="twrap"><table>
+    <thead><tr><th>Dátum</th><th>Príspevok</th>${NUM.map(n=>`<th class="num">${n[1]}</th>`).join("")}
+    ${RKEYS.map(r=>`<th class="num">${r[1]}</th>`).join("")}<th>Boost</th><th></th></tr></thead><tbody>`;
+  if(!ps.length)h+=`<tr><td colspan="20" class="emptyst" style="padding:22px 12px">Zatiaľ žiadne príspevky. Pridaj prvý po tom, čo bude vonku aspoň 7 dní.</td></tr>`;
+  ps.forEach(p=>{
+    const r=ratios(p),rb=rub(p.rub);
+    h+=`<tr class="${p.boost?"boostrow":""}">
+      <td><input type="date" value="${esc(p.dat)}" data-a="dat|${p.id}" style="width:140px;padding:6px 8px;font-size:13px"></td>
+      <td class="name"><input value="${esc(p.ttl)}" data-a="ttl|${p.id}" style="padding:6px 8px;font-size:13.5px">
+        <small>${esc(p.typ)}${rb?" · "+esc(rb.n):""}</small></td>
+      ${NUM.map(n=>`<td class="num"><input class="mini" inputmode="numeric" value="${esc(p[n[0]])}" data-a="${n[0]}|${p.id}"></td>`).join("")}
+      ${RKEYS.map(k=>`<td class="num">${rcell(r[k[0]],med[k[0]])}</td>`).join("")}
+      <td style="text-align:center"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--acc-dk)" data-boost="${p.id}" ${p.boost?"checked":""} aria-label="Boostované"></td>
+      <td><button class="x" data-delpost="${p.id}">×</button></td></tr>`;
+  });
+  h+=`</tbody></table></div>
+  <div style="margin-top:16px"><button class="addbtn" data-addpost="1">+ Pridať príspevok</button></div>`;
+  return h;
+}
+
+function pgHodnotenie(){
+  const ps=DB.analytika;
+  const sc=(id,f,v)=>`<div class="score">${[1,2,3,4,5].map(n=>`<button data-score="${f}|${id}|${n}" aria-pressed="${v===n}" aria-label="${n} z 5">${n}</button>`).join("")}</div>`;
+  const hi=[],lo=[];
+  ps.forEach(p=>{const r=ratios(p).uloz;if(r==null||!p.hook)return;if(p.hook>=4)hi.push(r);else if(p.hook<=2)lo.push(r)});
+  const mh=median(hi),ml=median(lo);
+  let ins=(mh!=null&&ml!=null)
+    ?`Príspevky s hodnotením hooku <b>4–5</b> majú medián uložení <b>${mh.toFixed(1)} %</b>. Príspevky s hodnotením <b>1–2</b> majú <b>${ml.toFixed(1)} %</b>.`
+    :"Zatiaľ nie je dosť ohodnotených príspevkov s doplnenými číslami. Hodnoť každý príspevok hneď, ako doplníš jeho čísla — po mesiaci sa ukáže, čo z remesla naozaj hýbe výsledkom.";
+  let h=`<div class="insight" style="margin-bottom:26px"><h5>Hodnotenie hooku oproti uloženiam</h5><p>${ins}</p></div>`;
+  if(!ps.length)return h+`<div class="card"><div class="emptyst">Žiadne príspevky na hodnotenie.</div></div>`;
+  h+=`<div class="grid g2">`+ps.map(p=>{
+    const r=ratios(p);
+    return `<div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div><b style="font-size:16.5px">${esc(p.ttl||"Bez názvu")}</b>
+        <div style="color:var(--mut);font-size:13px;margin-top:3px">${esc(p.dat||"—")} · ${esc(p.typ)}</div></div>
+        <span class="pill ${r.uloz==null?"":r.uloz>=2?"okp":"tanp"}">${r.uloz==null?"uloženia —":"uloženia "+r.uloz.toFixed(1)+" %"}</span>
+      </div>
+      <div style="margin-top:16px">
+        <div class="srow"><span class="lab">Hook</span>${sc(p.id,"hook",p.hook)}</div>
+        <div class="srow"><span class="lab">Myšlienka</span>${sc(p.id,"scenar",p.scenar)}</div>
+        <div class="srow"><span class="lab">Obraz</span>${sc(p.id,"strih",p.strih)}</div>
+        <div class="srow"><span class="lab">Záver / CTA</span>${sc(p.id,"cta",p.cta)}</div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="lab" style="font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:6px">Čo pri ďalšom zmeniť</div>
+        <textarea data-a="pozn|${p.id}" placeholder="Poznámka k ďalšiemu príspevku">${esc(p.pozn)}</textarea>
+      </div></div>`;
+  }).join("")+`</div>`;
+  return h;
+}
+
+const RMET=[
+  {k:"ulo",n:"Uloženia",w:"Hlavné číslo. Meria, či sa niekto chce k obsahu vrátiť.",key:true},
+  {k:"dosah",n:"Dosah (účty)",w:"Koľko ľudí obsah videlo. Kontext, nie cieľ."},
+  {k:"zdi",n:"Zdieľania",w:"Poslané ďalej v DM. Najlacnejší nový človek."},
+  {k:"kom",n:"Komentáre",w:"Kvalita nad počtom — píšu sa vety alebo emoji?"},
+  {k:"novi",n:"Noví sledovatelia",w:"Za mesiac, netto."},
+  {k:"prof",n:"Návštevy profilu",w:"Koľkí prešli z postu na profil."},
+  {k:"kliky",n:"Kliky na rozvrh",w:"Prihlásenie a rezervácia."},
+  {k:"lekcia",n:"Noví ľudia na lekcii z Instagramu",w:"Z otázky „Odkiaľ o nás vieš?“. Jediné číslo o peniazoch.",key:true}
+];
+const RQUAL=[
+  {k:"q1",n:"Čo fungovalo a prečo",p:"Nie ktorý post mal najviac lajkov — ktorý mal najviac uložení a čo mali tie posty spoločné."},
+  {k:"q2",n:"Čo nefungovalo",p:"A či je problém v rubrike, v obrázku, alebo v čase, kedy to išlo von."},
+  {k:"q3",n:"Čo sa opakuje v správach",p:"Každá opakovaná otázka z DM je hotová téma na ďalší mesiac."},
+  {k:"q4",n:"Jedna zmena na ďalší mesiac",p:"Jedna, nie päť. Inak sa nedá vyhodnotiť, čo zabralo."},
+  {k:"q5",n:"Čo potrebujem od Kolektívu",p:"Materiály, termíny, prístupy — aby sa ďalší mesiac nezasekol."}
+];
+function pgReport(){
+  const m=DB.month;
+  const r=DB.report[m]||(DB.report[m]={});
+  return months()+
+  `<p class="lede">Report za <b>${mLabel(m)}</b>. Čísla z Instagram Insights za posledných 30 dní. Posledný riadok nie je z Instagramu — pochádza z otázky pri prihlásení na lekciu.</p>
+  <div class="grid g4">
+    ${RMET.map(x=>`<div class="stat ${x.key?"key":""}">
+      <div class="lab">${x.n}</div>
+      <div class="val ${r[x.k]?"":"empty"}"><span data-k="rep.${m}.${x.k}" contenteditable="true" data-ph="—">${esc(r[x.k]||"")}</span></div>
+      <div class="fin">${x.w}</div></div>`).join("")}
+  </div>
+  <h4 class="sec">Čo z toho vyplýva</h4>
+  <div class="grid g2">
+    ${RQUAL.map(q=>`<div class="card"><b style="font-size:16.5px">${q.n}</b>
+      <p style="color:var(--mut);font-size:13.5px;margin-top:5px">${q.p}</p>
+      <textarea data-rep="${m}|${q.k}" placeholder="Píš sem…" style="margin-top:10px">${esc(r[q.k]||"")}</textarea></div>`).join("")}
+  </div>`;
+}
+
+function pgUlohy(){
+  return `<p class="lede">Väčšina obsahových plánov nepadne na nápadoch, ale na chýbajúcich surovinách. Pri každej je meno človeka, ktorý ju dodá.</p>
+  <div class="card">
+    ${DB.ulohy.map(u=>`<div class="task ${u.done?"done":""}">
+      <input type="checkbox" data-togu="${u.id}" ${u.done?"checked":""} aria-label="Hotové">
+      <div class="body"><div>${ed("u.t."+u.id,u.t,"Čo treba urobiť")}</div>
+        <div class="meta"><span>${ed("u.kto."+u.id,u.kto,"kto")}</span><span>·</span><span>${ed("u.kedy."+u.id,u.kedy,"dokedy")}</span></div></div>
+      <button class="x" data-delu="${u.id}">×</button></div>`).join("")||'<div class="emptyst">Nič neostáva.</div>'}
+    <button class="addbtn" style="margin-top:14px" data-addu="1">+ Pridať položku</button>
+  </div>`;
+}
+
+function pgOtazky(){
+  return `<p class="lede">Otázky, na ktoré potrebuješ odpoveď od Mirky. Kým nie sú zodpovedané, časť plánu stojí na domnienke.</p>
+  <div class="card">
+    ${DB.otazky.map(q=>`<div class="task ${q.done?"done":""}">
+      <input type="checkbox" data-togq="${q.id}" ${q.done?"checked":""} aria-label="Vyriešené">
+      <div class="body"><div>${ed("q.t."+q.id,q.t,"Otázka")}</div>
+        <div class="meta"><span>${ed("q.w."+q.id,q.w,"prečo sa to pýtaš")}</span></div></div>
+      <button class="x" data-delq="${q.id}">×</button></div>`).join("")}
+    <button class="addbtn" style="margin-top:14px" data-addq="1">+ Pridať otázku</button>
+  </div>`;
+}
+
+const RENDER={kto:pgKto,myslienky:pgMyslienky,rubriky:pgRubriky,plan:pgPlan,banka:pgBanka,analytika:pgAnalytika,hodnotenie:pgHodnotenie,report:pgReport,ulohy:pgUlohy,otazky:pgOtazky};
+function render(){
+  const p=PAGES.find(x=>x.id===page);
+  document.getElementById("ptitle").textContent=p.n;
+  document.getElementById("psub").textContent="studiokolektiv.sk · správa: Petra · "+mLabel(DB.month);
+  document.getElementById("page").innerHTML=`<div class="eyebrow">${p.eb}</div><h3 style="margin-bottom:20px">${p.h}</h3>`+
+    (edit?`<div class="editnote">Režim úprav je zapnutý. Každý text sa dá prepísať kliknutím.</div>`:"")+
+    RENDER[page]();
+  renderNav();
+  const be=document.getElementById("btnEdit");
+  be.textContent=edit?"Hotovo, zavrieť úpravy":"Režim úprav";
+  be.className="btn"+(edit?" on":"");
+}
+
+/* ================= ZÁPIS TEXTU ================= */
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.hasAttribute&&t.hasAttribute("data-k")){writeK(t.dataset.k,t.textContent);return}
+  if(t.dataset&&t.dataset.rep){
+    const [m,k]=t.dataset.rep.split("|");
+    (DB.report[m]||(DB.report[m]={}))[k]=t.value;touch();return;
+  }
+  if(t.dataset&&t.dataset.a){
+    const [f,id]=t.dataset.a.split("|");
+    const p=DB.analytika.find(x=>x.id===id);
+    if(p){p[f]=t.value;touch();
+      if(!["ttl","pozn","dat"].includes(f)){clearTimeout(window.__rt);window.__rt=setTimeout(render,700)}}
+    return;
+  }
+});
+function writeK(k,val){
+  const p=k.split("."),f=(arr,id)=>arr.find(x=>x.id===id);
+  if(k==="thesis"){DB.thesis=val}
+  else if(p[0]==="kto"){DB.kto[p[1]]=val}
+  else if(p[0]==="fol"){const x=f(DB.kto.follows,p[2]);if(x)x[p[1]]=val}
+  else if(p[0]==="vis"){const x=f(DB.kto.visual,p[2]);if(x)x[p[1]]=val}
+  else if(p[0]==="doing"||p[0]==="notdoing"||p[0]==="vrules"){const x=f(DB.kto[p[0]],p[1]);if(x)x.t=val}
+  else if(p[0]==="idea"){const x=f(DB.ideas,p[2]);if(x)x[p[1]]=val}
+  else if(p[0]==="pull"){DB.pull[p[1]]=val}
+  else if(p[0]==="rub"){const x=f(DB.rubs,p[2]);if(x)x[p[1]]=val}
+  else if(p[0]==="rimg"){const r=f(DB.rubs,p[1]);if(r&&r.imgs){const i=f(r.imgs,p[2]);if(i)i.cap=val}}
+  else if(p[0]==="item"){const x=f(DB.plan,p[2]);if(x)x[p[1]]=val}
+  else if(p[0]==="bkat"){const x=f(DB.banka,p[1]);if(x)x.n=val}
+  else if(p[0]==="btema"){DB.banka.forEach(c=>{const i=f(c.items,p[1]);if(i)i.t=val})}
+  else if(p[0]==="rep"){(DB.report[p[1]]||(DB.report[p[1]]={}))[p[2]]=val}
+  else if(p[0]==="u"){const x=f(DB.ulohy,p[2]);if(x)x[p[1]]=val}
+  else if(p[0]==="q"){const x=f(DB.otazky,p[2]);if(x)x[p[1]]=val}
+  touch();
+}
+
+/* ================= KLIKY ================= */
+document.addEventListener("click",e=>{
+  const lb=e.target.closest("img[data-lb]");
+  if(lb){openLB(lb.getAttribute("src"));return}
+  const a=e.target.closest("nav a");
+  if(a){e.preventDefault();page=a.dataset.p;render();window.scrollTo(0,0);return}
+  const t=e.target.closest("button");if(!t)return;
+  const d=t.dataset;
+
+  if(d.m){DB.month=d.m;persist();render();return}
+  if(d.addmonth){
+    const ks=[...new Set(DB.plan.map(p=>p.m))].sort();const last=ks[ks.length-1]||DB.month;
+    let y=+last.slice(0,4),mm=+last.slice(5,7)+1;if(mm>12){mm=1;y++}
+    DB.month=y+"-"+String(mm).padStart(2,"0");touch();render();return;
+  }
+  if(d.addline){DB.kto[d.addline].push({id:uid(),t:""});edit=true;touch();render();return}
+  if(d.delline){const[k,id]=d.delline.split("|");DB.kto[k]=DB.kto[k].filter(x=>x.id!==id);touch();render();return}
+  if(d.addfol){DB.kto.follows.push({id:uid(),t:"",d:""});edit=true;touch();render();return}
+  if(d.delfol){DB.kto.follows=DB.kto.follows.filter(x=>x.id!==d.delfol);touch();render();return}
+  if(d.addvis){DB.kto.visual.push({id:uid(),t:"",d:""});edit=true;touch();render();return}
+  if(d.delvis){DB.kto.visual=DB.kto.visual.filter(x=>x.id!==d.delvis);touch();render();return}
+  if(d.addidea){DB.ideas.push({id:uid(),q:"",b:"",s:"",use:""});edit=true;touch();render();return}
+  if(d.delidea){if(!confirm("Zmazať myšlienku?"))return;DB.ideas=DB.ideas.filter(x=>x.id!==d.delidea);touch();render();return}
+  if(d.delimg){const[rid,iid]=d.delimg.split("|");const r=DB.rubs.find(x=>x.id===rid);if(r&&r.imgs)r.imgs=r.imgs.filter(x=>x.id!==iid);touch();render();return}
+  if(d.addrub){DB.rubs.push({id:uid(),n:"Nová rubrika",c:"#8C977D",what:"",body:"",tags:"",imgs:[]});edit=true;touch();render();return}
+  if(d.delrub){if(!confirm("Zmazať rubriku? V pláne zostanú položky bez rubriky."))return;DB.rubs=DB.rubs.filter(x=>x.id!==d.delrub);touch();render();return}
+  if(d.additem){DB.plan.push({id:uid(),m:DB.month,w:+d.additem,typ:"POST",rub:"",ttl:"",hook:"",desc:"",cta:"",stav:"napad"});edit=true;touch();render();return}
+  if(d.delitem){DB.plan=DB.plan.filter(x=>x.id!==d.delitem);touch();render();return}
+  if(d.addtema){const c=DB.banka.find(x=>x.id===d.addtema);c.items.push({id:uid(),t:""});edit=true;touch();render();return}
+  if(d.deltema){const[c,i]=d.deltema.split("|");const k=DB.banka.find(x=>x.id===c);k.items=k.items.filter(x=>x.id!==i);touch();render();return}
+  if(d.addkat){DB.banka.push({id:uid(),n:"Nová kategória",items:[]});edit=true;touch();render();return}
+  if(d.delkat){if(!confirm("Zmazať celú kategóriu?"))return;DB.banka=DB.banka.filter(x=>x.id!==d.delkat);touch();render();return}
+  if(d.addpost){DB.analytika.push({id:uid(),dat:new Date().toISOString().slice(0,10),ttl:"",typ:"POST",rub:"",boost:false,dosah:"",videnia:"",cas:"",dlzka:"",ulo:"",zdi:"",kom:"",laj:"",prof:"",sled:"",hook:0,scenar:0,strih:0,cta:0,pozn:""});touch();render();return}
+  if(d.delpost){if(!confirm("Zmazať príspevok aj s hodnotením?"))return;DB.analytika=DB.analytika.filter(x=>x.id!==d.delpost);touch();render();return}
+  if(d.score){const[f,id,n]=d.score.split("|");const p=DB.analytika.find(x=>x.id===id);p[f]=p[f]===+n?0:+n;touch();render();return}
+  if(d.addu){DB.ulohy.push({id:uid(),t:"",kto:"",kedy:"",done:false});edit=true;touch();render();return}
+  if(d.delu){DB.ulohy=DB.ulohy.filter(x=>x.id!==d.delu);touch();render();return}
+  if(d.addq){DB.otazky.push({id:uid(),t:"",w:"",done:false});edit=true;touch();render();return}
+  if(d.delq){DB.otazky=DB.otazky.filter(x=>x.id!==d.delq);touch();render();return}
+});
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset.stav){const i=DB.plan.find(x=>x.id===t.dataset.stav);i.stav=t.value;touch();render();return}
+  if(t.dataset.typ){const i=DB.plan.find(x=>x.id===t.dataset.typ);i.typ=t.value;touch();render();return}
+  if(t.dataset.rubsel){const i=DB.plan.find(x=>x.id===t.dataset.rubsel);i.rub=t.value;touch();render();return}
+  if(t.dataset.rubcol){const r=DB.rubs.find(x=>x.id===t.dataset.rubcol);r.c=t.value;touch();render();return}
+  if(t.dataset.boost){const p=DB.analytika.find(x=>x.id===t.dataset.boost);p.boost=t.checked;touch();render();return}
+  if(t.dataset.togu){const u=DB.ulohy.find(x=>x.id===t.dataset.togu);u.done=t.checked;touch();render();return}
+  if(t.dataset.togq){const q=DB.otazky.find(x=>x.id===t.dataset.togq);q.done=t.checked;touch();render();return}
+});
+
+/* ================= AKCIE V LIŠTE ================= */
+function dl(txt,name,mime){
+  const bl=new Blob([txt],{type:mime});const a=document.createElement("a");
+  a.href=URL.createObjectURL(bl);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+}
+document.getElementById("btnEdit").onclick=()=>{edit=!edit;render()};
+document.getElementById("btnPrint").onclick=()=>window.print();
+document.getElementById("btnExport").onclick=()=>{dl(JSON.stringify(DB,null,2),"kolektiv-data-"+DB.month+".json","application/json");dirty=false;setStatus()};
+document.getElementById("btnImport").onclick=()=>document.getElementById("fileIn").click();
+document.getElementById("fileIn").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const j=JSON.parse(r.result);if(!j.ideas||!j.rubs)throw 0;DB=j;persist();dirty=false;setStatus();render()}
+    catch(err){alert("Súbor sa nepodarilo načítať. Skontroluj, či je to Export dát z tohto panelu.")}};
+  r.readAsText(f);e.target.value="";
+};
+document.getElementById("btnPage").onclick=()=>{
+  const c=document.documentElement.cloneNode(true);
+  c.querySelectorAll("[contenteditable]").forEach(x=>x.removeAttribute("contenteditable"));
+  c.querySelector("#seed").textContent=JSON.stringify({...DB,updated:Date.now()});
+  dl("<!DOCTYPE html>\n"+c.outerHTML,"kolektiv-panel-"+DB.month+".html","text/html");
+  dirty=false;setStatus();
+};
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+
+loadDB();page="kto";render();setStatus();
+</script>
+
+
+</body></html>
