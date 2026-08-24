@@ -9,6 +9,34 @@ a nič sa nekompiluje.
 | GoMerch — obsahový hub | `index.html` | `/` |
 | Riadiaci panel Kolektívu | `kolektiv/index.html` | `/kolektiv/` |
 | Minifestival — plán stanovíšť | `minifestival/index.html` | `/minifestival/` |
+| Riadiaci panel Dajner &amp; Fatty Patty | `dajner/index.html` | `/dajner/` |
+
+---
+
+## Riadiaci panel Dajner & Fatty Patty
+
+Panel na správu obsahu pre dve značky naraz — **Dajner** a **Fatty Patty**.
+Prepínač v ľavom stĺpci mení značku aj farbu panelu; každá značka má vlastné
+dáta.
+
+Sedem sekcií: prehľad a ciele mesiaca, plán obsahu po týždňoch, banka tém,
+analytika príspevkov, hodnotenie obsahu, aktivity (online a offline) a zmeny
+s pripomienkami.
+
+Stránku otvorí ktokoľvek s odkazom, bez prihlásenia. Tlačidlom **Režim úprav**
+sa dá každý text prepísať priamo v prehliadači; zmeny sa priebežne ukladajú do
+prehliadača toho, kto ich urobil.
+
+Panel nemá spoločné úložisko — každý má vlastnú kópiu. Na výmenu zmien slúži:
+
+- **Export dát** — uloží súbor `.json` so všetkým obsahom oboch značiek
+- **Načítať dáta** — načíta taký súbor od druhej strany
+- **Uložiť stránku** — uloží celý panel aj s obsahom ako jeden HTML súbor
+- **Tlač / PDF** — vytlačí alebo uloží aktuálnu sekciu
+
+Celá stránka je jeden súbor `dajner/index.html` — nič sa neinštaluje a nič sa
+nekompiluje. Jediná vec, ktorá sa ťahá z internetu, sú fonty z Google Fonts;
+bez pripojenia sa panel zobrazí s náhradnými fontami.
 
 ---
 

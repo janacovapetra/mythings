@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="sk"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Riadiaci panel — Dajner &amp; Fatty Patty</title>
+<meta name="description" content="Riadiaci panel obsahu a aktivít pre Dajner a Fatty Patty — ciele mesiaca, plán obsahu, banka tém, analytika, hodnotenie príspevkov, aktivity a pripomienky.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Barlow:wght@400;500;600;700&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --side:#17100E; --side-2:#241A16; --side-txt:#EFE3D2; --side-mut:#9C8875;
+  --bg:#FAF5EC; --card:#FFFFFF; --ink:#1B1512; --mut:#7A6A5C;
+  --line:#E7DAC6; --line-2:#D3C0A6;
+  --acc:#E9262A; --acc-dk:#B71C20; --acc-soft:#FDEBEB;
+  --ok:#3E7A4D; --ok-soft:#EBF3EC; --warn:#B5811A; --warn-soft:#FBF2DE;
+  --r:6px;
+}
+body[data-brand="fatty"]{ --acc:#E0A11E; --acc-dk:#A8760F; --acc-soft:#FCF3DF; }
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Barlow',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:15.5px;line-height:1.5}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:8px 10px;width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible,[contenteditable]:focus{outline:2px solid var(--acc);outline-offset:1px}
+textarea{resize:vertical;min-height:70px}
+.mono{font-family:'Space Mono',monospace}
+
+/* ---- SHELL ---- */
+.shell{display:flex;min-height:100vh}
+aside{width:268px;flex:0 0 268px;background:var(--side);color:var(--side-txt);padding:26px 0 30px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.wordmark{padding:0 26px 4px}
+.wordmark h1{font-family:'Anton',Impact,sans-serif;font-size:25px;letter-spacing:.055em;text-transform:uppercase;font-weight:400}
+.wordmark h1 span{color:var(--acc)}
+.wordmark p{color:var(--side-mut);font-size:13px;margin-top:5px;line-height:1.35}
+.bswitch{display:flex;gap:6px;padding:20px 20px 0}
+.bswitch button{flex:1;padding:9px 4px;border:1px solid rgba(239,227,210,.22);border-radius:var(--r);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--side-mut);min-height:40px}
+.bswitch button:hover{color:var(--side-txt);background:rgba(239,227,210,.08)}
+.bswitch button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700}
+body[data-brand="fatty"] .bswitch button[aria-pressed="true"]{color:#1B1512}
+nav{margin-top:22px;padding:0 14px}
+.navgroup{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--side-mut);padding:16px 12px 7px}
+nav a{display:flex;gap:13px;align-items:baseline;padding:10px 12px;border-radius:var(--r);color:rgba(239,227,210,.82);text-decoration:none;font-size:15px;line-height:1.3}
+nav a:hover{background:rgba(239,227,210,.07);color:var(--side-txt)}
+nav a[aria-current="true"]{background:var(--side-2);color:#fff;font-weight:600;box-shadow:inset 3px 0 0 var(--acc)}
+nav a i{font-style:normal;font-family:'Space Mono',monospace;font-size:11px;color:var(--side-mut);flex:0 0 18px}
+nav a[aria-current="true"] i{color:var(--acc)}
+.sidefoot{margin:26px 26px 0;padding-top:20px;border-top:1px solid rgba(239,227,210,.14);color:var(--side-mut);font-size:12.5px;line-height:1.55}
+.sidefoot b{color:var(--side-txt)}
+
+main{flex:1;min-width:0}
+.topbar{background:var(--card);border-bottom:1px solid var(--line);padding:20px 34px;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;position:sticky;top:0;z-index:30}
+.topbar h2{font-size:25px;font-weight:600;letter-spacing:-.01em}
+.topbar .sub{color:var(--mut);font-size:13.5px;margin-top:3px}
+.acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{padding:8px 13px;border-radius:100px;font-size:13px;font-weight:600}
+.chip.saved{background:var(--ok-soft);color:var(--ok)}
+.chip.dirty{background:var(--warn-soft);color:var(--warn)}
+.btn{padding:9px 14px;border:1px solid var(--line-2);border-radius:var(--r);font-size:13.5px;font-weight:600;background:#fff;min-height:40px}
+.btn:hover{border-color:var(--ink)}
+.btn.dark{background:var(--side);border-color:var(--side);color:#fff}
+.btn.dark:hover{background:var(--acc);border-color:var(--acc)}
+.btn.on{background:var(--acc);border-color:var(--acc);color:#fff}
+body[data-brand="fatty"] .btn.on{color:#1B1512}
+
+.page{padding:34px 34px 90px;max-width:1240px}
+.eyebrow{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+.page h3{font-size:29px;font-weight:600;letter-spacing:-.015em;margin-bottom:9px}
+.lede{color:var(--mut);font-size:16px;max-width:66ch;margin-bottom:26px;line-height:1.55}
+h4.sec{font-size:21px;font-weight:600;margin:38px 0 6px}
+.hint{color:var(--mut);font-size:14px;margin-bottom:18px;max-width:64ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px}
+.card+.card{margin-top:14px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(258px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.note{background:var(--acc-soft);border-left:3px solid var(--acc);border-radius:0 var(--r) var(--r) 0;padding:12px 15px;font-size:14.5px;line-height:1.5}
+.note b{font-weight:700}
+.editnote{background:#F3F6FA;border:1px solid #DCE5F0;border-radius:var(--r);padding:13px 16px;font-size:14.5px;color:#3E4C5E;margin-bottom:22px}
+[contenteditable="true"]{background:#FFFDF6;box-shadow:inset 0 -1px 0 var(--line-2);border-radius:3px;padding:1px 3px;margin:0 -3px}
+[contenteditable="true"]:empty::before{content:attr(data-ph);color:#B9AA98}
+.x{color:var(--line-2);font-size:16px;line-height:1;padding:3px 6px;border-radius:4px}
+.x:hover{color:var(--acc);background:var(--acc-soft)}
+.addbtn{border:1px dashed var(--line-2);border-radius:var(--r);padding:11px 14px;font-size:13.5px;font-weight:600;color:var(--mut);min-height:42px}
+.addbtn:hover{border-color:var(--acc);color:var(--acc);border-style:solid}
+.pill{display:inline-block;font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:100px;border:1px solid var(--line-2);color:var(--mut);white-space:nowrap}
+.pill.dark{background:var(--side);border-color:var(--side);color:#fff}
+.pill.acc{background:var(--acc);border-color:var(--acc);color:#fff}
+body[data-brand="fatty"] .pill.acc{color:#1B1512}
+.pill.soft{background:var(--acc-soft);border-color:var(--acc-soft);color:var(--acc-dk)}
+.pill.okp{background:var(--ok-soft);border-color:var(--ok-soft);color:var(--ok)}
+
+/* ---- ciele ---- */
+.task{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:none}
+.task input[type=checkbox]{width:19px;height:19px;flex:0 0 19px;margin-top:2px;accent-color:var(--acc)}
+.task span{flex:1;font-size:15.5px}
+.task.done span{color:var(--mut);text-decoration:line-through}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:17px 18px}
+.stat .lab{font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);margin-bottom:9px}
+.stat .val{font-size:33px;font-weight:700;line-height:1;letter-spacing:-.02em}
+.stat .val.empty{font-size:15px;font-weight:500;color:#BCAC98}
+.stat .fin{font-size:13px;color:var(--mut);margin-top:9px}
+
+/* ---- plán ---- */
+.mtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.mtab{padding:9px 16px;border:1px solid var(--line-2);border-radius:100px;background:#fff;font-size:14px;font-weight:600}
+.mtab[aria-pressed="true"]{background:var(--side);border-color:var(--side);color:#fff}
+.week{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:16px}
+.week-h{background:var(--side);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.week-h h5{font-size:17px;font-weight:600}
+.week-h .r{display:flex;gap:14px;align-items:center;color:rgba(255,255,255,.75);font-size:13px}
+.item{padding:17px 20px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr 178px;gap:16px}
+.item:last-child{border-bottom:none}
+.item .typ{margin-bottom:8px}
+.item .ttl{font-size:16.5px;font-weight:600;line-height:1.35}
+.item .pil{color:var(--mut);font-size:13.5px;margin-top:4px}
+.item .hook{border-left:3px solid var(--acc);padding:2px 0 2px 13px;margin:11px 0;font-size:15px}
+.item .desc{color:var(--mut);font-size:14.5px}
+.item .cta{color:var(--mut);font-size:14px;margin-top:6px}
+.item .right{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+
+/* ---- tabuľka analytiky ---- */
+.twrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;min-width:940px;font-size:14px}
+th{background:#FCF8F0;text-align:left;padding:11px 12px;font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);border-bottom:1px solid var(--line);white-space:nowrap;position:relative}
+th.num,td.num{text-align:right}
+th.sortable{cursor:pointer}
+th.sortable:hover{color:var(--acc)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#FDFBF6}
+td.name{font-weight:600;min-width:200px}
+td.name small{display:block;font-weight:400;color:var(--mut);font-size:12.5px;margin-top:2px}
+.ratio{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;white-space:nowrap}
+.ratio.up{color:var(--ok)}
+.ratio.dn{color:var(--acc-dk)}
+.ratio.mid{color:var(--mut)}
+.mini{width:78px;padding:6px 8px;font-size:13.5px;text-align:right}
+.boostrow td{background:#FBF6EC}
+
+/* ---- hodnotenie ---- */
+.score{display:flex;gap:5px}
+.score button{width:29px;height:29px;border:1px solid var(--line-2);border-radius:5px;font-size:13px;font-weight:700;color:var(--mut)}
+.score button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:#fff}
+body[data-brand="fatty"] .score button[aria-pressed="true"]{color:#1B1512}
+.srow{display:grid;grid-template-columns:118px 1fr;gap:12px;align-items:center;padding:9px 0;border-bottom:1px dotted var(--line)}
+.srow:last-of-type{border-bottom:none}
+.srow .lab{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.insight{background:var(--side);color:var(--side-txt);border-radius:10px;padding:22px 24px}
+.insight h5{font-size:18px;font-weight:600;color:#fff;margin-bottom:12px}
+.insight p{font-size:14.5px;line-height:1.6;color:rgba(239,227,210,.82)}
+.insight p+p{margin-top:9px}
+.insight b{color:#fff}
+
+/* ---- zmeny ---- */
+.logitem{display:flex;gap:14px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--line)}
+.logitem:last-child{border-bottom:none}
+.logitem .body{flex:1;min-width:0}
+.logitem .meta{color:var(--mut);font-size:13px;margin-top:5px;display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.logitem .r{display:flex;gap:6px;flex-shrink:0}
+.logitem .r button{padding:6px 11px;border:1px solid var(--line-2);border-radius:var(--r);font-size:12.5px;font-weight:600}
+.logitem .r button:hover{border-color:var(--ink)}
+.sumline{display:flex;justify-content:space-between;align-items:baseline;padding:18px 0 0;margin-top:6px;border-top:2px solid var(--ink)}
+.sumline .lab{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.sumline b{font-size:30px;font-weight:700}
+.qrow{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+.qrow:last-child{border-bottom:none}
+.qrow input[type=checkbox]{width:19px;height:19px;flex:0 0 19px;margin-top:2px;accent-color:var(--acc)}
+.qrow .body{flex:1}
+.qrow .why{color:var(--mut);font-size:13.5px;margin-top:3px}
+
+.emptyst{padding:26px 0;color:var(--mut);font-size:14.5px}
+.addform{display:grid;grid-template-columns:1fr 168px 118px auto;gap:10px;align-items:start}
+.hidden{display:none!important}
+
+@media (max-width:1000px){
+  .shell{flex-direction:column}
+  aside{width:100%;flex:none;height:auto;position:static;padding:18px 0}
+  .wordmark{padding:0 18px}
+  .bswitch{padding:14px 18px 0}
+  nav{display:flex;gap:6px;overflow-x:auto;padding:14px 18px 4px;margin:0;-webkit-overflow-scrolling:touch}
+  .navgroup{display:none}
+  nav a{white-space:nowrap;border:1px solid rgba(239,227,210,.2);padding:9px 13px}
+  nav a i{display:none}
+  .sidefoot{display:none}
+  .topbar{padding:16px 18px;position:static}
+  .page{padding:22px 18px 70px}
+  .item{grid-template-columns:1fr}
+  .item .right{flex-direction:row;align-items:center;justify-content:flex-start;flex-wrap:wrap}
+  .addform{grid-template-columns:1fr}
+  .page h3{font-size:24px}
+}
+@media print{
+  aside,.acts,.addbtn,.x,.mtabs,.editnote,.score{display:none!important}
+  .topbar{position:static}
+  body{background:#fff}
+  .card,.week,.stat,.twrap{break-inside:avoid}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body data-brand="dajner">
+<script id="seed" type="application/json">{"v":1,"updated":1787574647459,"brand":"dajner","month":"2026-08","dajner":{"ciele":{"2026-08":{"hlavny":"","ulohy":[{"id":"lxhghis","t":"","done":false},{"id":"pj3x945","t":"Kúpiť fotoaparát na pult a vytlačiť prvú nástenku","done":false},{"id":"6lpz3cn","t":"Odtočiť 4 reely v jednom natáčacom dni","done":false},{"id":"exzdrlx","t":"Vyhodnotiť mediány z posledných 20 organických príspevkov","done":false}],"cisla":[{"id":"0gxfsuy","lab":"","val":"","fin":""},{"id":"zskn2c6","lab":"Uloženia / dosah","val":"","fin":"medián, cieľ nad 2 %"},{"id":"r2o358y","lab":"Udržanie videa","val":"","fin":"medián, cieľ nad 55 %"},{"id":"sohzuaj","lab":"Fotky z fotoaparátu","val":"","fin":"cieľ 60 za mesiac"}]}},"plan":[{"id":"dmlcn9j","m":"2026-08","w":2,"typ":"CAROUSEL","ttl":"Zrušili sme polovicu menu","pil":"Osobný","hook":"„Zrušili sme polovicu menu. Nie preto, že sme to nezvládli.“","desc":"10 slidov, príbeh pivotu od Fatty Patty 2022 po cheeseburger za 5 €.","cta":"Napíšte, čo vám v menu chýba.","stav":"hotovo"},{"id":"5yy2bpr","m":"2026-08","w":3,"typ":"REEL","ttl":"Čo je v burgeri za 5 €","pil":"Predajný","hook":"„Za päť eur. Poďme si to rozobrať na kúsky.“","desc":"Rozloženie burgera na komponenty, každý s cenou. Bez hudby, len zvuk kuchyne.","cta":"Príďte si to overiť.","stav":"pisem"},{"id":"d7ji87y","m":"2026-08","w":4,"typ":"STORIES","ttl":"","pil":"Komunitný","hook":"","desc":"","cta":"","stav":"napad"},{"id":"6cooh7k","m":"2026-09","w":1,"typ":"REEL","ttl":"Ráno v Dajneri od siedmej","pil":"Zábavný","hook":"„Takto vyzerá hodina predtým, než otvoríme.“","desc":"Zrýchlené zákulisie, prvý smash dňa v detaile.","cta":"Otvárame o deviatej.","stav":"napad"}],"banka":[{"id":"uyoayvh","n":"Pivot a rovnaká pravda","items":[{"id":"8scchu5","t":"Prečo sme zrušili polovicu menu"},{"id":"71ktstp","t":"Čo nám ľudia napísali v dotazníku"},{"id":"flda2qm","t":"Kedy sme vedeli, že to nefunguje"},{"id":"wb7lcck","t":"Čo zostalo z americkej verzie"},{"id":"r4aqfv3","t":"Ako sme vyberali práve tieto dve položky"}]},{"id":"xc9jnfe","n":"Cena a hodnota","items":[{"id":"lzb1qku","t":"Čo všetko je v burgeri za 5 €"},{"id":"uw6vpd0","t":"Prečo sa to dá spraviť za 5 €"},{"id":"tdwhodt","t":"Koľko kusov denne musíme predať"},{"id":"az4pmpw","t":"5 € u nás vs obedové menu inde"}]},{"id":"9c5g47g","n":"Zákulisie a proces","items":[{"id":"iwaaa5i","t":"Ráno v Dajneri od siedmej"},{"id":"eozr7ky","t":"Ako sa smashuje správne a čo sa pokazí"},{"id":"4o4b6nz","t":"Odkiaľ berieme mäso a pečivo"},{"id":"5b3kp9f","t":"Čo sa deje s tým, čo do večera nepredáme"}]},{"id":"yccg7pk","n":"Ľudia","items":[{"id":"fv87gbh","t":"Kto stojí za pultom"},{"id":"ipl1e2f","t":"Prvý deň nového človeka v kuchyni"},{"id":"6tnyo2g","t":"Stály hosť a jeho objednávka"},{"id":"c7mkydq","t":"Jano o tom, čo by dnes urobil inak"}]}],"aktivity":{"online":[{"id":"ziagrbn","t":"Tajné heslo z Instagramu","d":"Raz týždenne heslo v storke. Kto ho pri pulte povie, dostane niečo malé — extra syr, dip, kolu. Obsluha si čiarkuje na papier.","w":"Jediná vec, ktorá priamo zmeria cestu z Instagramu k pultu."},{"id":"ue9ja84","t":"Navrhni burger","d":"Followeri posielajú návrhy, ty vyberieš tri, hlasovanie v storke. Víťaz ide na týždeň do menu pod svojím menom a má mesiac burgery zadarmo.","w":"Novinka bez toho, aby sa kuchyňa natrvalo skomplikovala. Víťaz privedie celý svoj okruh ľudí."}],"offline":[{"id":"s9ldfnq","t":"Fotoaparát a stena alebo IG hostí","d":"Foťák na pulte a QRko odfoť sa s jedlom a pridáme ťa na náš instagram = komunita","w":""},{"id":"gsbzh3h","t":"Smashni si vlastný","d":"Raz mesačne jedno video,  hosť ide za pult, dostane zásteru a smashne si vlastný burger. Rezervácia cez DM.","w":"Nikto iný v Trenčíne to nerobí."},{"id":"3gfgm0x","t":"","d":"","w":""},{"id":"ufpe9og","t":"Odkazová stena","d":"Stoh kartičiek a pero: napíš odkaz ďalšiemu hosťovi. Najlepšie vylepíš na stenu, raz týždenne jednu do storky.","w":"Náklad nula, obsah nekonečný, a ľudia sa pri stene fotia sami."},{"id":"az17ugx","t":"","d":"","w":""},{"id":"zk1ld99","t":"Pop-up","d":"Prebehlo. Doplniť výsledok.","w":"Predaj a dosah počas akcie oproti bežnému dňu."}]},"analytika":[{"id":"v89y0o4","dat":"2026-08-05","ttl":"Zrušili sme polovicu menu","typ":"CAROUSEL","boost":false,"dosah":"","videnia":"","cas":"","dlzka":"","ulo":"","zdi":"","kom":"","laj":"","prof":"","sled":"","hook":0,"scenar":0,"strih":0,"cta":0,"pozn":""}],"zmeny":[],"otazky":[{"id":"9i55so0","t":"","w":"","done":false},{"id":"s155bdv","t":"","w":"","done":false},{"id":"0yzsnu8","t":"","w":"","done":false},{"id":"f24feht","t":"","w":"","done":false},{"id":"17bs241","t":"","w":"","done":false},{"id":"v6qwwgm","t":"","w":"","done":false},{"id":"m6l5g8r","t":"","w":"","done":false}]},"fatty":{"ciele":{"2026-08":{"hlavny":"Premeniť stálych hostí na hlasnú skupinu a vyriešiť nespokojnosť z menu tak, aby z nej vznikla udalosť.","ulohy":[{"id":"0avg1nh","t":"Spustiť anketu o návrate položky do menu","done":false},{"id":"5tt1q62","t":"Rozbehnúť výzvu „Kde ješ svojho Fattyho“","done":false},{"id":"hx3t1da","t":"Zaviesť odmenu za Google recenziu pri okienku","done":false},{"id":"t1riqa7","t":"Odtočiť 4 reely v jednom natáčacom dni","done":false}],"cisla":[{"id":"srwtari","lab":"Nové Google recenzie","val":"","fin":"cieľ 25 za mesiac"},{"id":"cil3uvb","lab":"Fotky do mapy Trenčína","val":"","fin":"cieľ 40 za mesiac"},{"id":"uqofoe6","lab":"Hlasov v ankete o menu","val":"","fin":"cieľ 200"},{"id":"nwf3inx","lab":"Udržanie videa","val":"","fin":"medián, cieľ nad 55 %"}]}},"plan":[{"id":"pcqaofv","m":"2026-08","w":2,"typ":"STORIES","ttl":"5 špeciálov za 5 mesiacov","pil":"Komunitný","hook":"","desc":"","cta":"","stav":"hotovo"},{"id":"t4c1ok7","m":"2026-08","w":3,"typ":"REEL","ttl":"Najlepšie miesta v Trenčíne, kde zjesť Fattyho","pil":"Zábavný","hook":"„Nemáme kde sadnúť. Tak sme našli päť miest za vás.“","desc":"Päť lokácií, každá 3 sekundy, na konci výzva na posielanie vlastných.","cta":"Pošlite, kde ho jete vy.","stav":"pisem"},{"id":"khfdsr9","m":"2026-08","w":4,"typ":"FOTO","ttl":"Stály hosť mesiaca","pil":"Komunitný","hook":"„Chodí sem od 2022 a vždy si dá to isté.“","desc":"Portrét pri okienku, tri otázky, jeho objednávka.","cta":"Poznáte ho? Napíšte mu do komentárov.","stav":"podklady"},{"id":"zxj04zw","m":"2026-09","w":1,"typ":"REEL","ttl":"Rozdiel medzi smash a klasickým burgerom","pil":"Edukačný","hook":"„Dva burgery, jedna platňa. Rozdiel je v prvých piatich sekundách.“","desc":"Vedľa seba, detail na kôrku.","cta":"Ktorý si dáte?","stav":"napad"},{"id":"1a0qo0a","m":"2026-08","w":1,"typ":"REEL","ttl":"špeciál","pil":"informačný","hook":"","desc":"","cta":"","stav":"hotovo"}],"banka":[{"id":"soor19k","n":"Menu a nespokojnosť","items":[{"id":"ig9oigw","t":"Prečo sa menu zmenilo"},{"id":"p0ma19l","t":"Čo sa vracia a čo nie"},{"id":"h7l1rnj","t":"Ktorý burger je najpredávanejší a prečo"},{"id":"e4vnpj0","t":"Ako vyberáme, čo vyradiť"}]},{"id":"mgrdc8b","n":"Okienko pod Fatimou","items":[{"id":"v5q0rzu","t":"Ako funguje výdaj a prečo nemáme stoly"},{"id":"kelqmss","t":"Najlepšie miesta v Trenčíne, kde zjesť Fattyho"},{"id":"0qrf8dj","t":"Koľko trvá jeden burger od objednávky"},{"id":"n70g4hb","t":"Čo robiť, keď je pred okienkom front"}]},{"id":"ds4knk2","n":"Kvalita a remeslo","items":[{"id":"03hrjxk","t":"Prečo smažíme na tejto platni"},{"id":"3ucz5ak","t":"Rozdiel medzi smash a klasickým burgerom"},{"id":"zz9wiow","t":"Ako vyzerá zlý burger"},{"id":"oetng02","t":"Čo je v našej omáčke"}]},{"id":"ebc5d4m","n":"Komunita","items":[{"id":"iylhcty","t":"Stály hosť mesiaca"},{"id":"qesvaxp","t":"Prvý zákazník z roku 2022"},{"id":"b4vny71","t":"Trenčínčania, ktorí si chodia po Fattyho každý týždeň"}]}],"aktivity":{"online":[{"id":"gk0ll62","t":"Kde ješ svojho Fattyho","d":"Ľudia posielajú fotku miesta, kde burger zjedli - park pod Fatimou, hradby, breh Váhu, auto pred prácou. Skladá sa z toho mapa Trenčína.","w":"Z toho, že sa nedá sadnúť, sa stáva rituál. Obsah tvoria samotní hostia."},{"id":"jolubbi","t":"Comeback týždeň","d":"Anketa: ktorú vec chcete späť do menu? Víťaz sa vráti na týždeň.","w":"požiadavka od zákazníka sa mení na realitu"},{"id":"2rbkkzl","t":"","d":"","w":""},{"id":"z219hst","t":"","d":"","w":""},{"id":"bnvhizq","t":"","d":"","w":""},{"id":"p7aqolx","t":"Lokálne kolaborácie cez ľudí","d":"Trenčianski mikro-tvorcovia, kapely, športovci - jeden človek mesačne si vyzdvihne burger a povie, čo robí v meste.","w":""}],"offline":[]},"analytika":[{"id":"kra3v0h","dat":"2026-08-06","ttl":"Najlepšie miesta v Trenčíne","typ":"REEL","boost":false,"dosah":"","videnia":"","cas":"","dlzka":"","ulo":"","zdi":"","kom":"","laj":"","prof":"","sled":"","hook":0,"scenar":0,"strih":0,"cta":0,"pozn":""}],"zmeny":[],"otazky":[]}}</script>
+
+<div class="shell">
+<aside>
+  <div class="wordmark">
+    <h1 id="wm">DAJNER<span>.</span></h1>
+    <p id="wmsub">Riadiaci panel obsahu a aktivít</p>
+  </div>
+  <div class="bswitch" id="bswitch">
+    <button data-b="dajner" aria-pressed="true">Dajner</button>
+    <button data-b="fatty" aria-pressed="false">Fatty Patty</button>
+  </div>
+  <nav id="nav"><div class="navgroup">Mesiac</div><a href="#ciele" data-p="ciele"><i>01</i>Prehľad a ciele</a><a href="#plan" data-p="plan"><i>02</i>Plán obsahu</a><a href="#banka" data-p="banka"><i>03</i>Banka tém</a><div class="navgroup">Výkon</div><a href="#analytika" data-p="analytika"><i>04</i>Analytika</a><a href="#hodnotenie" data-p="hodnotenie"><i>05</i>Hodnotenie obsahu</a><div class="navgroup">Rast</div><a href="#aktivity" data-p="aktivity" aria-current="true"><i>06</i>Aktivity</a><a href="#zmeny" data-p="zmeny"><i>07</i>Zmeny a pripomienky</a></nav>
+</aside>
+
+<main>
+  <div class="topbar">
+    <div>
+      <h2 id="ptitle">Aktivity</h2>
+      <div class="sub" id="psub">dajner.sk · správa: Petra · August 2026</div>
+    </div>
+    <div class="acts">
+      <span class="chip saved" id="status">Uložené</span>
+      <button class="btn" id="btnEdit">Režim úprav</button>
+      <button class="btn dark" id="btnPage">Uložiť stránku</button>
+      <button class="btn" id="btnExport">Export dát</button>
+      <button class="btn" id="btnImport">Načítať dáta</button>
+      <button class="btn" id="btnPrint">Tlač / PDF</button>
+      <input type="file" id="fileIn" accept="application/json" hidden="">
+    </div>
+  </div>
+  <div class="page" id="page"><div class="eyebrow">Nad rámec postov</div><h3 style="margin-bottom:24px">Online a offline aktivity</h3>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:38px 0 14px">
+      <h4 class="sec" style="margin:0">Online</h4>
+      <button class="addbtn" data-addakt="online">+ Pridať</button>
+    </div>
+    
+    <div class="grid g3"><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px"><b style="font-size:16.5px;line-height:1.3"><span class="" data-k="akt.t.online.ziagrbn" data-ph="Názov aktivity">Tajné heslo z Instagramu</span></b>
+      <button class="x" data-delakt="online|ziagrbn">×</button></div>
+      <p style="color:var(--mut);font-size:14.5px;margin-top:8px;line-height:1.5"><span class="" data-k="akt.d.online.ziagrbn" data-ph="Ako to funguje">Raz týždenne heslo v storke. Kto ho pri pulte povie, dostane niečo malé — extra syr, dip, kolu. Obsluha si čiarkuje na papier.</span></p>
+      <div class="note" style="margin-top:13px"><b>Prečo to robiť:</b> <span class="" data-k="akt.w.online.ziagrbn" data-ph="načo to je a čo meriaš">Jediná vec, ktorá priamo zmeria cestu z Instagramu k pultu.</span></div>
+    </div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px"><b style="font-size:16.5px;line-height:1.3"><span class="" data-k="akt.t.online.ue9ja84" data-ph="Názov aktivity">Navrhni burger</span></b>
+      <button class="x" data-delakt="online|ue9ja84">×</button></div>
+      <p style="color:var(--mut);font-size:14.5px;margin-top:8px;line-height:1.5"><span class="" data-k="akt.d.online.ue9ja84" data-ph="Ako to funguje">Followeri posielajú návrhy, ty vyberieš tri, hlasovanie v storke. Víťaz ide na týždeň do menu pod svojím menom a má mesiac burgery zadarmo.</span></p>
+      <div class="note" style="margin-top:13px"><b>Prečo to robiť:</b> <span class="" data-k="akt.w.online.ue9ja84" data-ph="načo to je a čo meriaš">Novinka bez toho, aby sa kuchyňa natrvalo skomplikovala. Víťaz privedie celý svoj okruh ľudí.</span></div>
+    </div></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:38px 0 14px">
+      <h4 class="sec" style="margin:0">Offline</h4>
+      <button class="addbtn" data-addakt="offline">+ Pridať</button>
+    </div>
+    
+    <div class="grid g3"><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px"><b style="font-size:16.5px;line-height:1.3"><span class="" data-k="akt.t.offline.s9ldfnq" data-ph="Názov aktivity">Fotoaparát a stena alebo IG hostí</span></b>
+      <button class="x" data-delakt="offline|s9ldfnq">×</button></div>
+      <p style="color:var(--mut);font-size:14.5px;margin-top:8px;line-height:1.5"><span class="" data-k="akt.d.offline.s9ldfnq" data-ph="Ako to funguje">Foťák na pulte a QRko odfoť sa s jedlom a pridáme ťa na náš instagram = komunita</span></p>
+      <div class="note" style="margin-top:13px"><b>Prečo to robiť:</b> <span class="" data-k="akt.w.offline.s9ldfnq" data-ph="načo to je a čo meriaš"></span></div>
+    </div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px"><b style="font-size:16.5px;line-height:1.3"><span class="" data-k="akt.t.offline.gsbzh3h" data-ph="Názov aktivity">Smashni si vlastný</span></b>
+      <button class="x" data-delakt="offline|gsbzh3h">×</button></div>
+      <p style="color:var(--mut);font-size:14.5px;margin-top:8px;line-height:1.5"><span class="" data-k="akt.d.offline.gsbzh3h" data-ph="Ako to funguje">Raz mesačne jedno video,&nbsp; hosť ide za pult, dostane zásteru a smashne si vlastný burger. Rezervácia cez DM.</span></p>
+      <div class="note" style="margin-top:13px"><b>Prečo to robiť:</b> <span class="" data-k="akt.w.offline.gsbzh3h" data-ph="načo to je a čo meriaš">Nikto iný v Trenčíne to nerobí.</span></div>
+    </div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px"><b style="font-size:16.5px;line-height:1.3"><span class="" data-k="akt.t.offline.3gfgm0x" data-ph="Názov aktivity"></span></b>
+      <button class="x" data-delakt="offline|3gfgm0x">×</button></div>
+      <p style="color:var(--mut);font-size:14.5px;margin-top:8px;line-height:1.5"><span class="" data-k="akt.d.offline.3gfgm0x" data-ph="Ako to funguje"></span></p>
+      <div class="note" style="margin-top:13px"><b>Prečo to robiť:</b> <span class="" data-k="akt.w.offline.3gfgm0x" data-ph="načo to je a čo meriaš"></span></div>
+    </div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px"><b style="font-size:16.5px;line-height:1.3"><span class="" data-k="akt.t.offline.ufpe9og" data-ph="Názov aktivity">Odkazová stena</span></b>
+      <button class="x" data-delakt="offline|ufpe9og">×</button></div>
+      <p style="color:var(--mut);font-size:14.5px;margin-top:8px;line-height:1.5"><span class="" data-k="akt.d.offline.ufpe9og" data-ph="Ako to funguje">Stoh kartičiek a pero: napíš odkaz ďalšiemu hosťovi. Najlepšie vylepíš na stenu, raz týždenne jednu do storky.</span></p>
+      <div class="note" style="margin-top:13px"><b>Prečo to robiť:</b> <span class="" data-k="akt.w.offline.ufpe9og" data-ph="načo to je a čo meriaš">Náklad nula, obsah nekonečný, a ľudia sa pri stene fotia sami.</span></div>
+    </div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px"><b style="font-size:16.5px;line-height:1.3"><span class="" data-k="akt.t.offline.az17ugx" data-ph="Názov aktivity"></span></b>
+      <button class="x" data-delakt="offline|az17ugx">×</button></div>
+      <p style="color:var(--mut);font-size:14.5px;margin-top:8px;line-height:1.5"><span class="" data-k="akt.d.offline.az17ugx" data-ph="Ako to funguje"></span></p>
+      <div class="note" style="margin-top:13px"><b>Prečo to robiť:</b> <span class="" data-k="akt.w.offline.az17ugx" data-ph="načo to je a čo meriaš"></span></div>
+    </div><div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px"><b style="font-size:16.5px;line-height:1.3"><span class="" data-k="akt.t.offline.zk1ld99" data-ph="Názov aktivity">Pop-up</span></b>
+      <button class="x" data-delakt="offline|zk1ld99">×</button></div>
+      <p style="color:var(--mut);font-size:14.5px;margin-top:8px;line-height:1.5"><span class="" data-k="akt.d.offline.zk1ld99" data-ph="Ako to funguje">Prebehlo. Doplniť výsledok.</span></p>
+      <div class="note" style="margin-top:13px"><b>Prečo to robiť:</b> <span class="" data-k="akt.w.offline.zk1ld99" data-ph="načo to je a čo meriaš">Predaj a dosah počas akcie oproti bežnému dňu.</span></div>
+    </div></div></div>
+</main>
+</div>
+
+<script>
+"use strict";
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const MES=["Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"];
+const mLabel=k=>MES[+k.slice(5,7)-1]+" "+k.slice(0,4);
+const STAV={napad:"Nápad",pisem:"Píšem",podklady:"Čakám na podklady",hotovo:"Hotové",vonku:"Vonku"};
+const TYPY=["REEL","CAROUSEL","STORIES","FOTO","SPOLUPRÁCA"];
+const PILIERE=["Zábavný","Predajný","Komunitný","Edukačný","Osobný"];
+
+const PAGES=[
+  {id:"ciele",n:"Prehľad a ciele",g:"Mesiac",eb:"Kde sme",h:"Ciele a povinnosti"},
+  {id:"plan",n:"Plán obsahu",g:"Mesiac",eb:"Produkcia",h:"Plán obsahu"},
+  {id:"banka",n:"Banka tém",g:"Mesiac",eb:"Zásobník",h:"Banka tém"},
+  {id:"analytika",n:"Analytika",g:"Výkon",eb:"Čísla",h:"Analytika príspevkov"},
+  {id:"hodnotenie",n:"Hodnotenie obsahu",g:"Výkon",eb:"Remeslo",h:"Hook, scenár, strih"},
+  {id:"aktivity",n:"Aktivity",g:"Rast",eb:"Nad rámec postov",h:"Online a offline aktivity"},
+  {id:"zmeny",n:"Zmeny a pripomienky",g:"Rast",eb:"Komunikácia",h:"Zmeny, pripomienky, otázky"}
+];
+
+/* ================= ŠTARTOVACIE DÁTA ================= */
+function brandSeed(b){
+  const D=b==="dajner";
+  return {
+    ciele:{
+      "2026-08":{
+        hlavny: D
+          ? "Rozbehnúť návratnosť. Po pivote prišli ľudia raz — teraz potrebujú dôvod prísť druhý a tretíkrát."
+          : "Premeniť stálych hostí na hlasnú skupinu a vyriešiť nespokojnosť z menu tak, aby z nej vznikla udalosť.",
+        ulohy: D?[
+          {id:uid(),t:"Spustiť tajné heslo v storkách a naučiť obsluhu čiarkovať",done:false},
+          {id:uid(),t:"Kúpiť fotoaparát na pult a vytlačiť prvú nástenku",done:false},
+          {id:uid(),t:"Odtočiť 4 reely v jednom natáčacom dni",done:false},
+          {id:uid(),t:"Vyhodnotiť mediány z posledných 20 organických príspevkov",done:false}
+        ]:[
+          {id:uid(),t:"Spustiť anketu o návrate položky do menu",done:false},
+          {id:uid(),t:"Rozbehnúť výzvu „Kde ješ svojho Fattyho“",done:false},
+          {id:uid(),t:"Zaviesť odmenu za Google recenziu pri okienku",done:false},
+          {id:uid(),t:"Odtočiť 4 reely v jednom natáčacom dni",done:false}
+        ],
+        cisla: D?[
+          {id:uid(),lab:"Hesiel z Instagramu",val:"",fin:"cieľ 120 za mesiac"},
+          {id:uid(),lab:"Uloženia / dosah",val:"",fin:"medián, cieľ nad 2 %"},
+          {id:uid(),lab:"Udržanie videa",val:"",fin:"medián, cieľ nad 55 %"},
+          {id:uid(),lab:"Fotky z fotoaparátu",val:"",fin:"cieľ 60 za mesiac"}
+        ]:[
+          {id:uid(),lab:"Nové Google recenzie",val:"",fin:"cieľ 25 za mesiac"},
+          {id:uid(),lab:"Fotky do mapy Trenčína",val:"",fin:"cieľ 40 za mesiac"},
+          {id:uid(),lab:"Hlasov v ankete o menu",val:"",fin:"cieľ 200"},
+          {id:uid(),lab:"Udržanie videa",val:"",fin:"medián, cieľ nad 55 %"}
+        ]
+      }
+    },
+    plan: D?[
+      {id:uid(),m:"2026-08",w:2,typ:"CAROUSEL",ttl:"Zrušili sme polovicu menu",pil:"Osobný",hook:"„Zrušili sme polovicu menu. Nie preto, že sme to nezvládli.“",desc:"10 slidov, príbeh pivotu od Fatty Patty 2022 po cheeseburger za 5 €.",cta:"Napíšte, čo vám v menu chýba.",stav:"hotovo"},
+      {id:uid(),m:"2026-08",w:3,typ:"REEL",ttl:"Čo je v burgeri za 5 €",pil:"Predajný",hook:"„Za päť eur. Poďme si to rozobrať na kúsky.“",desc:"Rozloženie burgera na komponenty, každý s cenou. Bez hudby, len zvuk kuchyne.",cta:"Príďte si to overiť.",stav:"pisem"},
+      {id:uid(),m:"2026-08",w:4,typ:"STORIES",ttl:"Tajné heslo — prvý týždeň",pil:"Komunitný",hook:"„Povedzte pri pulte jedno slovo a máte niečo navrch.“",desc:"3 storky: heslo, pripomenutie o 17:00, výsledok na druhý deň.",cta:"Heslo je v poslednej storke.",stav:"napad"},
+      {id:uid(),m:"2026-09",w:1,typ:"REEL",ttl:"Ráno v Dajneri od siedmej",pil:"Zábavný",hook:"„Takto vyzerá hodina predtým, než otvoríme.“",desc:"Zrýchlené zákulisie, prvý smash dňa v detaile.",cta:"Otvárame o deviatej.",stav:"napad"}
+    ]:[
+      {id:uid(),m:"2026-08",w:2,typ:"STORIES",ttl:"Anketa: ktorú vec chcete späť do menu",pil:"Komunitný",hook:"„Nadávali ste. Tak si vyberte.“",desc:"Anketa s tromi možnosťami, výsledok zverejniť a víťaza vrátiť na týždeň.",cta:"Hlasujte v storke.",stav:"napad"},
+      {id:uid(),m:"2026-08",w:3,typ:"REEL",ttl:"Najlepšie miesta v Trenčíne, kde zjesť Fattyho",pil:"Zábavný",hook:"„Nemáme kde sadnúť. Tak sme našli päť miest za vás.“",desc:"Päť lokácií, každá 3 sekundy, na konci výzva na posielanie vlastných.",cta:"Pošlite, kde ho jete vy.",stav:"pisem"},
+      {id:uid(),m:"2026-08",w:4,typ:"FOTO",ttl:"Stály hosť mesiaca",pil:"Komunitný",hook:"„Chodí sem od 2022 a vždy si dá to isté.“",desc:"Portrét pri okienku, tri otázky, jeho objednávka.",cta:"Poznáte ho? Napíšte mu do komentárov.",stav:"podklady"},
+      {id:uid(),m:"2026-09",w:1,typ:"REEL",ttl:"Rozdiel medzi smash a klasickým burgerom",pil:"Edukačný",hook:"„Dva burgery, jedna platňa. Rozdiel je v prvých piatich sekundách.“",desc:"Vedľa seba, detail na kôrku.",cta:"Ktorý si dáte?",stav:"napad"}
+    ],
+    banka: D?[
+      {id:uid(),n:"Pivot a rovnaká pravda",items:[
+        {id:uid(),t:"Prečo sme zrušili polovicu menu"},{id:uid(),t:"Čo nám ľudia napísali v dotazníku"},
+        {id:uid(),t:"Kedy sme vedeli, že to nefunguje"},{id:uid(),t:"Čo zostalo z americkej verzie"},
+        {id:uid(),t:"Ako sme vyberali práve tieto dve položky"}]},
+      {id:uid(),n:"Cena a hodnota",items:[
+        {id:uid(),t:"Čo všetko je v burgeri za 5 €"},{id:uid(),t:"Prečo sa to dá spraviť za 5 €"},
+        {id:uid(),t:"Koľko kusov denne musíme predať"},{id:uid(),t:"5 € u nás vs obedové menu inde"}]},
+      {id:uid(),n:"Zákulisie a proces",items:[
+        {id:uid(),t:"Ráno v Dajneri od siedmej"},{id:uid(),t:"Ako sa smashuje správne a čo sa pokazí"},
+        {id:uid(),t:"Odkiaľ berieme mäso a pečivo"},{id:uid(),t:"Čo sa deje s tým, čo do večera nepredáme"}]},
+      {id:uid(),n:"Ľudia",items:[
+        {id:uid(),t:"Kto stojí za pultom"},{id:uid(),t:"Prvý deň nového človeka v kuchyni"},
+        {id:uid(),t:"Stály hosť a jeho objednávka"},{id:uid(),t:"Jano o tom, čo by dnes urobil inak"}]}
+    ]:[
+      {id:uid(),n:"Menu a nespokojnosť",items:[
+        {id:uid(),t:"Prečo sa menu zmenilo"},{id:uid(),t:"Čo sa vracia a čo nie"},
+        {id:uid(),t:"Ktorý burger je najpredávanejší a prečo"},{id:uid(),t:"Ako vyberáme, čo vyradiť"}]},
+      {id:uid(),n:"Okienko pod Fatimou",items:[
+        {id:uid(),t:"Ako funguje výdaj a prečo nemáme stoly"},{id:uid(),t:"Najlepšie miesta v Trenčíne, kde zjesť Fattyho"},
+        {id:uid(),t:"Koľko trvá jeden burger od objednávky"},{id:uid(),t:"Čo robiť, keď je pred okienkom front"}]},
+      {id:uid(),n:"Kvalita a remeslo",items:[
+        {id:uid(),t:"Prečo smažíme na tejto platni"},{id:uid(),t:"Rozdiel medzi smash a klasickým burgerom"},
+        {id:uid(),t:"Ako vyzerá zlý burger"},{id:uid(),t:"Čo je v našej omáčke"}]},
+      {id:uid(),n:"Komunita",items:[
+        {id:uid(),t:"Stály hosť mesiaca"},{id:uid(),t:"Prvý zákazník z roku 2022"},
+        {id:uid(),t:"Trenčínčania, ktorí si chodia po Fattyho každý týždeň"}]}
+    ],
+    aktivity:{
+      online: D?[
+        {id:uid(),t:"Tajné heslo z Instagramu",d:"Raz týždenne heslo v storke. Kto ho pri pulte povie, dostane niečo malé — extra syr, dip, kolu. Obsluha si čiarkuje na papier.",w:"Jediná vec, ktorá priamo zmeria cestu z Instagramu k pultu."},
+        {id:uid(),t:"Navrhni burger",d:"Followeri posielajú návrhy, ty vyberieš tri, hlasovanie v storke. Víťaz ide na týždeň do menu pod svojím menom a má mesiac burgery zadarmo.",w:"Novinka bez toho, aby sa kuchyňa natrvalo skomplikovala. Víťaz privedie celý svoj okruh ľudí."}
+      ]:[
+        {id:uid(),t:"Kde ješ svojho Fattyho",d:"Ľudia posielajú fotku miesta, kde burger zjedli — park pod Fatimou, hradby, breh Váhu, auto pred prácou. Skladá sa z toho mapa Trenčína.",w:"Z toho, že sa nedá sadnúť, sa stáva rituál. Obsah tvoria samotní hostia."},
+        {id:uid(),t:"Comeback týždeň",d:"Anketa: ktorú vec chcete späť do menu? Víťaz sa vráti na týždeň.",w:"Sťažnosť z dotazníka sa mení na udalosť. Obhajovanie zmeny nikdy nefunguje, hlasovanie áno."},
+        {id:uid(),t:"Tajné heslo z Instagramu",d:"Raz týždenne heslo v storke, funguje aj pri okienku. Obsluha čiarkuje.",w:"Tvrdá atribúcia. Ak beží v oboch podnikoch, čísla sa dajú porovnať."},
+        {id:uid(),t:"Recenzia pri okienku",d:"Kto ukáže napísanú Google recenziu, dostane niečo malé.",w:"Recenzie ťahajú podnik vyššie vo vyhľadávaní a pracujú aj mimo Instagramu."},
+        {id:uid(),t:"Stály hosť mesiaca",d:"Obsluha si všíma, kto chodí najčastejšie. Raz mesačne portrét a krátky rozhovor, ten človek má týždeň burgery zadarmo.",w:"Fatty Patty má lojalitu. Toto ju zviditeľní a dá ostatným dôvod chodiť častejšie."},
+        {id:uid(),t:"Lokálne kolaborácie cez ľudí",d:"Trenčianski mikro-tvorcovia, kapely, športovci — jeden človek mesačne si vyzdvihne burger a povie, čo robí v meste.",w:"Nepotrebuje priestor. Získavaš ich publikum bez rozpočtu."}
+      ],
+      offline: D?[
+        {id:uid(),t:"Fotoaparát a stena hostí",d:"Lacný digitálny kompakt leží na pulte, QR-ko vyzýva vyfotiť sa. Raz týždenne vytlačíš pár fotiek na nástenku v podniku.",w:"Ľudia sa vracajú pozrieť, či tam sú — presne ten dôvod vrátiť sa, ktorý Dajneru chýba."},
+        {id:uid(),t:"Smashni si vlastný",d:"Raz mesačne pár slotov — hosť ide za pult, dostane zásteru a smashne si vlastný burger. Rezervácia cez DM.",w:"Nikto iný v Trenčíne to nerobí."},
+        {id:uid(),t:"Deň pre komunitu",d:"Jeden deň v mesiaci ide 1 € z každého burgera na konkrétnu lokálnu vec — útulok, ihrisko, školský projekt. Menovite, s fotkou, koľko sa vyzbieralo.",w:"Nerobí to obrat, robí to reputáciu a šancu na lokálne médiá."},
+        {id:uid(),t:"Odkazová stena",d:"Stoh kartičiek a pero: napíš odkaz ďalšiemu hosťovi. Najlepšie vylepíš na stenu, raz týždenne jednu do storky.",w:"Náklad nula, obsah nekonečný, a ľudia sa pri stene fotia sami."},
+        {id:uid(),t:"Obrátený pop-up",d:"Pop-upy ste robili tak, že ste išli von. Skús opak — pozvi niekoho k sebe. Lokálny pivovar, kaviareň, pekáreň.",w:"Ich publikum zadarmo a dôvod na spoločný obsah."},
+        {id:uid(),t:"Pop-up",d:"Prebehlo. Doplniť výsledok.",w:"Predaj a dosah počas akcie oproti bežnému dňu."},
+        {id:uid(),t:"Party s jedlom",d:"Prebehlo. Doplniť výsledok.",w:"Počet ľudí a predaj počas akcie."}
+      ]:[]
+    },
+    analytika: D?[
+      {id:uid(),dat:"2026-08-05",ttl:"Zrušili sme polovicu menu",typ:"CAROUSEL",boost:false,
+       dosah:"",videnia:"",cas:"",dlzka:"",ulo:"",zdi:"",kom:"",laj:"",prof:"",sled:"",
+       hook:0,scenar:0,strih:0,cta:0,pozn:""}
+    ]:[
+      {id:uid(),dat:"2026-08-06",ttl:"Najlepšie miesta v Trenčíne",typ:"REEL",boost:false,
+       dosah:"",videnia:"",cas:"",dlzka:"",ulo:"",zdi:"",kom:"",laj:"",prof:"",sled:"",
+       hook:0,scenar:0,strih:0,cta:0,pozn:""}
+    ],
+    zmeny:[],
+    otazky:[
+      {id:uid(),t:"Aký je cieľ na tento mesiac v číslach — obrat, počet objednávok, alebo dosah?",w:"Podľa toho sa vyhodnotí, či mesiac vyšiel.",done:false},
+      {id:uid(),t:"Koľko dní dopredu vieš dať informácie o novinkách a akciách?",w:"Určuje, koľko obsahu sa dá naplánovať dopredu.",done:false},
+      {id:uid(),t:"Kto schvaľuje obsah — ty alebo Natália?",w:"Dvaja schvaľovatelia bez poradia znamenajú prepisovanie hotových vecí.",done:false},
+      {id:uid(),t:"Môže obsluha týždeň zapisovať, koľko ľudí povie heslo z Instagramu?",w:"Päť sekúnd pri pulte, inak sa vplyv Instagramu nedá zmerať.",done:false},
+      {id:uid(),t:"Máme prístup do Google profilu podniku?",w:"Ukazuje, či ľudia podnik hľadajú menom, alebo ho objavujú.",done:false},
+      {id:uid(),t:"Aký je rozpočet na propagáciu príspevkov a kto ho spravuje?",w:"Boostované príspevky sa vyraďujú z organických mediánov.",done:false},
+      {id:uid(),t:"Čo sa stane, keď zmena príde v deň postovania?",w:"Dohoda vopred, nie pri prvom konflikte.",done:false}
+    ]
+  };
+}
+function uint(){return uid()}
+
+function freshDB(){
+  return {v:1,updated:Date.now(),brand:"dajner",month:"2026-08",dajner:brandSeed("dajner"),fatty:brandSeed("fatty")};
+}
+
+/* ================= STAV ================= */
+let DB=null, dirty=false, edit=false, page="ciele";
+const KEY="panel-dajner-fatty-v1";
+function loadDB(){
+  let ls=null,sd=null;
+  try{ls=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+  try{const t=document.getElementById("seed").textContent.trim();if(t)sd=JSON.parse(t)}catch(e){}
+  if(ls&&sd)DB=(sd.updated||0)>(ls.updated||0)?sd:ls;
+  else DB=ls||sd||freshDB();
+  if(!DB.dajner||!DB.fatty)DB=freshDB();
+}
+function persist(){DB.updated=Date.now();try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}}
+function touch(){dirty=true;setStatus();persist()}
+function setStatus(){
+  const s=document.getElementById("status");
+  s.className="chip "+(dirty?"dirty":"saved");
+  s.textContent=dirty?"Neuložené zmeny":"Uložené";
+}
+const B=()=>DB[DB.brand];
+const fixOne=x=>{const n=Number(x);return isNaN(n)?null:n};
+
+/* ================= NAV ================= */
+function renderNav(){
+  const nav=document.getElementById("nav");let h="",g="";let i=0;
+  PAGES.forEach(p=>{
+    i++;
+    if(p.g!==g){g=p.g;h+=`<div class="navgroup">${g}</div>`}
+    h+=`<a href="#${p.id}" data-p="${p.id}" ${p.id===page?'aria-current="true"':""}><i>${String(i).padStart(2,"0")}</i>${p.n}</a>`;
+  });
+  nav.innerHTML=h;
+  document.getElementById("wm").innerHTML=(DB.brand==="dajner"?"DAJNER":"FATTY PATTY")+'<span>.</span>';
+  document.body.dataset.brand=DB.brand;
+  document.querySelectorAll("#bswitch button").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.b===DB.brand)));
+}
+
+/* ================= POMOCNÉ ================= */
+function median(a){if(!a.length)return null;const s=[...a].sort((x,y)=>x-y);const m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2}
+function ratios(p){
+  const d=fixOne(p.dosah),ulo=fixOne(p.ulo),zdi=fixOne(p.zdi),kom=fixOne(p.kom),laj=fixOne(p.laj),
+        prof=fixOne(p.prof),sled=fixOne(p.sled),cas=fixOne(p.cas),dl=fixOne(p.dlzka);
+  const pc=(x,y)=>(x!=null&&y)?x/y*100:null;
+  return {
+    udrzanie:(cas!=null&&dl)?cas/dl*100:null,
+    uloz:pc(ulo,d), zdiel:pc(zdi,d), profil:pc(prof,d),
+    sledovanie:(sled!=null&&prof)?sled/prof*100:null,
+    interakcie:(d&&[ulo,zdi,kom,laj].every(x=>x!=null))?((ulo+zdi+kom+laj)/d*100):null
+  };
+}
+const RKEYS=[["udrzanie","Udržanie"],["uloz","Uloženia"],["zdiel","Zdieľania"],["profil","Profil"],["sledovanie","Sledovanie"],["interakcie","Interakcie"]];
+function baseline(){
+  const org=B().analytika.filter(p=>!p.boost).slice(-20).map(ratios);
+  const out={};
+  RKEYS.forEach(([k])=>{out[k]=median(org.map(r=>r[k]).filter(v=>v!=null))});
+  return out;
+}
+function rcell(v,med){
+  if(v==null)return `<span class="ratio mid">—</span>`;
+  let cls="mid",arw="";
+  if(med!=null&&med>0){const d=(v-med)/med;if(d>=.12){cls="up";arw="▲"}else if(d<=-.12){cls="dn";arw="▼"}}
+  return `<span class="ratio ${cls}">${v.toFixed(1)} %${arw?" "+arw:""}</span>`;
+}
+function ed(k,txt,ph,cls){
+  return `<span class="${cls||""}" data-k="${k}" ${edit?'contenteditable="true"':""} data-ph="${ph||""}">${esc(txt)}</span>`;
+}
+
+/* ================= STRÁNKY ================= */
+function pgCiele(){
+  const m=DB.month,c=B().ciele[m]||(B().ciele[m]={hlavny:"",ulohy:[],cisla:[]});
+  return `
+  ${months()}
+  <div class="card">
+    <h4 class="sec" style="margin:0 0 6px">Hlavný cieľ</h4>
+    <p style="font-size:16px;color:var(--mut);line-height:1.55">${ed("ciel.hlavny."+m,c.hlavny,"Napíš jednu vetu smeru.")}</p>
+    <div style="margin-top:18px">
+      ${c.ulohy.map(u=>`<div class="task ${u.done?"done":""}">
+        <input type="checkbox" data-task="${u.id}" ${u.done?"checked":""} aria-label="Hotové">
+        <span>${ed("ulo."+u.id,u.t,"Úloha")}</span>
+        <button class="x" data-delulo="${u.id}" aria-label="Zmazať">×</button></div>`).join("")||'<div class="emptyst">Žiadne úlohy.</div>'}
+    </div>
+    <button class="addbtn" style="margin-top:14px" data-addulo="1">+ Pridať úlohu</button>
+  </div>
+
+  <h4 class="sec">Čísla</h4>
+  <div class="grid g4">
+    ${c.cisla.map(n=>`<div class="stat">
+      <div class="lab">${ed("cislolab."+n.id,n.lab,"Názov")}</div>
+      <div class="val ${n.val?"":"empty"}"><span data-k="cisloval.${n.id}" contenteditable="true" data-ph="—">${esc(n.val)}</span></div>
+      <div class="fin">${ed("cislofin."+n.id,n.fin,"cieľ")}</div>
+      ${edit?`<button class="x" data-delcislo="${n.id}" style="margin-top:8px">× zmazať</button>`:""}
+    </div>`).join("")}
+    <button class="addbtn" data-addcislo="1">+ Pridať číslo</button>
+  </div>`;
+}
+
+function months(){
+  const set=new Set(Object.keys(B().ciele).concat(B().plan.map(p=>p.m)));
+  set.add(DB.month);
+  const arr=[...set].sort();
+  return `<div class="mtabs">${arr.map(k=>`<button class="mtab" data-m="${k}" aria-pressed="${k===DB.month}">${mLabel(k)}</button>`).join("")}
+    <button class="addbtn" data-addmonth="1" style="padding:9px 14px;border-radius:100px">+ Ďalší mesiac</button></div>`;
+}
+
+function pgPlan(){
+  const items=B().plan.filter(p=>p.m===DB.month);
+  let h=months();
+  for(let w=1;w<=5;w++){
+    const it=items.filter(x=>x.w===w);
+    if(!it.length&&w>4)continue;
+    const done=it.filter(x=>x.stav==="vonku"||x.stav==="hotovo").length;
+    h+=`<div class="week"><div class="week-h"><h5>Týždeň ${w}</h5>
+      <div class="r"><span>${done}/${it.length} hotových</span><button class="btn" data-additem="${w}" style="padding:6px 11px;font-size:12.5px">+ Položka</button></div></div>`;
+    if(!it.length)h+=`<div class="emptyst" style="padding:20px">Zatiaľ nič.</div>`;
+    h+=it.map(x=>`<div class="item">
+      <div>
+        <div class="typ"><span class="pill ${x.typ==="REEL"?"dark":"soft"}">${esc(x.typ)}</span></div>
+        <div class="ttl">${ed("item.ttl."+x.id,x.ttl,"Názov príspevku")}</div>
+        <div class="pil">Pilier: ${ed("item.pil."+x.id,x.pil,"pilier")}</div>
+        <div class="hook">${ed("item.hook."+x.id,x.hook,"Hook — prvá veta, ktorú človek uvidí")}</div>
+        <div class="desc">${ed("item.desc."+x.id,x.desc,"Ako to natočiť")}</div>
+        <div class="cta">CTA: ${ed("item.cta."+x.id,x.cta,"výzva na akciu")}</div>
+      </div>
+      <div class="right">
+        <select data-stav="${x.id}" aria-label="Stav">${Object.entries(STAV).map(([k,v])=>`<option value="${k}" ${k===x.stav?"selected":""}>${v}</option>`).join("")}</select>
+        <select data-typ="${x.id}" aria-label="Formát">${TYPY.map(t=>`<option value="${t}" ${t===x.typ?"selected":""}>${t}</option>`).join("")}</select>
+        <button class="x" data-delitem="${x.id}">× zmazať</button>
+      </div></div>`).join("");
+    h+=`</div>`;
+  }
+  return h;
+}
+
+function pgBanka(){
+  return B().banka.map(c=>`
+    <h4 class="sec">${ed("bkat."+c.id,c.n,"Kategória")} ${edit?`<button class="x" data-delkat="${c.id}">×</button>`:""}</h4>
+    <div class="grid g3">
+      ${c.items.map(i=>`<div class="card" style="padding:15px 16px;display:flex;gap:10px;align-items:flex-start">
+        <span style="flex:1;font-size:15px;line-height:1.4">${ed("btema."+i.id,i.t,"Téma")}</span>
+        <button class="x" data-deltema="${c.id}|${i.id}">×</button></div>`).join("")}
+      <button class="addbtn" data-addtema="${c.id}">+ Pridať tému</button>
+    </div>`).join("")+
+    `<div style="margin-top:26px"><button class="addbtn" data-addkat="1">+ Pridať kategóriu</button></div>`;
+}
+
+function pgAnalytika(){
+  const med=baseline(),ps=B().analytika;
+  const NUM=[["dosah","Dosah"],["videnia","Videnia"],["cas","Čas (s)"],["dlzka","Dĺžka (s)"],["ulo","Uloženia"],["zdi","Zdieľania"],["kom","Komentáre"],["laj","Páči sa"],["prof","Profil"],["sled","Sledovania"]];
+  let h=`<div class="grid g3" style="margin-bottom:26px">
+    ${RKEYS.map(([k,n])=>`<div class="stat"><div class="lab">Medián — ${n}</div>
+      <div class="val ${med[k]==null?"empty":""}">${med[k]==null?"chýbajú dáta":med[k].toFixed(1)+" %"}</div>
+      <div class="fin">z posledných organických príspevkov</div></div>`).join("")}
+  </div>
+  <div class="twrap"><table>
+    <thead><tr><th>Dátum</th><th>Príspevok</th>${NUM.map(n=>`<th class="num">${n[1]}</th>`).join("")}
+    ${RKEYS.map(r=>`<th class="num">${r[1]}</th>`).join("")}<th>Boost</th><th></th></tr></thead><tbody>`;
+  if(!ps.length)h+=`<tr><td colspan="20" class="emptyst" style="padding:22px 12px">Zatiaľ žiadne príspevky.</td></tr>`;
+  ps.forEach(p=>{
+    const r=ratios(p);
+    h+=`<tr class="${p.boost?"boostrow":""}">
+      <td><input type="date" value="${esc(p.dat)}" data-a="dat|${p.id}" style="width:140px;padding:6px 8px;font-size:13px"></td>
+      <td class="name"><input value="${esc(p.ttl)}" data-a="ttl|${p.id}" style="padding:6px 8px;font-size:13.5px">
+        <small>${esc(p.typ)}</small></td>
+      ${NUM.map(n=>`<td class="num"><input class="mini" inputmode="numeric" value="${esc(p[n[0]])}" data-a="${n[0]}|${p.id}"></td>`).join("")}
+      ${RKEYS.map(k=>`<td class="num">${rcell(r[k[0]],med[k[0]])}</td>`).join("")}
+      <td style="text-align:center"><input type="checkbox" style="width:18px;height:18px;accent-color:var(--acc)" data-boost="${p.id}" ${p.boost?"checked":""} aria-label="Boostované"></td>
+      <td><button class="x" data-delpost="${p.id}">×</button></td></tr>`;
+  });
+  h+=`</tbody></table></div>
+  <div style="margin-top:16px"><button class="addbtn" data-addpost="1">+ Pridať príspevok</button></div>`;
+  return h;
+}
+
+function pgHodnotenie(){
+  const ps=B().analytika;
+  const sc=(id,f,v)=>`<div class="score">${[1,2,3,4,5].map(n=>`<button data-score="${f}|${id}|${n}" aria-pressed="${v===n}" aria-label="${n} z 5">${n}</button>`).join("")}</div>`;
+  const hi=[],lo=[];
+  ps.forEach(p=>{
+    const r=ratios(p).udrzanie;
+    if(r==null||!p.hook)return;
+    if(p.hook>=4)hi.push(r);else if(p.hook<=2)lo.push(r);
+  });
+  const mh=median(hi),ml=median(lo);
+  let ins;
+  if(mh!=null&&ml!=null)ins=`Príspevky s hodnotením hooku <b>4–5</b> majú medián udržania <b>${mh.toFixed(1)} %</b>. Príspevky s hodnotením <b>1–2</b> majú <b>${ml.toFixed(1)} %</b>.`;
+  else ins="Zatiaľ nie je dosť ohodnotených príspevkov s doplnenými číslami.";
+  let h=`<div class="insight" style="margin-bottom:26px"><h5>Hodnotenie hooku oproti udržaniu</h5><p>${ins}</p></div>`;
+  if(!ps.length)return h+`<div class="card"><div class="emptyst">Žiadne príspevky na hodnotenie.</div></div>`;
+  h+=`<div class="grid g2">`+ps.map(p=>{
+    const r=ratios(p);
+    return `<div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div><b style="font-size:16.5px">${esc(p.ttl||"Bez názvu")}</b>
+        <div style="color:var(--mut);font-size:13px;margin-top:3px">${esc(p.dat||"—")} · ${esc(p.typ)}</div></div>
+        <span class="pill ${r.udrzanie==null?"":r.udrzanie>=55?"okp":"soft"}">${r.udrzanie==null?"udržanie —":"udržanie "+r.udrzanie.toFixed(0)+" %"}</span>
+      </div>
+      <div style="margin-top:16px">
+        <div class="srow"><span class="lab">Hook</span>${sc(p.id,"hook",p.hook)}</div>
+        <div class="srow"><span class="lab">Scenár</span>${sc(p.id,"scenar",p.scenar)}</div>
+        <div class="srow"><span class="lab">Strih a tempo</span>${sc(p.id,"strih",p.strih)}</div>
+        <div class="srow"><span class="lab">CTA</span>${sc(p.id,"cta",p.cta)}</div>
+      </div>
+      <div style="margin-top:14px">
+        <div class="lab" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-bottom:6px">Čo pri ďalšom zmeniť</div>
+        <textarea data-a="pozn|${p.id}" placeholder="Poznámka k ďalšiemu príspevku">${esc(p.pozn)}</textarea>
+      </div></div>`;
+  }).join("")+`</div>`;
+  return h;
+}
+
+function pgAktivity(){
+  const a=B().aktivity,D=DB.brand==="dajner";
+  const block=(kind,list)=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin:38px 0 14px">
+      <h4 class="sec" style="margin:0">${kind==="online"?"Online":"Offline"}</h4>
+      <button class="addbtn" data-addakt="${kind}">+ Pridať</button>
+    </div>
+    ${(!list.length)?`<div class="card"><div class="emptyst">${kind==="offline"&&!D?"Pre Fatty Patty offline aktivity neplánujeme — prevádzka je výdajné okienko bez priestoru na sedenie.":"Zatiaľ nič."}</div></div>`:""}
+    <div class="grid g3">${list.map(x=>`<div class="card">
+      <div style="display:flex;justify-content:space-between;gap:10px"><b style="font-size:16.5px;line-height:1.3">${ed("akt.t."+kind+"."+x.id,x.t,"Názov aktivity")}</b>
+      <button class="x" data-delakt="${kind}|${x.id}">×</button></div>
+      <p style="color:var(--mut);font-size:14.5px;margin-top:8px;line-height:1.5">${ed("akt.d."+kind+"."+x.id,x.d,"Ako to funguje")}</p>
+      <div class="note" style="margin-top:13px"><b>Prečo to robiť:</b> ${ed("akt.w."+kind+"."+x.id,x.w,"načo to je a čo meriaš")}</div>
+    </div>`).join("")}</div>`;
+  return block("online",a.online)+block("offline",a.offline);
+}
+
+function pgZmeny(){
+  const z=B().zmeny.slice().sort((a,b)=>(b.dat||"").localeCompare(a.dat||""));
+  const hod=z.reduce((s,x)=>s+(Number(x.hod)||0),0);
+  return `
+  <div class="card">
+    <h4 class="sec" style="margin:0 0 14px">Pridať zmenu alebo pripomienku</h4>
+    <div class="addform">
+      <textarea id="zt" placeholder="Čo sa zmenilo"></textarea>
+      <input id="zk" placeholder="Kto (Jano / Natália)">
+      <input id="zh" inputmode="decimal" placeholder="Hodiny navyše">
+      <button class="btn dark" id="zadd" style="height:42px">Pridať</button>
+    </div>
+    <div style="margin-top:20px">
+      ${z.map(x=>`<div class="logitem">
+        <span class="pill ${x.vcas?"okp":"soft"}">${x.vcas?"včas":"na poslednú chvíľu"}</span>
+        <div class="body"><div>${ed("zt."+x.id,x.t,"Čo sa zmenilo")}</div>
+          <div class="meta"><span>${esc(x.kto||"—")}</span><span>·</span><span>${esc(x.dat||"—")}</span><span>·</span><span class="mono">${(Number(x.hod)||0)} h navyše</span></div></div>
+        <div class="r"><button data-togvcas="${x.id}">${x.vcas?"Prišlo pozde":"Prišlo včas"}</button><button data-delz="${x.id}">Zmazať</button></div>
+      </div>`).join("")||'<div class="emptyst">Za tento mesiac zatiaľ žiadne zmeny.</div>'}
+    </div>
+    <div class="sumline"><span class="lab">Hodiny navyše celkom</span><b>${hod.toFixed(1).replace(".0","")} h</b></div>
+  </div>
+
+  <h4 class="sec">Otázky, ktoré treba dohodnúť</h4>
+  <div class="card">
+    ${B().otazky.map(q=>`<div class="qrow">
+      <input type="checkbox" data-togq="${q.id}" ${q.done?"checked":""} aria-label="Vyriešené">
+      <div class="body"><div style="${q.done?"color:var(--mut);text-decoration:line-through":""}">${ed("q.t."+q.id,q.t,"Otázka")}</div>
+        <div class="why">${ed("q.w."+q.id,q.w,"prečo sa to pýtaš")}</div></div>
+      <button class="x" data-delq="${q.id}">×</button></div>`).join("")}
+    <button class="addbtn" style="margin-top:14px" data-addq="1">+ Pridať otázku</button>
+  </div>`;
+}
+
+const RENDER={ciele:pgCiele,plan:pgPlan,banka:pgBanka,analytika:pgAnalytika,hodnotenie:pgHodnotenie,aktivity:pgAktivity,zmeny:pgZmeny};
+function render(){
+  const p=PAGES.find(x=>x.id===page);
+  document.getElementById("ptitle").textContent=p.n;
+  document.getElementById("psub").textContent=(DB.brand==="dajner"?"dajner.sk":"fatty-patty.sk")+" · správa: Petra · "+mLabel(DB.month);
+  document.getElementById("page").innerHTML=`<div class="eyebrow">${p.eb}</div><h3 style="margin-bottom:24px">${p.h}</h3>`+
+    (edit?`<div class="editnote">Režim úprav je zapnutý. Text sa dá prepísať kliknutím.</div>`:"")+
+    RENDER[page]();
+  renderNav();
+  document.getElementById("btnEdit").textContent=edit?"Hotovo, zavrieť úpravy":"Režim úprav";
+  document.getElementById("btnEdit").className="btn"+(edit?" on":"");
+}
+
+/* ================= ZÁPIS TEXTU ================= */
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.hasAttribute&&t.hasAttribute("data-k")){writeK(t.dataset.k,t.textContent);return}
+  if(t.dataset&&t.dataset.a){
+    const [f,id]=t.dataset.a.split("|");
+    const p=B().analytika.find(x=>x.id===id);if(p){p[f]=t.value;touch();
+      if(!["ttl","pozn","dat"].includes(f)){clearTimeout(window.__rt);window.__rt=setTimeout(render,700)}}
+    return;
+  }
+});
+function writeK(k,val){
+  const b=B(),p=k.split(".");
+  const find=(arr,id)=>arr.find(x=>x.id===id);
+  if(p[0]==="ciel"&&p[1]==="hlavny"){b.ciele[p[2]].hlavny=val}
+  else if(p[0]==="ulo"){for(const m in b.ciele){const u=find(b.ciele[m].ulohy,p[1]);if(u)u.t=val}}
+  else if(p[0].startsWith("cislo")){const f=p[0].slice(5);for(const m in b.ciele){const c=find(b.ciele[m].cisla,p[1]);if(c)c[f==="lab"?"lab":f==="val"?"val":"fin"]=val}}
+  else if(p[0]==="item"){const it=find(b.plan,p[2]);if(it)it[p[1]]=val}
+  else if(p[0]==="bkat"){const c=find(b.banka,p[1]);if(c)c.n=val}
+  else if(p[0]==="btema"){b.banka.forEach(c=>{const i=find(c.items,p[1]);if(i)i.t=val})}
+  else if(p[0]==="akt"){const x=find(b.aktivity[p[2]],p[3]);if(x)x[p[1]]=val}
+  else if(p[0]==="zt"){const x=find(b.zmeny,p[1]);if(x)x.t=val}
+  else if(p[0]==="q"){const x=find(b.otazky,p[2]);if(x)x[p[1]]=val}
+  touch();
+}
+
+/* ================= KLIKY ================= */
+document.addEventListener("click",e=>{
+  const a=e.target.closest("nav a");
+  if(a){e.preventDefault();page=a.dataset.p;render();window.scrollTo(0,0);return}
+  const bs=e.target.closest("#bswitch button");
+  if(bs){DB.brand=bs.dataset.b;persist();render();return}
+  const t=e.target.closest("button");if(!t)return;
+  const d=t.dataset,b=B();
+  const m=DB.month;
+  const cur=()=>b.ciele[m]||(b.ciele[m]={hlavny:"",ulohy:[],cisla:[]});
+
+  if(d.m){DB.month=d.m;persist();render();return}
+  if(d.addmonth){
+    const ks=Object.keys(b.ciele).sort();const last=ks[ks.length-1]||"2026-08";
+    let y=+last.slice(0,4),mm=+last.slice(5,7)+1;if(mm>12){mm=1;y++}
+    const key=y+"-"+String(mm).padStart(2,"0");
+    if(!b.ciele[key])b.ciele[key]={hlavny:"",ulohy:[],cisla:[]};
+    DB.month=key;touch();render();return;
+  }
+  if(d.addulo){cur().ulohy.push({id:uid(),t:"",done:false});edit=true;touch();render();return}
+  if(d.delulo){cur().ulohy=cur().ulohy.filter(x=>x.id!==d.delulo);touch();render();return}
+  if(d.addcislo){cur().cisla.push({id:uid(),lab:"Nové číslo",val:"",fin:"cieľ"});edit=true;touch();render();return}
+  if(d.delcislo){cur().cisla=cur().cisla.filter(x=>x.id!==d.delcislo);touch();render();return}
+  if(d.additem){b.plan.push({id:uid(),m:m,w:+d.additem,typ:"REEL",ttl:"",pil:"Zábavný",hook:"",desc:"",cta:"",stav:"napad"});edit=true;touch();render();return}
+  if(d.delitem){b.plan=b.plan.filter(x=>x.id!==d.delitem);touch();render();return}
+  if(d.addtema){const c=b.banka.find(x=>x.id===d.addtema);c.items.push({id:uid(),t:""});edit=true;touch();render();return}
+  if(d.deltema){const[c,i]=d.deltema.split("|");const k=b.banka.find(x=>x.id===c);k.items=k.items.filter(x=>x.id!==i);touch();render();return}
+  if(d.addkat){b.banka.push({id:uid(),n:"Nová kategória",items:[]});edit=true;touch();render();return}
+  if(d.delkat){if(!confirm("Zmazať celú kategóriu?"))return;b.banka=b.banka.filter(x=>x.id!==d.delkat);touch();render();return}
+  if(d.addpost){b.analytika.push({id:uid(),dat:new Date().toISOString().slice(0,10),ttl:"",typ:"REEL",boost:false,dosah:"",videnia:"",cas:"",dlzka:"",ulo:"",zdi:"",kom:"",laj:"",prof:"",sled:"",hook:0,scenar:0,strih:0,cta:0,pozn:""});touch();render();return}
+  if(d.delpost){if(!confirm("Zmazať príspevok aj s hodnotením?"))return;b.analytika=b.analytika.filter(x=>x.id!==d.delpost);touch();render();return}
+  if(d.score){const[f,id,n]=d.score.split("|");const p=b.analytika.find(x=>x.id===id);p[f]=p[f]===+n?0:+n;touch();render();return}
+  if(d.addakt){b.aktivity[d.addakt].push({id:uid(),t:"",d:"",w:""});edit=true;touch();render();return}
+  if(d.delakt){const[k,id]=d.delakt.split("|");b.aktivity[k]=b.aktivity[k].filter(x=>x.id!==id);touch();render();return}
+  if(t.id==="zadd"){
+    const tx=document.getElementById("zt").value.trim();if(!tx)return;
+    b.zmeny.push({id:uid(),t:tx,kto:document.getElementById("zk").value.trim()||"Jano",hod:document.getElementById("zh").value||0,dat:new Date().toISOString().slice(0,10),vcas:false});
+    touch();render();return;
+  }
+  if(d.togvcas){const x=b.zmeny.find(y=>y.id===d.togvcas);x.vcas=!x.vcas;touch();render();return}
+  if(d.delz){b.zmeny=b.zmeny.filter(x=>x.id!==d.delz);touch();render();return}
+  if(d.addq){b.otazky.push({id:uid(),t:"",w:"",done:false});edit=true;touch();render();return}
+  if(d.delq){b.otazky=b.otazky.filter(x=>x.id!==d.delq);touch();render();return}
+});
+document.addEventListener("change",e=>{
+  const t=e.target,b=B();
+  if(t.dataset.task){for(const m in b.ciele){const u=b.ciele[m].ulohy.find(x=>x.id===t.dataset.task);if(u)u.done=t.checked}touch();render();return}
+  if(t.dataset.stav){const i=b.plan.find(x=>x.id===t.dataset.stav);i.stav=t.value;touch();render();return}
+  if(t.dataset.typ){const i=b.plan.find(x=>x.id===t.dataset.typ);i.typ=t.value;touch();render();return}
+  if(t.dataset.boost){const p=b.analytika.find(x=>x.id===t.dataset.boost);p.boost=t.checked;touch();render();return}
+  if(t.dataset.togq){const q=b.otazky.find(x=>x.id===t.dataset.togq);q.done=t.checked;touch();render();return}
+});
+
+/* ================= AKCIE V LIŠTE ================= */
+function dl(txt,name,mime){
+  const bl=new Blob([txt],{type:mime});const a=document.createElement("a");
+  a.href=URL.createObjectURL(bl);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500);
+}
+document.getElementById("btnEdit").onclick=()=>{edit=!edit;render()};
+document.getElementById("btnPrint").onclick=()=>window.print();
+document.getElementById("btnExport").onclick=()=>{dl(JSON.stringify(DB,null,2),"panel-data-"+DB.month+".json","application/json");dirty=false;setStatus()};
+document.getElementById("btnImport").onclick=()=>document.getElementById("fileIn").click();
+document.getElementById("fileIn").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const j=JSON.parse(r.result);if(!j.dajner||!j.fatty)throw 0;DB=j;persist();dirty=false;setStatus();render()}
+    catch(err){alert("Súbor sa nepodarilo načítať. Skontroluj, či je to Export dát z tohto panelu.")}};
+  r.readAsText(f);e.target.value="";
+};
+document.getElementById("btnPage").onclick=()=>{
+  const clone=document.documentElement.cloneNode(true);
+  clone.querySelectorAll("[contenteditable]").forEach(x=>x.removeAttribute("contenteditable"));
+  const s=clone.querySelector("#seed");s.textContent=JSON.stringify({...DB,updated:Date.now()});
+  dl("<!DOCTYPE html>\n"+clone.outerHTML,"panel-"+DB.brand+"-"+DB.month+".html","text/html");
+  dirty=false;setStatus();
+};
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+
+loadDB();page="ciele";render();setStatus();
+</script>
+
+
+</body></html>
