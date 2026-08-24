@@ -8,6 +8,7 @@ a nič sa nekompiluje.
 | --- | --- | --- |
 | GoMerch — obsahový hub | `index.html` | `/` |
 | Riadiaci panel Kolektívu | `kolektiv/index.html` | `/kolektiv/` |
+| Minifestival — plán stanovíšť | `minifestival/index.html` | `/minifestival/` |
 
 ---
 
@@ -52,13 +53,18 @@ z Google Fonts; bez pripojenia sa stránka zobrazí s náhradnými fontami.
   po zatvorení karty sú preč)
 - `Ctrl/Cmd + P` vytlačí alebo uloží celý hub do PDF vrátane všetkých záložiek
 
-## Ďalšie stránky
+## Minifestival — plán stanovíšť
 
-- `minifestival/index.html` — plán stanovíšť minifestivalu Kolektiv × Bača Customs
-  (29. 8. 2026, Bunky na Lookach). Verejná adresa: `.../minifestival/`.
-  Odškrtávací zoznam, kto čo nesie, časová os doobeda, režim **Upraviť** a tlač do PDF.
-  Zmeny sa ukladajú do prehliadača návštevníka, takže po návrate na stránku ostávajú.
+Plán stanovíšť minifestivalu Kolektiv × Bača Customs (29. 8. 2026, Bunky na
+Lookach): odškrtávací zoznam, kto čo nesie, časová os doobeda, režim **Upraviť**
+a tlač do PDF. Zmeny sa ukladajú do prehliadača návštevníka, takže po návrate
+na stránku ostávajú.
 
-Pages nasadzuje iba tú vetvu, ktorá je v nastaveniach repozitára zvolená ako zdroj
-stránky (teraz `claude/public-webpage-url-qw00o5`). Nová stránka sa na verejnú adresu
-dostane až po zlúčení do tejto vetvy — alebo po prepnutí zdroja v *Settings → Pages*.
+---
+
+## Nasadenie
+
+Pages nasadzuje iba vetvu `claude/public-webpage-url-qw00o5` — prostredie
+`github-pages` iné vetvy odmieta. Nová stránka sa na verejnú adresu dostane až
+po zlúčení do tejto vetvy, alebo po pridaní pravidla v *Settings → Environments
+→ github-pages → Deployment branches and tags*.

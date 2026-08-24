@@ -2,9 +2,7 @@ name: Publikovanie stránky na GitHub Pages
 
 on:
   push:
-    branches:
-      - claude/public-webpage-url-qw00o5
-      - claude/vedel-mirka-page-l8h646
+    branches: [claude/public-webpage-url-qw00o5]
   workflow_dispatch:
 
 permissions:
