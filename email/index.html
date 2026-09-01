@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E-mail marketing Kolektívu</title>
+<meta name="description" content="Panel na e-mail marketing Kolektívu — pozícia kanála, zbieranie kontaktov, uvítacia séria, mesačný list, predajná vlna, automaty, kalendár, čísla a checklist.">
+<meta name="color-scheme" content="light">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --side:#232821; --side-2:#2F362C; --side-txt:#EFEDE4; --side-mut:#98A08D;
+  --bg:#F2EEE7; --card:#FFFFFF; --ink:#1E211C; --mut:#6E7566;
+  --line:#E4DDD0; --line-2:#D3CABA;
+  --acc:#8C977D; --acc-dk:#5A6450; --acc-soft:#EDF0E8;
+  --tan:#AC8D71; --tan-dk:#8B6B4E; --tan-soft:#F6EFE6;
+  --ok:#5A6450; --ok-soft:#EDF0E8; --warn:#8B6B4E; --warn-soft:#F6EFE6;
+  --r:6px;
+  --fd:'Fraunces',Georgia,serif;
+  --fb:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --fm:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--fb);font-size:15.5px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink);background:#fff;border:1px solid var(--line-2);border-radius:var(--r);padding:8px 10px;width:100%}
+input:focus,select:focus,textarea:focus,button:focus-visible,[contenteditable]:focus{outline:2px solid var(--acc-dk);outline-offset:1px}
+.mono{font-family:var(--fm)}
+
+.shell{display:flex;min-height:100vh}
+aside{width:270px;flex:0 0 270px;background:var(--side);color:var(--side-txt);padding:26px 0 30px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.wordmark{padding:0 26px 4px}
+.wordmark h1{font-family:var(--fd);font-size:30px;font-weight:400;letter-spacing:-.01em}
+.wordmark h1 span{color:var(--acc)}
+.wordmark p{color:var(--side-mut);font-size:13px;margin-top:4px;line-height:1.4}
+nav{margin-top:20px;padding:0 14px}
+.navgroup{font-family:var(--fm);font-size:9.5px;letter-spacing:.17em;text-transform:uppercase;color:var(--side-mut);padding:16px 12px 7px}
+nav a{display:flex;gap:13px;align-items:baseline;padding:10px 12px;border-radius:var(--r);color:rgba(239,237,228,.82);text-decoration:none;font-size:15px;line-height:1.3}
+nav a:hover{background:rgba(239,237,228,.07);color:var(--side-txt)}
+nav a[aria-current="true"]{background:var(--side-2);color:#fff;font-weight:600;box-shadow:inset 3px 0 0 var(--acc)}
+nav a i{font-style:normal;font-family:var(--fm);font-size:11px;color:var(--side-mut);flex:0 0 18px}
+nav a[aria-current="true"] i{color:var(--acc)}
+.sidefoot{margin:24px 26px 0;padding-top:18px;border-top:1px solid rgba(239,237,228,.14);color:var(--side-mut);font-size:12.5px;line-height:1.55}
+.sidefoot b{color:var(--side-txt)}
+.sidefoot a{color:var(--acc);text-decoration:none}
+.sidefoot a:hover{text-decoration:underline}
+
+main{flex:1;min-width:0}
+.topbar{background:var(--card);border-bottom:1px solid var(--line);padding:18px 34px;display:flex;align-items:flex-start;justify-content:space-between;gap:18px;flex-wrap:wrap;position:sticky;top:0;z-index:30}
+.topbar h2{font-family:var(--fd);font-size:26px;font-weight:400;letter-spacing:-.01em}
+.topbar .sub{color:var(--mut);font-size:13.5px;margin-top:2px}
+.acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{padding:8px 13px;border-radius:100px;font-size:13px;font-weight:600}
+.chip.saved{background:var(--ok-soft);color:var(--ok)}
+.chip.dirty{background:var(--warn-soft);color:var(--warn)}
+.btn{padding:9px 14px;border:1px solid var(--line-2);border-radius:var(--r);font-size:13.5px;font-weight:600;background:#fff;min-height:40px}
+.btn:hover{border-color:var(--ink)}
+.btn.dark{background:var(--side);border-color:var(--side);color:#fff}
+.btn.dark:hover{background:var(--acc-dk);border-color:var(--acc-dk)}
+
+.page{padding:32px 34px 90px;max-width:1240px}
+.eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--acc-dk);margin-bottom:10px}
+.page h3{font-family:var(--fd);font-size:32px;font-weight:400;letter-spacing:-.015em;margin-bottom:9px}
+.lede{color:var(--mut);font-size:16px;max-width:66ch;margin-bottom:24px;line-height:1.55}
+h4.sec{font-family:var(--fd);font-size:22px;font-weight:400;margin:38px 0 6px}
+.hint{color:var(--mut);font-size:14px;margin-bottom:16px;max-width:66ch}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:22px}
+.card+.card{margin-top:14px}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(258px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.note{background:var(--acc-soft);border-left:3px solid var(--acc);border-radius:0 var(--r) var(--r) 0;padding:12px 15px;font-size:14.5px;line-height:1.5}
+.note.tan{background:var(--tan-soft);border-left-color:var(--tan)}
+.note b{font-weight:700}
+.editnote{background:#F0F3EC;border:1px solid #DCE2D3;border-radius:var(--r);padding:13px 16px;font-size:14.5px;color:#48513F;margin-bottom:22px}
+[contenteditable="true"]{background:#FCFBF6;box-shadow:inset 0 -1px 0 var(--line-2);border-radius:3px;padding:1px 3px;margin:0 -3px}
+[contenteditable="true"]:empty::before{content:attr(data-ph);color:#B7B2A4}
+.ml{display:block;white-space:pre-wrap}
+.x{color:var(--line-2);font-size:16px;line-height:1;padding:3px 6px;border-radius:4px}
+.x:hover{color:var(--tan-dk);background:var(--tan-soft)}
+.addbtn{border:1px dashed var(--line-2);border-radius:var(--r);padding:11px 14px;font-size:13.5px;font-weight:600;color:var(--mut);min-height:42px;width:100%}
+.addbtn:hover{border-color:var(--acc-dk);color:var(--acc-dk);border-style:solid}
+.pill{display:inline-block;font-family:var(--fm);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;border-radius:100px;border:1px solid var(--line-2);color:var(--mut);white-space:nowrap}
+.pill.dark{background:var(--side);border-color:var(--side);color:#fff}
+.pill.acc{background:var(--acc);border-color:var(--acc);color:#fff}
+.pill.soft{background:var(--acc-soft);border-color:var(--acc-soft);color:var(--acc-dk)}
+.pill.tanp{background:var(--tan-soft);border-color:var(--tan-soft);color:var(--tan-dk)}
+
+.line{display:flex;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line)}
+.line:last-of-type{border-bottom:none}
+.line .t{flex:1;font-size:15px;line-height:1.5}
+.line .n{font-family:var(--fm);font-size:11px;color:var(--mut);flex:0 0 20px}
+
+.pull{background:var(--side);color:var(--side-txt);border-radius:10px;padding:34px 32px}
+.pull .q{font-family:var(--fd);font-size:clamp(22px,3.2vw,34px);font-weight:400;line-height:1.15;letter-spacing:-.02em;color:#fff;max-width:22ch;margin-bottom:14px}
+.pull .b{font-size:14.5px;opacity:.82;max-width:56ch}
+
+/* ---- e-mail ---- */
+.mail{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.mail+.mail{margin-top:14px}
+.mail-h{background:var(--acc-soft);border-bottom:1px solid var(--line);padding:13px 20px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.mail-h .who{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.mail-h .when{font-family:var(--fm);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc-dk)}
+.mail-in{padding:20px 22px}
+.fld{display:grid;grid-template-columns:104px 1fr;gap:10px 14px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--line)}
+.fld:last-child{border-bottom:none}
+.fld>em{font-style:normal;font-family:var(--fm);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut)}
+.fld .subj{font-size:17px;font-weight:600;line-height:1.35}
+.fld .body{font-size:15px;line-height:1.7;max-width:70ch}
+.fld .cta{display:inline-block;background:var(--side);color:#fff;border-radius:var(--r);padding:9px 16px;font-size:14px;font-weight:600}
+.fld .cta [contenteditable="true"]{background:rgba(255,255,255,.14);box-shadow:none;color:#fff}
+.copy{font-family:var(--fm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);border:1px solid var(--line-2);border-radius:100px;padding:5px 11px}
+.copy:hover{border-color:var(--acc-dk);color:var(--acc-dk)}
+.copy.done{background:var(--ok-soft);border-color:var(--ok-soft);color:var(--ok)}
+
+/* ---- os ---- */
+.tl{border-left:2px solid var(--line-2);margin-left:10px;padding-left:24px}
+.step{position:relative;padding-bottom:16px}
+.step:before{content:"";position:absolute;left:-31px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--acc);border:2px solid var(--bg)}
+.step.tanp:before{background:var(--tan)}
+
+/* ---- tabuľky ---- */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:14.5px}
+table.wide{min-width:1240px}
+th{font-family:var(--fm);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mut);text-align:left;font-weight:400;padding:12px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:#FBFAF6}
+td{padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+td input,td select{padding:6px 8px;font-size:14px;border-color:var(--line)}
+td.num input{text-align:right;font-family:var(--fm);font-size:13.5px}
+.ratio{font-family:var(--fm);font-size:13.5px;white-space:nowrap}
+.ratio.up{color:var(--ok);font-weight:500}
+.ratio.dn{color:var(--tan-dk);font-weight:500}
+.ratio.mid{color:var(--mut)}
+
+/* ---- kalendár ---- */
+.mtabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.mtab{padding:9px 16px;border:1px solid var(--line-2);border-radius:100px;background:#fff;font-size:14px;font-weight:600}
+.mtab[aria-pressed="true"]{background:var(--side);border-color:var(--side);color:#fff}
+.st{font-family:var(--fm);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:100px;white-space:nowrap}
+.st-napad{background:#F1EFE9;color:var(--mut)}
+.st-pisem{background:var(--tan-soft);color:var(--tan-dk)}
+.st-pripravene{background:#EAF0F6;color:#4A6076}
+.st-odoslane{background:var(--ok-soft);color:var(--ok)}
+
+/* ---- checklist ---- */
+.chk{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+.chk:last-of-type{border-bottom:none}
+.chk input[type=checkbox]{width:19px;height:19px;flex:0 0 19px;margin-top:2px;accent-color:var(--acc-dk)}
+.chk .t{flex:1;font-size:15px;line-height:1.5}
+.chk.on .t{color:var(--mut);text-decoration:line-through}
+
+/* ---- banka predmetov ---- */
+.subj-i{display:flex;gap:12px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.subj-i:last-of-type{border-bottom:none}
+.subj-i:hover .t{color:var(--acc-dk)}
+.subj-i .t{flex:1;font-size:15.5px;line-height:1.45}
+.subj-i .hint2{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--line-2)}
+.subj-i:hover .hint2{color:var(--acc-dk)}
+.fchips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.fchip{padding:7px 14px;border:1px solid var(--line-2);border-radius:100px;background:#fff;font-size:13.5px;font-weight:600}
+.fchip[aria-pressed="true"]{background:var(--side);border-color:var(--side);color:#fff}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:var(--side);color:#fff;padding:11px 20px;border-radius:100px;font-size:14px;z-index:99;box-shadow:0 6px 22px rgba(30,33,28,.22)}
+
+@media (max-width:900px){
+  .shell{display:block}
+  aside{width:auto;height:auto;position:static;padding:20px 0 16px}
+  nav{display:flex;gap:6px;overflow-x:auto;padding:0 14px;margin-top:14px}
+  nav a{white-space:nowrap}
+  .navgroup{display:none}
+  .topbar,.page{padding-left:18px;padding-right:18px}
+  .fld{grid-template-columns:1fr;gap:4px}
+}
+@media print{
+  aside,.acts,.chip,.x,.addbtn,.copy,.mtabs,.fchips,.editnote,.toast{display:none!important}
+  .shell{display:block}
+  .topbar{position:static;border-bottom:1px solid #000}
+  .page{padding:0;max-width:none}
+  .card,.mail,.tw{break-inside:avoid;border-color:#CCC}
+  body{background:#fff;font-size:11pt}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside>
+    <div class="wordmark">
+      <h1>kolektív<span>.</span></h1>
+      <p>E-mail marketing · list, nie leták</p>
+    </div>
+    <nav id="nav"></nav>
+    <div class="sidefoot">
+      <b>Petra</b> · Brand &amp; content strategist<br>
+      @napisnazor · Trenčín<br><br>
+      Sesterský panel: <a href="../kolektiv/">obsah Kolektívu</a><br><br>
+      Zmeny sa ukladajú do tvojho prehliadača. Ak chceš poslať svoju verziu druhej, klikni <b>Export dát</b> a súbor jej pošli — ona ho otvorí cez <b>Načítať dáta</b>.
+    </div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <div>
+        <h2 id="ttl">Prečo e-mail</h2>
+        <div class="sub" id="sub">studiokolektiv.sk · správa: Petra · September 2026</div>
+      </div>
+      <div class="acts">
+        <span class="chip saved" id="status">Uložené</span>
+        <button class="btn dark" id="bEdit">Režim úprav</button>
+        <button class="btn" id="bSave">Uložiť stránku</button>
+        <button class="btn" id="bExport">Export dát</button>
+        <button class="btn" id="bImport">Načítať dáta</button>
+        <button class="btn" id="bPrint">Tlač / PDF</button>
+        <input type="file" id="fImport" accept="application/json" hidden>
+      </div>
+    </div>
+    <div class="page" id="page"></div>
+  </main>
+</div>
+
+<script id="seed" type="application/json"></script>
+<script>
+"use strict";
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let _id=0;const uid=()=>"i"+(Date.now().toString(36))+(_id++).toString(36);
+const MES=["Január","Február","Marec","Apríl","Máj","Jún","Júl","August","September","Október","November","December"];
+const mLabel=k=>MES[+k.slice(5,7)-1]+" "+k.slice(0,4);
+
+const PAGES=[
+  {id:"preco",n:"Prečo e-mail",g:"Základ",eb:"Pozícia",h:"Prečo e-mail"},
+  {id:"zoznam",n:"Zoznam a súhlas",g:"Základ",eb:"Kontakty",h:"Zoznam a súhlas"},
+  {id:"uvitacia",n:"Uvítacia séria",g:"Kampane",eb:"Automat",h:"Uvítacia séria"},
+  {id:"list",n:"Mesačný list",g:"Kampane",eb:"Rytmus",h:"Mesačný list"},
+  {id:"vlna",n:"Predajná vlna",g:"Kampane",eb:"Sezóna",h:"Predajná vlna"},
+  {id:"automaty",n:"Automatické e-maily",g:"Kampane",eb:"Prevádzka",h:"Automatické e-maily"},
+  {id:"kalendar",n:"Kalendár rozposielok",g:"Prevádzka",eb:"Plán",h:"Kalendár rozposielok"},
+  {id:"cisla",n:"Čísla",g:"Prevádzka",eb:"Výkon",h:"Čísla rozposielok"},
+  {id:"checklist",n:"Pred odoslaním",g:"Prevádzka",eb:"Kontrola",h:"Pred odoslaním"},
+  {id:"predmety",n:"Banka predmetov",g:"Prevádzka",eb:"Zásobník",h:"Banka predmetov"}
+];
+
+/* ================= ŠTARTOVACIE DÁTA ================= */
+function seedData(){
+  const M=(o)=>Object.assign({id:uid(),when:"",subj:"",pre:"",body:"",cta:"",seg:"",note:""},o);
+  const L=t=>({id:uid(),t});
+  const C=(t,d)=>({id:uid(),t,d});
+  return {
+  v:1,updated:Date.now(),month:"2026-09",
+  meta:{sub:"studiokolektiv.sk · správa: Petra · September 2026",
+        from:"Mirka z Kolektívu",fromMail:"mirka@studiokolektiv.sk",tool:"Ecomail"},
+
+  preco:{
+    lede:"Instagram rozhoduje, komu tvoj príspevok ukáže. E-mail nie. Zoznam je jediné publikum, ktoré Kolektívu naozaj patrí — a jediné miesto, kde sa dá napísať viac než tri vety.",
+    q:"Instagram je ulica. E-mail je list.",
+    qb:"Na ulici oslovuješ dav a dúfaš, že sa niekto obzrie. V liste píšeš jednej žene, ktorá ti dala adresu. Preto v ňom nikdy nekričíme — kričať sa dá len na dav.",
+    does:[
+      C("Drží rozhodnutie","Prihlásiť sa na sezónu je jedno rozhodnutie. E-mail je miesto, kde ho pripomenieš — bez toho, aby si tlačila."),
+      C("Vysvetľuje","Prečo lekcie, a nie appka. Prečo v skupine. Na Instagrame sa to nezmestí, v liste áno."),
+      C("Predáva termíny","Otvorenie sezóny, voľné miesta, spoločné jedlo. Konkrétny termín, konkrétne miesto."),
+      C("Vracia tie, čo vypadli","Po chorobe, po lete, po troch mesiacoch. Bez výčitky: dvere sú otvorené.")
+    ],
+    doing:[
+      L("Píšeme jednej žene — v jednotnom čísle, nie „ahojte všetci“."),
+      L("Jeden e-mail = jedna vec a jedna výzva."),
+      L("Predmet hovorí, čo je vnútri. Nie „neuveríš, čo sa stalo“."),
+      L("Odosielateľ je človek s menom a tvárou, nie „info@“."),
+      L("Odkaz na odhlásenie je vidieť a funguje na jeden klik."),
+      L("Na odpovede odpovedáme — list, na ktorý sa nedá odpovedať, nie je list.")
+    ],
+    notdoing:[
+      L("Odpočty, „posledná šanca“ a umelá núdza."),
+      L("Motivačné výzvy a hanba („ešte stále si nezačala…“)."),
+      L("Predtým / potom, transformácie tela."),
+      L("Šablóny plné bannerov a tlačidiel. List vyzerá ako list."),
+      L("Kontakty bez súhlasu — nikoho nepridávame len preto, že sme si vymenili e-mail."),
+      L("Rozposielanie „lebo je mesiac“. Keď nie je čo povedať, nepíšeme.")
+    ],
+    rytmus:"1 mesačný list · 1 predajná vlna na sezónu (max 5 e-mailov) · automaty bežia na pozadí. Spolu 2 – 3 e-maily mesačne na jednu ženu, nikdy viac.",
+    note:"Otvorenosť je zlé prvé číslo. Prvé číslo je, koľko žien prišlo na lekciu, ktorú list ponúkal. Ostatné sú len cesta k nemu."
+  },
+
+  zoznam:{
+    lede:"Zoznam sa nedá kúpiť ani dobehnúť za mesiac. Rastie po pár kontaktoch týždenne — z lekcií, z webu, z eventov. Preto má zmysel začať dnes, aj keď je malý.",
+    kde:[
+      C("Web studiokolektiv.sk","Formulár v pätičke každej stránky + samostatná stránka „List z Kolektívu“, na ktorú vedie odkaz z Instagram bia."),
+      C("Na lekcii","QR kód na dverách a na stolíku pri vchode. Lektorka o ňom raz za mesiac povie — jednou vetou, na konci lekcie."),
+      C("Instagram","Odkaz v biu a raz mesačne story so screenshotom posledného listu. Ľudia sa prihlasujú na to, čo vidia, nie na sľub."),
+      C("Po evente a jedle","Papierik na stole alebo QR na tabuľke. Ľudia, ktorí zažili spoločné jedlo, sú najlepší adresáti."),
+      C("Čakačka na sezónu","Keď je plno: „nechaj mi e-mail a napíšem ti prvej, keď sa uvoľní miesto“. Tento segment kupuje najviac.")
+    ],
+    slub:"Raz za mesiac list o tom, čo sa v Kolektíve deje — termíny, spoločné jedlo a jedna vec o tele, ktorú má zmysel vedieť. Žiadne výzvy, žiadne odpočty. Odhlásiť sa dá jedným klikom.",
+    pravidla:[
+      L("Dvojité potvrdenie (double opt-in): po prihlásení príde e-mail s odkazom, kým ho žena neklikne, do zoznamu nevstúpi."),
+      L("Prihláška na lekciu nie je súhlas s newsletterom. Musí to byť samostatné políčko, nezaškrtnuté vopred."),
+      L("Ku každému kontaktu evidujeme, kedy a odkiaľ súhlas prišiel — stačí pole „zdroj“ a dátum v nástroji."),
+      L("Odhlásenie v pätičke každého e-mailu. Kto sa odhlási, nedostane už nič, ani „škoda“."),
+      L("Na požiadanie kontakt zmažeme a potvrdíme to jednou vetou."),
+      L("S nástrojom (Ecomail / Mailchimp) máme spracovateľskú zmluvu a v zásadách ochrany údajov je uvedený.")
+    ],
+    segmenty:[
+      C("Nové (do 30 dní)","Beží im uvítacia séria. Do bežného listu ich zapájame až po nej, aby nedostali dva e-maily v jednom týždni."),
+      C("Chodiace pravidelne","Aktívna permanentka alebo aspoň 2 lekcie za mesiac. Dostávajú list a pozvánky, nie presviedčanie."),
+      C("Spiace (90+ dní)","Sú na zozname, ale nechodia. Raz za sezónu jeden návratový e-mail, inak pokoj."),
+      C("Čakačka / záujem","Nechali e-mail, keď bolo plno. Prvé, komu ide oznam o otvorení sezóny."),
+      C("Jedlo a eventy","Chodia na spoločné jedlo a akcie, nie nutne na lekcie. Samostatná línia pozvánok.")
+    ],
+    hyg:"Raz za rok: kto neotvoril nič 12 mesiacov, dostane jeden e-mail „chceš to ešte dostávať?“ a ak neodpovie, ide preč. Menší zoznam, ktorý číta, je lepší než veľký, ktorý padá do spamu."
+  },
+
+  uvitacia:{
+    lede:"Prvé tri e-maily rozhodnú, či bude žena list otvárať aj o pol roka. Nepredávajú — vysvetľujú, kam prišla. Séria beží automaticky, napíše sa raz.",
+    mails:[
+      M({when:"Hneď po potvrdení",subj:"Vitaj — a čo ti odteraz bude chodiť",pre:"Krátko, čo Kolektív je a čo v liste nájdeš.",
+        body:"Ahoj,\n\nsi na zozname — ďakujem. Raz za mesiac ti odteraz príde jeden list: čo sa v Kolektíve deje, kedy sú lekcie a spoločné jedlo, a jedna vec o tele, ktorú má zmysel vedieť.\n\nAby si vedela, kam si prišla: nie sme tréneri, sme sprievodcovia. Tréner ti povie, čo máš robiť, a meria, či si to urobila. Sprievodca pozná terén, ide s tebou a vysvetľuje, prečo je cesta taká, aká je.\n\nNič od teba teraz nechcem. Ak si zvedavá, tu je rozvrh — a ak sa chceš na čokoľvek spýtať, stačí odpovedať na tento e-mail. Číta ho človek.",
+        cta:"Pozrieť rozvrh",seg:"Nové",note:"Bez ponuky. Jediná úloha: potvrdiť, že prišla správne a že píše človek."}),
+      M({when:"+3 dni",subj:"Prečo lekcie, a nie appka",pre:"O tom, prečo sa telo nehýbe samo od seba.",
+        body:"Kedysi sa telo hýbalo, lebo bolo treba. Nosilo, chodilo, dvíhalo. Dnes sa musíme rozhodnúť — a to je celý rozdiel.\n\nAppka to rozhodnutie necháva na tebe každé ráno znova. Lekcia ho urobí raz: máš miesto, čas a ľudí, ktorí ťa čakajú. Presne tie tri veci z bežného dňa vypadli.\n\nPreto v Kolektíve nerobíme videá na doma. Nie preto, že by boli zlé — ale preto, že telo sa učí od iných tiel, imitáciou, od niekoho, komu veríš. Obrazovka to nenahradí.",
+        cta:"Ako vyzerá týždeň v Kolektíve",seg:"Nové",note:"Myšlienka, nie ponuka. Odkaz vedie na rozvrh alebo na stránku o lekciách."}),
+      M({when:"+7 dní",subj:"Ako vyzerá prvá lekcia",pre:"Čo si vziať, kedy prísť, čo sa bude diať.",
+        body:"Ak uvažuješ, že prídeš, toto je všetko, čo treba vedieť.\n\nPríď o desať minút skôr, aby si si našla miesto a nemusela sa ponáhľať. Vezmi si niečo pohodlné, v čom sa ti dýcha, a fľašu vody. Podložku máme.\n\nNa lekcii nie je nič, čo by si musela vedieť dopredu. Nikto sa na teba nepozerá — každá je zabraná do vlastného tela. Ak ti niečo nejde, lektorka ukáže inú verziu. To je celá jej robota.\n\nA ak ti to nesadne, nič sa nedeje. Radšej jedna lekcia, po ktorej vieš, že to nie je pre teba, než tri mesiace váhania.",
+        cta:"Prihlásiť sa na prvú lekciu",seg:"Nové",note:"Odstraňuje strach, nie námietku ceny. Až tu je prvá skutočná výzva."}),
+      M({when:"+14 dní",subj:"Jedlo nie je odmena po cvičení",pre:"Prečo je spoločné jedlo súčasťou programu.",
+        body:"V Kolektíve varíme a jeme spolu. Nie ako bonus po lekcii — ako súčasť programu.\n\nSpolu bolo kedysi súčasťou roboty, nie odmenou po nej. Ľudia jedli, lebo spolu pracovali. Dnes sa jedlo stalo buď rýchlou vecou medzi dverami, alebo niečím, čo si treba zaslúžiť. Ani jedno nie je pravda.\n\nNajbližší termín nájdeš v rozvrhu. Prísť môžeš, aj keď si ešte nebola na lekcii.",
+        cta:"Termíny spoločného jedla",seg:"Nové",note:"Voliteľný štvrtý. Ak sa nestíha, séria funguje aj v troch."})
+    ],
+    pravidla:[
+      L("Séria beží nezávisle od mesačného listu — kým beží, žena ho nedostáva."),
+      L("Kto sa počas série prihlási na lekciu, dostane ešte zvyšok série, ale bez výzvy na prvú lekciu."),
+      L("Texty sa menia raz za sezónu, nie priebežne. Inak sa stratí prehľad, čo komu chodí.")
+    ]
+  },
+
+  list:{
+    lede:"Jeden list mesačne, vždy v rovnakom týždni. Ľudia si naň zvyknú a poznajú ho podľa odosielateľa skôr, než prečítajú predmet.",
+    kedy:"Posledný utorok v mesiaci, 19:30. Vtedy je publikum najaktívnejšie a list si prečíta večer v pokoji, nie medzi dverami.",
+    dlzka:"300 – 500 slov. Jeden odkaz, zopakovaný najviac dvakrát. Jedna fotka.",
+    bloky:[
+      C("1 · Oslovenie a prečo píšeš","Dve vety. Čo je tento mesiac iné. Bez „dúfam, že sa máš dobre“."),
+      C("2 · Čo sa deje","Termíny lekcií, spoločné jedlo, zmeny v rozvrhu, voľné miesta. Konkrétne dátumy, nie „čoskoro“."),
+      C("3 · Jedna myšlienka","150 – 200 slov z banky tém. Toto je dôvod, prečo list otvárajú — nie termíny."),
+      C("4 · Obraz","Archívna fotka alebo záber z lekcie, s jednou vetou popisu. Nikdy stock."),
+      C("5 · Jedna výzva","Prihlásiť sa, odpovedať, prísť. Jedna, nie tri.")
+    ],
+    rubriky:[
+      L("Z archívu — jedna historická fotografia a čo na nej vidno o tele."),
+      L("Čo hovorí telo — bežná ťažkosť (chrbát, spánok, dych) a prečo vzniká."),
+      L("Zo zákulisia — čo sme menili v rozvrhu, v priestore, v jedle a prečo."),
+      L("Otázka z lekcie — čo sa niekto spýtal a odpoveď, ktorá sa zmestí do listu."),
+      L("Kto pri tom je — lektorka, žena, ktorá chodí rok, kuchárka.")
+    ],
+    sablona:{when:"Posledný utorok v mesiaci",subj:"September v Kolektíve: nové časy a jedno jedlo navyše",
+      pre:"Rozvrh na september, spoločné jedlo 19. 9. a jedna vec o dýchaní.",
+      body:"Ahoj,\n\nod septembra pribudol štvrtkový podvečerný termín — pýtali ste sa naň celé leto, tak je tu.\n\nČO SA DEJE\n· Pondelok a štvrtok 18:00, streda 8:30\n· Spoločné jedlo v piatok 19. 9. o 18:30, prihlasovanie cez rozvrh\n· Sezónna permanentka je otvorená do 15. 9.\n\nJEDNA VEC\n(sem príde myšlienka mesiaca — 150 až 200 slov z banky tém)\n\nAk sa chceš na čokoľvek spýtať, odpíš na tento e-mail. Číta ho človek.\n\nMirka",
+      cta:"Pozrieť rozvrh a prihlásiť sa",seg:"Všetci okrem uvítacej série",note:"Šablóna: kopíruj a prepíš. Bloky ostávajú v tomto poradí."},
+    note:"Keď v danom mesiaci nie je čo povedať, list sa nepošle. Prázdny list stojí viac dôvery, než koľko prinesie."
+  },
+
+  vlna:{
+    lede:"Otvorenie sezóny je jediný moment, keď e-mail predáva otvorene. Päť e-mailov v troch týždňoch — a potom je ticho až do ďalšej sezóny.",
+    steps:[
+      M({when:"D −14 · Avízo",subj:"O dva týždne otvárame jesennú sezónu",pre:"Termíny, ceny a kedy sa dá prihlásiť.",
+        body:"Aby si to vedela dopredu: prihlasovanie na jesennú sezónu otvárame v pondelok 15. 9. o 9:00.\n\nSezóna má 12 lekcií, začína 22. 9. a končí pred Vianocami. Miest je 14, lebo v priestore ich viac nie je.\n\nZatiaľ nič nerob. Len nech ti to nevypadne.",cta:"Uložiť si termín",seg:"Všetci",note:"Bez odkazu na platbu. Iba dátum."}),
+      M({when:"D −7 · Prečo",subj:"Prečo sezóna, a nie jednotlivé lekcie",pre:"O rozhodnutí, ktoré stačí urobiť raz.",
+        body:"Sezóna nie je zľava za objem. Je to spôsob, ako urobiť rozhodnutie raz.\n\nKeď si kúpiš jednotlivú lekciu, rozhoduješ sa každý týždeň znova — a v stredu večer sa vždy nájde dôvod, prečo nie. Keď si zapíšeš sezónu, rozhodla si sa v septembri a zvyšok už len prídeš.\n\nDruhá vec: v sezóne chodia tie isté ženy. Po štvrtej lekcii sa poznáte a to je moment, keď sa z cvičenia stane miesto, kam patríš.",cta:"Pozrieť program sezóny",seg:"Všetci",note:"Myšlienka, ktorá odbúrava námietku ceny bez toho, aby o cene hovorila."}),
+      M({when:"D 0 · Otvorenie",subj:"Prihlasovanie je otvorené",pre:"14 miest, sezóna začína 22. 9.",
+        body:"Od tejto chvíle sa dá prihlásiť.\n\n12 lekcií, začíname 22. 9., 14 miest. Ak ti termín nesadne, odpíš — vieme, kedy býva voľné a poradíme.",cta:"Prihlásiť sa na sezónu",seg:"Všetci",note:"Najkratší e-mail vlny. Odosiela sa ráno, nie večer."}),
+      M({when:"D +3 · Pripomienka",subj:"Zostáva päť miest",pre:"Ak váhaš, toto je dobrý čas.",
+        body:"Krátky oznam: z pätnástich miest ostáva päť.\n\nAk váhaš kvôli termínu alebo kvôli tomu, že si dlho necvičila, odpíš na tento e-mail. Prvá lekcia sezóny je stavaná tak, aby sa dala prejsť aj po roku pauzy.",cta:"Prihlásiť sa",seg:"Neprihlásené",note:"Číslo musí byť pravdivé. Ak miest neubúda, tento e-mail sa nepošle."}),
+      M({when:"D +6 · Posledný",subj:"V piatok zatvárame prihlasovanie",pre:"Potom až v januári.",
+        body:"V piatok o 20:00 zatvárame prihlasovanie — v sobotu robíme rozpis a viac sa už do skupiny nedá pridať.\n\nĎalšia sezóna otvára v januári. Ak to teraz nevychádza, je to úplne v poriadku; jednotlivé lekcie bežia ďalej a rozvrh nájdeš na webe.",cta:"Prihlásiť sa do piatka",seg:"Neprihlásené",note:"Vecné, nie naliehavé. Posledná veta dáva východisko tým, ktoré neprídu."})
+    ],
+    pravidla:[
+      L("Kto sa prihlási, okamžite vypadne zo zvyšku vlny. Toto je najdôležitejšie nastavenie celej kampane."),
+      L("Maximálne päť e-mailov. Šiesty nepredá nič a odhlási ľudí."),
+      L("Čísla o voľných miestach musia sedieť. Vymyslená núdza je jediná vec, ktorú publikum neodpustí."),
+      L("Po zatvorení vlny je aspoň dva týždne ticho — okrem automatov.")
+    ]
+  },
+
+  automaty:{
+    lede:"E-maily, ktoré sa napíšu raz a potom bežia samy. Robia väčšinu práce a nikto ich nemusí každý mesiac vymýšľať.",
+    items:[
+      C("Potvrdenie prihlásenia na lekciu","Odosiela sa hneď. Kedy, kde (aj s mapou), čo si vziať, ako sa odhlásiť. Toto je e-mail s najvyššou otvorenosťou — patrí doň aj jedna veta o tom, kto lekciu vedie."),
+      C("Pripomienka deň pred","Krátka. Čas, adresa, počasie ak sa cvičí vonku. Bez ničoho navyše."),
+      C("Po prvej lekcii (+1 deň)","Jedna otázka: ako to bolo? Odpovede chodia lektorke a odpovedá na ne. Tu sa rozhoduje, či príde druhýkrát."),
+      C("Koniec permanentky (−3 dni)","Oznam, nie predaj: zostávajú ti dve lekcie. Odkaz na predĺženie na konci, nie na začiatku."),
+      C("Spiaca (90 dní bez lekcie)","„Nič sa nestalo, dvere sú otvorené.“ Bez zľavy, bez výčitky. Raz za sezónu, nie opakovane."),
+      C("Po spoločnom jedle","Fotka zo stola a termín ďalšieho. Posiela sa do troch dní, kým to ľudia majú v hlave.")
+    ],
+    note:"Automaty sa kontrolujú raz za sezónu: prejsť ich ako nová žena, skontrolovať odkazy, termíny a mená lektoriek. Zastaraný automat robí väčšiu škodu než žiadny."
+  },
+
+  kalendar:{
+    lede:"Čo ide von, komu a v akom stave. Mesiac vopred stačí.",
+    rows:[
+      {id:uid(),m:"2026-09",d:"2026-09-15",typ:"Vlna",subj:"Prihlasovanie je otvorené",seg:"Všetci",stav:"pripravene"},
+      {id:uid(),m:"2026-09",d:"2026-09-18",typ:"Vlna",subj:"Zostáva päť miest",seg:"Neprihlásené",stav:"pisem"},
+      {id:uid(),m:"2026-09",d:"2026-09-21",typ:"Vlna",subj:"V piatok zatvárame prihlasovanie",seg:"Neprihlásené",stav:"napad"},
+      {id:uid(),m:"2026-09",d:"2026-09-29",typ:"List",subj:"September v Kolektíve: nové časy a jedno jedlo navyše",seg:"Všetci okrem nových",stav:"napad"},
+      {id:uid(),m:"2026-10",d:"2026-10-27",typ:"List",subj:"",seg:"Všetci okrem nových",stav:"napad"}
+    ]
+  },
+
+  cisla:{
+    lede:"Zapíš po každej rozposielke štyri čísla. Miery si panel dopočíta sám a porovná ich s tvojím vlastným mediánom — nie s cudzím benchmarkom.",
+    rows:[
+      {id:uid(),d:"2026-08-26",subj:"August: prázdninový rozvrh",seg:"Všetci",odoslane:214,otvor:96,klik:18,odhl:1},
+      {id:uid(),d:"2026-07-29",subj:"Leto v Kolektíve",seg:"Všetci",odoslane:206,otvor:88,klik:12,odhl:2}
+    ],
+    note:"Otvorenosť je od roku 2021 nepresná — Apple ju nadhodnocuje. Riadiace číslo je preklik a to, koľko žien z listu naozaj prišlo."
+  },
+
+  checklist:{
+    lede:"Prejsť pred každým odoslaním. Trvá to tri minúty a ušetrí to jeden trápny opravný e-mail.",
+    items:[
+      {id:uid(),t:"Predmet do 45 znakov a hovorí, čo je vnútri.",on:false},
+      {id:uid(),t:"Preheader nie je „Zobraziť v prehliadači“ — je to druhá veta predmetu.",on:false},
+      {id:uid(),t:"Odosielateľ je meno človeka, odpovede chodia na schránku, ktorú niekto číta.",on:false},
+      {id:uid(),t:"Jeden odkaz, otestovaný kliknutím. Vedie tam, kam má.",on:false},
+      {id:uid(),t:"Dátumy a časy sedia s rozvrhom na webe.",on:false},
+      {id:uid(),t:"Segment je správny — hlavne pri vlne (kto sa prihlásil, nedostane pripomienku).",on:false},
+      {id:uid(),t:"Text prejdený nahlas. Kde sa zadrhneš, tam je veta zlá.",on:false},
+      {id:uid(),t:"Žiadna hanba, žiadny odpočet, žiadne „musíš“.",on:false},
+      {id:uid(),t:"Fotka má popis (alt text) a nie je jediným nositeľom informácie.",on:false},
+      {id:uid(),t:"Testovací e-mail poslaný sebe a otvorený v mobile.",on:false},
+      {id:uid(),t:"Odhlásenie v pätičke funguje.",on:false},
+      {id:uid(),t:"Odosielam v naplánovanom čase, nie „hneď, kým to mám“.",on:false}
+    ]
+  },
+
+  predmety:{
+    lede:"Predmet je celý e-mail zbalený do piatich slov. Klikni na ktorýkoľvek a skopíruje sa.",
+    items:[
+      {id:uid(),k:"list",t:"September v Kolektíve: nové časy a jedno jedlo navyše"},
+      {id:uid(),k:"list",t:"Čo sa deje v októbri"},
+      {id:uid(),k:"list",t:"Rozvrh, jedlo a jedna vec o dýchaní"},
+      {id:uid(),k:"list",t:"Z archívu: ako sa telo hýbalo, keď muselo"},
+      {id:uid(),k:"predaj",t:"O dva týždne otvárame jesennú sezónu"},
+      {id:uid(),k:"predaj",t:"Prihlasovanie je otvorené"},
+      {id:uid(),k:"predaj",t:"Zostáva päť miest"},
+      {id:uid(),k:"predaj",t:"V piatok zatvárame prihlasovanie"},
+      {id:uid(),k:"predaj",t:"Prečo sezóna, a nie jednotlivé lekcie"},
+      {id:uid(),k:"uvitanie",t:"Vitaj — a čo ti odteraz bude chodiť"},
+      {id:uid(),k:"uvitanie",t:"Prečo lekcie, a nie appka"},
+      {id:uid(),k:"uvitanie",t:"Ako vyzerá prvá lekcia"},
+      {id:uid(),k:"navrat",t:"Nič sa nestalo, dvere sú otvorené"},
+      {id:uid(),k:"navrat",t:"Ak ti vypadol september"},
+      {id:uid(),k:"navrat",t:"Chceš to ešte dostávať?"},
+      {id:uid(),k:"prevadzka",t:"Zajtra o 18:00, Kolektív"},
+      {id:uid(),k:"prevadzka",t:"Máš prihlásené: pondelok 18:00"},
+      {id:uid(),k:"prevadzka",t:"Ako to bolo?"}
+    ]
+  }
+  };
+}
+const KIND={list:"Mesačný list",predaj:"Predaj",uvitanie:"Uvítanie",navrat:"Návrat",prevadzka:"Prevádzka"};
+const STAV={napad:"Nápad",pisem:"Píšem",pripravene:"Pripravené",odoslane:"Odoslané"};
+
+/* ================= STAV ================= */
+let DB=null,dirty=false,edit=false,page="preco",subjFilter="all";
+const KEY="kolektiv-email-v1";
+
+function loadDB(){
+  let ls=null,sd=null;
+  try{ls=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+  try{const t=document.getElementById("seed").textContent.trim();if(t)sd=JSON.parse(t)}catch(e){}
+  if(ls&&sd)DB=(sd.updated||0)>(ls.updated||0)?sd:ls;
+  else DB=ls||sd||seedData();
+  const s=seedData();
+  Object.keys(s).forEach(k=>{if(DB[k]===undefined)DB[k]=s[k]});
+}
+function persist(){
+  DB.updated=Date.now();
+  try{localStorage.setItem(KEY,JSON.stringify(DB));return true}
+  catch(e){
+    if(!window.__quotaWarned){window.__quotaWarned=true;
+      alert("Úložisko prehliadača je plné. Klikni Uložiť stránku alebo Export dát, aby si o prácu neprišla.")}
+    return false;
+  }
+}
+function touch(){dirty=true;setStatus();persist()}
+function setStatus(){
+  const s=document.getElementById("status");
+  s.className="chip "+(dirty?"dirty":"saved");
+  s.textContent=dirty?"Neuložené zmeny":"Uložené";
+}
+function toast(txt){
+  document.querySelectorAll(".toast").forEach(t=>t.remove());
+  const d=document.createElement("div");d.className="toast";d.textContent=txt;
+  document.body.appendChild(d);setTimeout(()=>d.remove(),1800);
+}
+
+/* ---- cesty v dátach ---- */
+function walk(path){
+  const segs=path.split(".");let c=DB;
+  for(let i=0;i<segs.length-1;i++){
+    const s=segs[i];
+    c=Array.isArray(c)?c.find(x=>x.id===s):c[s];
+    if(c==null)return null;
+  }
+  return {obj:c,key:segs[segs.length-1]};
+}
+function get(path){const w=walk(path);return w?w.obj[w.key]:undefined}
+function set(path,val){const w=walk(path);if(w)w.obj[w.key]=val}
+
+/* ================= POMOCNÉ ================= */
+function ed(path,txt,ph,cls){
+  return `<span class="${cls||""}" data-k="${path}" ${edit?'contenteditable="true"':""} data-ph="${esc(ph||"")}">${esc(txt)}</span>`;
+}
+function edm(path,txt,ph,cls){
+  return `<span class="ml ${cls||""}" data-k="${path}" ${edit?'contenteditable="true"':""} data-ph="${esc(ph||"")}">${esc(txt)}</span>`;
+}
+function lineList(base,arr,ph,num){
+  return `<div>${arr.map((x,i)=>`<div class="line">
+    ${num?`<span class="n">${String(i+1).padStart(2,"0")}</span>`:""}
+    <span class="t">${ed(base+"."+x.id+".t",x.t,ph)}</span>
+    ${edit?`<button class="x" data-del="${base}|${x.id}">×</button>`:""}
+  </div>`).join("")}
+  ${edit?`<button class="addbtn" style="margin-top:14px" data-add="${base}|line">+ Pridať</button>`:""}</div>`;
+}
+function cardList(base,arr,phT,phD,cls){
+  return `<div class="grid ${cls||"g3"}">
+    ${arr.map(c=>`<div class="card">
+      <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline">
+        <b style="font-size:16px;line-height:1.3">${ed(base+"."+c.id+".t",c.t,phT)}</b>
+        ${edit?`<button class="x" data-del="${base}|${c.id}">×</button>`:""}
+      </div>
+      <p style="color:var(--mut);font-size:14.5px;margin-top:8px">${ed(base+"."+c.id+".d",c.d,phD)}</p>
+    </div>`).join("")}
+    ${edit?`<button class="addbtn" data-add="${base}|card">+ Pridať</button>`:""}
+  </div>`;
+}
+function mailCard(base,m,delKey){
+  return `<div class="mail">
+    <div class="mail-h">
+      <div class="who">
+        <span class="when">${ed(base+".when",m.when,"Kedy")}</span>
+        ${m.seg?`<span class="pill soft">${ed(base+".seg",m.seg,"Segment")}</span>`:""}
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="copy" data-copymail="${base}">Kopírovať e-mail</button>
+        ${edit&&delKey?`<button class="x" data-del="${delKey}">×</button>`:""}
+      </div>
+    </div>
+    <div class="mail-in">
+      <div class="fld"><em>Predmet</em><div class="subj">${ed(base+".subj",m.subj,"Predmet e-mailu")}</div></div>
+      <div class="fld"><em>Preheader</em><div style="color:var(--mut);font-size:14.5px">${ed(base+".pre",m.pre,"Druhá veta predmetu")}</div></div>
+      <div class="fld"><em>Text</em><div class="body">${edm(base+".body",m.body,"Telo e-mailu")}</div></div>
+      <div class="fld"><em>Tlačidlo</em><div><span class="cta">${ed(base+".cta",m.cta,"Výzva")}</span></div></div>
+      ${m.note!==undefined?`<div class="fld"><em>Poznámka</em><div style="color:var(--mut);font-size:14px">${ed(base+".note",m.note,"Načo tento e-mail je")}</div></div>`:""}
+    </div>
+  </div>`;
+}
+function mailText(base){
+  const m=get(base)||{};
+  return `Predmet: ${m.subj||""}\nPreheader: ${m.pre||""}\nKedy: ${m.when||""}\nSegment: ${m.seg||""}\n\n${m.body||""}\n\n[${m.cta||""}]`;
+}
+
+/* ================= STRÁNKY ================= */
+function pgPreco(){
+  const p=DB.preco;
+  return `
+  <p class="lede">${ed("preco.lede",p.lede,"Úvod")}</p>
+
+  <div class="pull">
+    <div class="q">${ed("preco.q",p.q,"Téza")}</div>
+    <div class="b">${ed("preco.qb",p.qb,"Vysvetlenie")}</div>
+  </div>
+
+  <h4 class="sec">Čo e-mail robí</h4>
+  <p class="hint">Štyri veci, ktoré Instagram spraviť nevie. Všetko ostatné patrí inam.</p>
+  ${cardList("preco.does",p.does,"Nadpis","Vysvetlenie","g4")}
+
+  <h4 class="sec">Hlas v e-maile</h4>
+  <div class="grid g2">
+    <div class="card">
+      <div class="pill acc" style="margin-bottom:12px">Robíme</div>
+      ${lineList("preco.doing",p.doing,"Pravidlo")}
+    </div>
+    <div class="card">
+      <div class="pill tanp" style="margin-bottom:12px">Nerobíme</div>
+      ${lineList("preco.notdoing",p.notdoing,"Čo nerobíme")}
+    </div>
+  </div>
+
+  <h4 class="sec">Rytmus</h4>
+  <div class="note"><b>${ed("preco.rytmus",p.rytmus,"Ako často píšeme")}</b></div>
+  <div class="note tan" style="margin-top:12px">${ed("preco.note",p.note,"Poznámka")}</div>`;
+}
+
+function pgZoznam(){
+  const z=DB.zoznam;
+  return `
+  <p class="lede">${ed("zoznam.lede",z.lede,"Úvod")}</p>
+
+  <h4 class="sec">Kde zbierame kontakty</h4>
+  ${cardList("zoznam.kde",z.kde,"Miesto","Ako to tam vyzerá","g2")}
+
+  <h4 class="sec">Čo pri prihlásení sľubujeme</h4>
+  <p class="hint">Presne tento text patrí k formuláru. Sľub, ktorý sa dá dodržať — a podľa ktorého sa dá merať, či ho dodržiavame.</p>
+  <div class="card"><div style="font-size:17px;line-height:1.6">${edm("zoznam.slub",z.slub,"Text pri formulári")}</div></div>
+
+  <h4 class="sec">Súhlas a pravidlá</h4>
+  ${lineList("zoznam.pravidla",z.pravidla,"Pravidlo",true)}
+  <div class="note tan" style="margin-top:16px"><b>Toto nie je právne stanovisko.</b> Sú to prevádzkové pravidlá, ktoré držia zoznam čistý a v súlade s tým, čo od nás GDPR bežne očakáva. Pri väčšej zmene (nový nástroj, nové spracovanie) sa oplatí dať si formulácie skontrolovať.</div>
+
+  <h4 class="sec">Segmenty</h4>
+  <p class="hint">Päť skupín stačí. Viac segmentov znamená viac verzií textu a menej odoslaných e-mailov.</p>
+  ${cardList("zoznam.segmenty",z.segmenty,"Segment","Kto to je a čo dostáva","g2")}
+
+  <h4 class="sec">Hygiena zoznamu</h4>
+  <div class="note">${ed("zoznam.hyg",z.hyg,"Ako čistíme zoznam")}</div>`;
+}
+
+function pgUvitacia(){
+  const u=DB.uvitacia;
+  return `
+  <p class="lede">${ed("uvitacia.lede",u.lede,"Úvod")}</p>
+  ${u.mails.map((m,i)=>`
+    <div class="eyebrow" style="margin-top:${i?28:8}px">E-mail ${i+1}</div>
+    ${mailCard("uvitacia.mails."+m.id,m,"uvitacia.mails|"+m.id)}`).join("")}
+  ${edit?`<button class="addbtn" style="margin-top:14px" data-add="uvitacia.mails|mail">+ Pridať e-mail do série</button>`:""}
+
+  <h4 class="sec">Pravidlá série</h4>
+  ${lineList("uvitacia.pravidla",u.pravidla,"Pravidlo",true)}`;
+}
+
+function pgList(){
+  const l=DB.list;
+  return `
+  <p class="lede">${ed("list.lede",l.lede,"Úvod")}</p>
+
+  <div class="grid g2">
+    <div class="card"><div class="eyebrow">Kedy</div><div style="font-size:15.5px">${ed("list.kedy",l.kedy,"Deň a čas")}</div></div>
+    <div class="card"><div class="eyebrow">Rozsah</div><div style="font-size:15.5px">${ed("list.dlzka",l.dlzka,"Dĺžka a počet odkazov")}</div></div>
+  </div>
+
+  <h4 class="sec">Stavba listu</h4>
+  <p class="hint">Päť blokov, vždy v tomto poradí. Čitateľka sa v liste orientuje podľa nich, aj keď si to neuvedomuje.</p>
+  ${cardList("list.bloky",l.bloky,"Blok","Čo v ňom je","g3")}
+
+  <h4 class="sec">Rubriky pre blok „jedna myšlienka“</h4>
+  ${lineList("list.rubriky",l.rubriky,"Rubrika",true)}
+
+  <h4 class="sec">Šablóna</h4>
+  ${mailCard("list.sablona",l.sablona,null)}
+  <div class="note tan" style="margin-top:14px">${ed("list.note",l.note,"Poznámka")}</div>`;
+}
+
+function pgVlna(){
+  const v=DB.vlna;
+  return `
+  <p class="lede">${ed("vlna.lede",v.lede,"Úvod")}</p>
+  <div class="tl">
+    ${v.steps.map((m,i)=>`<div class="step ${i>=3?"tanp":""}">${mailCard("vlna.steps."+m.id,m,"vlna.steps|"+m.id)}</div>`).join("")}
+  </div>
+  ${edit?`<button class="addbtn" data-add="vlna.steps|mail">+ Pridať e-mail do vlny</button>`:""}
+
+  <h4 class="sec">Pravidlá vlny</h4>
+  ${lineList("vlna.pravidla",v.pravidla,"Pravidlo",true)}`;
+}
+
+function pgAutomaty(){
+  const a=DB.automaty;
+  return `
+  <p class="lede">${ed("automaty.lede",a.lede,"Úvod")}</p>
+  ${cardList("automaty.items",a.items,"Automat","Kedy sa odosiela a čo v ňom je","g2")}
+  <div class="note tan" style="margin-top:18px">${ed("automaty.note",a.note,"Poznámka")}</div>`;
+}
+
+function months(){
+  const set=new Set(DB.kalendar.rows.map(r=>r.m));set.add(DB.month);
+  return `<div class="mtabs">${[...set].sort().map(k=>`<button class="mtab" data-m="${k}" aria-pressed="${k===DB.month}">${mLabel(k)}</button>`).join("")}
+    <button class="mtab" data-addmonth="1" style="border-style:dashed">+ Ďalší mesiac</button></div>`;
+}
+function pgKalendar(){
+  const rows=DB.kalendar.rows.filter(r=>r.m===DB.month).sort((a,b)=>(a.d||"").localeCompare(b.d||""));
+  return `
+  <p class="lede">${ed("kalendar.lede",DB.kalendar.lede,"Úvod")}</p>
+  ${months()}
+  <div class="tw"><table>
+    <thead><tr><th style="width:140px">Dátum</th><th style="width:120px">Typ</th><th>Predmet</th><th style="width:190px">Segment</th><th style="width:150px">Stav</th><th style="width:40px"></th></tr></thead>
+    <tbody>
+    ${rows.length?rows.map(r=>`<tr>
+      <td><input type="date" data-f="kalendar.rows.${r.id}.d" value="${esc(r.d)}"></td>
+      <td><select data-f="kalendar.rows.${r.id}.typ">${["List","Vlna","Automat","Pozvánka","Oznam"].map(t=>`<option ${t===r.typ?"selected":""}>${t}</option>`).join("")}</select></td>
+      <td><input type="text" data-f="kalendar.rows.${r.id}.subj" value="${esc(r.subj)}" placeholder="Predmet"></td>
+      <td><input type="text" data-f="kalendar.rows.${r.id}.seg" value="${esc(r.seg)}" placeholder="Komu"></td>
+      <td><select data-f="kalendar.rows.${r.id}.stav" class="st-sel">${Object.entries(STAV).map(([k,l])=>`<option value="${k}" ${k===r.stav?"selected":""}>${l}</option>`).join("")}</select></td>
+      <td><button class="x" data-del="kalendar.rows|${r.id}">×</button></td>
+    </tr>`).join(""):`<tr><td colspan="6" style="color:var(--mut);padding:18px 12px">V tomto mesiaci zatiaľ nič. Pridaj prvý riadok.</td></tr>`}
+    </tbody>
+  </table></div>
+  <button class="addbtn" style="margin-top:14px" data-add="kalendar.rows|kal">+ Pridať rozposielku</button>
+
+  <h4 class="sec">Stavy</h4>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    ${Object.entries(STAV).map(([k,l])=>`<span class="st st-${k}">${l}</span>`).join("")}
+  </div>`;
+}
+
+function median(a){if(!a.length)return null;const s=[...a].sort((x,y)=>x-y);const m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2}
+const num=x=>{const n=Number(x);return(x===""||x==null||isNaN(n))?null:n};
+function mRates(r){
+  const o=num(r.odoslane),ot=num(r.otvor),k=num(r.klik),u=num(r.odhl);
+  const pc=(x,y)=>(x!=null&&y)?x/y*100:null;
+  return {otvorenost:pc(ot,o),preklik:pc(k,o),ctor:(k!=null&&ot)?k/ot*100:null,odhlasenia:pc(u,o)};
+}
+const CKEYS=[["otvorenost","Otvorenosť"],["preklik","Preklik"],["ctor","Preklik z otvorení"],["odhlasenia","Odhlásenia"]];
+function cell(v,med,inverse){
+  if(v==null)return `<span class="ratio mid">—</span>`;
+  let cls="mid",arw="";
+  if(med!=null&&med>0){
+    const d=(v-med)/med;
+    if(d>=.12){cls=inverse?"dn":"up";arw="▲"}
+    else if(d<=-.12){cls=inverse?"up":"dn";arw="▼"}
+  }
+  return `<span class="ratio ${cls}">${v.toFixed(1)} %${arw?" "+arw:""}</span>`;
+}
+function pgCisla(){
+  const rows=[...DB.cisla.rows].sort((a,b)=>(b.d||"").localeCompare(a.d||""));
+  const base={};CKEYS.forEach(([k])=>{base[k]=median(rows.slice(0,12).map(r=>mRates(r)[k]).filter(v=>v!=null))});
+  const enough=rows.length>=4;
+  return `
+  <p class="lede">${ed("cisla.lede",DB.cisla.lede,"Úvod")}</p>
+
+  <div class="grid g4" style="margin-bottom:22px">
+    ${CKEYS.map(([k,l])=>`<div class="card">
+      <div class="eyebrow">${l}</div>
+      <div style="font-family:var(--fd);font-size:32px;line-height:1">${base[k]!=null?base[k].toFixed(1)+" %":"—"}</div>
+      <div style="color:var(--mut);font-size:13px;margin-top:4px">tvoj medián</div>
+    </div>`).join("")}
+  </div>
+
+  <div class="tw"><table class="wide">
+    <thead><tr>
+      <th style="width:130px">Dátum</th><th>Predmet</th><th style="width:150px">Segment</th>
+      <th style="width:92px">Odoslané</th><th style="width:92px">Otvorenia</th><th style="width:88px">Prekliky</th><th style="width:96px">Odhlásenia</th>
+      ${CKEYS.map(([,l])=>`<th style="width:118px">${l}</th>`).join("")}
+      <th style="width:40px"></th>
+    </tr></thead>
+    <tbody>
+    ${rows.map(r=>{const x=mRates(r);return `<tr>
+      <td><input type="date" data-f="cisla.rows.${r.id}.d" value="${esc(r.d)}"></td>
+      <td><input type="text" data-f="cisla.rows.${r.id}.subj" value="${esc(r.subj)}" placeholder="Predmet"></td>
+      <td><input type="text" data-f="cisla.rows.${r.id}.seg" value="${esc(r.seg)}" placeholder="Komu"></td>
+      <td class="num"><input type="number" min="0" data-f="cisla.rows.${r.id}.odoslane" value="${r.odoslane??""}"></td>
+      <td class="num"><input type="number" min="0" data-f="cisla.rows.${r.id}.otvor" value="${r.otvor??""}"></td>
+      <td class="num"><input type="number" min="0" data-f="cisla.rows.${r.id}.klik" value="${r.klik??""}"></td>
+      <td class="num"><input type="number" min="0" data-f="cisla.rows.${r.id}.odhl" value="${r.odhl??""}"></td>
+      ${CKEYS.map(([k])=>`<td>${cell(x[k],enough?base[k]:null,k==="odhlasenia")}</td>`).join("")}
+      <td><button class="x" data-del="cisla.rows|${r.id}">×</button></td>
+    </tr>`}).join("")}
+    </tbody>
+  </table></div>
+  <button class="addbtn" style="margin-top:14px" data-add="cisla.rows|cislo">+ Pridať rozposielku</button>
+
+  <h4 class="sec">Ako to čítať</h4>
+  <div class="note">Šípka porovnáva riadok s tvojím vlastným mediánom, nie s cudzím priemerom — a objaví sa až od štvrtej zapísanej rozposielky, kým je z čoho medián počítať. Pri odhláseniach je lepšie menej, preto sa vysoké číslo zobrazuje ako zhoršenie.</div>
+  <div class="note tan" style="margin-top:12px">${ed("cisla.note",DB.cisla.note,"Poznámka")}</div>`;
+}
+
+function pgChecklist(){
+  const c=DB.checklist;
+  const done=c.items.filter(i=>i.on).length;
+  return `
+  <p class="lede">${ed("checklist.lede",c.lede,"Úvod")}</p>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:12px;flex-wrap:wrap">
+      <div class="eyebrow" style="margin:0">Odškrtnuté ${done} / ${c.items.length}</div>
+      <button class="copy" data-reset="1">Vynulovať</button>
+    </div>
+    ${c.items.map(i=>`<label class="chk ${i.on?"on":""}">
+      <input type="checkbox" data-c="checklist.items.${i.id}.on" ${i.on?"checked":""}>
+      <span class="t">${ed("checklist.items."+i.id+".t",i.t,"Bod kontroly")}</span>
+      ${edit?`<button class="x" data-del="checklist.items|${i.id}">×</button>`:""}
+    </label>`).join("")}
+    ${edit?`<button class="addbtn" style="margin-top:14px" data-add="checklist.items|chk">+ Pridať bod</button>`:""}
+  </div>`;
+}
+
+function pgPredmety(){
+  const p=DB.predmety;
+  const items=p.items.filter(i=>subjFilter==="all"||i.k===subjFilter);
+  return `
+  <p class="lede">${ed("predmety.lede",p.lede,"Úvod")}</p>
+  <div class="fchips">
+    <button class="fchip" data-filter="all" aria-pressed="${subjFilter==="all"}">Všetko (${p.items.length})</button>
+    ${Object.entries(KIND).map(([k,l])=>`<button class="fchip" data-filter="${k}" aria-pressed="${subjFilter===k}">${l} (${p.items.filter(i=>i.k===k).length})</button>`).join("")}
+  </div>
+  <div class="card">
+    ${items.map(i=>`<div class="subj-i" data-copy="${esc(i.t)}">
+      <span class="pill soft">${KIND[i.k]||i.k}</span>
+      <span class="t">${ed("predmety.items."+i.id+".t",i.t,"Predmet")}</span>
+      <span class="hint2">Kopírovať</span>
+      ${edit?`<button class="x" data-del="predmety.items|${i.id}">×</button>`:""}
+    </div>`).join("")||`<p style="color:var(--mut)">V tejto skupine zatiaľ nič.</p>`}
+    ${edit?`<button class="addbtn" style="margin-top:14px" data-add="predmety.items|subj">+ Pridať predmet</button>`:""}
+  </div>
+  <div class="note" style="margin-top:16px">Predmet a preheader tvoria dvojicu. Predmet povie tému, preheader dôvod otvoriť — nikdy nezopakuj to isté dvakrát.</div>`;
+}
+
+const RENDER={preco:pgPreco,zoznam:pgZoznam,uvitacia:pgUvitacia,list:pgList,vlna:pgVlna,
+  automaty:pgAutomaty,kalendar:pgKalendar,cisla:pgCisla,checklist:pgChecklist,predmety:pgPredmety};
+
+function renderNav(){
+  let h="",g="",i=0;
+  PAGES.forEach(p=>{
+    i++;
+    if(p.g!==g){g=p.g;h+=`<div class="navgroup">${g}</div>`}
+    h+=`<a href="#${p.id}" data-p="${p.id}" ${p.id===page?'aria-current="true"':""}><i>${String(i).padStart(2,"0")}</i>${p.n}</a>`;
+  });
+  document.getElementById("nav").innerHTML=h;
+}
+function render(){
+  const p=PAGES.find(x=>x.id===page)||PAGES[0];
+  renderNav();
+  document.getElementById("ttl").textContent=p.h;
+  document.getElementById("sub").innerHTML=ed("meta.sub",DB.meta.sub,"Podnadpis");
+  document.getElementById("page").innerHTML=
+    `<div class="eyebrow">${esc(p.eb)}</div><h3>${esc(p.h)}</h3>`+
+    (edit?`<div class="editnote">Režim úprav je zapnutý. Každý text sa dá prepísať kliknutím, položky sa dajú pridávať a mazať.</div>`:"")+
+    RENDER[p.id]();
+  document.getElementById("bEdit").textContent=edit?"Hotovo, zavrieť úpravy":"Režim úprav";
+  document.getElementById("bEdit").classList.toggle("dark",!edit);
+  setStatus();
+}
+
+/* ================= UDALOSTI ================= */
+document.addEventListener("input",e=>{
+  const el=e.target.closest("[data-k]");
+  if(el&&el.isContentEditable){set(el.dataset.k,el.innerText.replace(/ /g," "));touch()}
+});
+document.addEventListener("change",e=>{
+  const f=e.target.closest("[data-f]");
+  if(f){set(f.dataset.f,f.type==="number"?(f.value===""?null:Number(f.value)):f.value);touch();
+    if(f.dataset.f.startsWith("cisla.")||f.dataset.f.endsWith(".d")||f.dataset.f.endsWith(".stav"))render();
+    return}
+  const c=e.target.closest("[data-c]");
+  if(c){set(c.dataset.c,c.checked);touch();render()}
+});
+
+const TPL={
+  line:()=>({id:uid(),t:""}),
+  card:()=>({id:uid(),t:"",d:""}),
+  mail:()=>({id:uid(),when:"",subj:"",pre:"",body:"",cta:"",seg:"",note:""}),
+  kal:()=>({id:uid(),m:DB.month,d:DB.month+"-01",typ:"List",subj:"",seg:"",stav:"napad"}),
+  cislo:()=>({id:uid(),d:new Date().toISOString().slice(0,10),subj:"",seg:"",odoslane:null,otvor:null,klik:null,odhl:null}),
+  chk:()=>({id:uid(),t:"",on:false}),
+  subj:()=>({id:uid(),k:subjFilter==="all"?"list":subjFilter,t:""})
+};
+document.addEventListener("click",e=>{
+  const nav=e.target.closest("nav a[data-p]");
+  if(nav){e.preventDefault();page=nav.dataset.p;window.scrollTo(0,0);render();return}
+
+  const add=e.target.closest("[data-add]");
+  if(add){
+    const [path,kind]=add.dataset.add.split("|");
+    const arr=get(path);if(Array.isArray(arr)){arr.push(TPL[kind]());touch();render()}
+    return;
+  }
+  const del=e.target.closest("[data-del]");
+  if(del){
+    const [path,id]=del.dataset.del.split("|");
+    const arr=get(path);
+    if(Array.isArray(arr)){
+      const i=arr.findIndex(x=>x.id===id);
+      if(i>-1){arr.splice(i,1);touch();render()}
+    }
+    return;
+  }
+  const mt=e.target.closest("[data-m]");
+  if(mt){DB.month=mt.dataset.m;touch();render();return}
+  if(e.target.closest("[data-addmonth]")){
+    const [y,m]=DB.month.split("-").map(Number);
+    const d=new Date(y,m,1);
+    DB.month=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+    touch();render();return;
+  }
+  const fc=e.target.closest("[data-filter]");
+  if(fc){subjFilter=fc.dataset.filter;render();return}
+  if(e.target.closest("[data-reset]")){DB.checklist.items.forEach(i=>i.on=false);touch();render();return}
+
+  const cm=e.target.closest("[data-copymail]");
+  if(cm){copy(mailText(cm.dataset.copymail),"E-mail skopírovaný");return}
+  const cp=e.target.closest("[data-copy]");
+  if(cp&&!e.target.closest("[contenteditable='true']")){copy(cp.dataset.copy,"Predmet skopírovaný");return}
+});
+function copy(txt,msg){
+  const done=()=>toast(msg);
+  if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(txt).then(done,()=>fallback(txt,done))}
+  else fallback(txt,done);
+}
+function fallback(txt,done){
+  const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand("copy");done()}catch(e){toast("Kopírovanie sa nepodarilo")}
+  ta.remove();
+}
+
+document.getElementById("bEdit").addEventListener("click",()=>{edit=!edit;render()});
+document.getElementById("bPrint").addEventListener("click",()=>window.print());
+
+function dl(txt,name,mime){
+  const b=new Blob([txt],{type:mime});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+}
+document.getElementById("bExport").addEventListener("click",()=>{
+  DB.updated=Date.now();
+  dl(JSON.stringify(DB,null,2),"kolektiv-email-"+new Date().toISOString().slice(0,10)+".json","application/json");
+  dirty=false;setStatus();
+});
+document.getElementById("bImport").addEventListener("click",()=>document.getElementById("fImport").click());
+document.getElementById("fImport").addEventListener("change",async e=>{
+  const f=e.target.files[0];if(!f)return;
+  try{
+    const d=JSON.parse(await f.text());
+    if(!d.preco||!d.uvitacia)throw new Error("zlý súbor");
+    DB=d;const s=seedData();Object.keys(s).forEach(k=>{if(DB[k]===undefined)DB[k]=s[k]});
+    persist();dirty=false;render();toast("Dáta načítané");
+  }catch(err){alert("Súbor sa nepodarilo načítať. Musí to byť .json z tlačidla Export dát.")}
+  e.target.value="";
+});
+document.getElementById("bSave").addEventListener("click",()=>{
+  DB.updated=Date.now();
+  const wasEdit=edit;edit=false;render();
+  const doc=document.documentElement.cloneNode(true);
+  doc.querySelector("#seed").textContent=JSON.stringify(DB);
+  doc.querySelectorAll(".toast").forEach(t=>t.remove());
+  dl("<!DOCTYPE html>\n"+doc.outerHTML,"kolektiv-email.html","text/html");
+  edit=wasEdit;render();dirty=false;setStatus();
+  toast("Stránka uložená aj s obsahom");
+});
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue=""}});
+window.addEventListener("hashchange",()=>{
+  const id=location.hash.slice(1);
+  if(PAGES.some(p=>p.id===id)&&id!==page){page=id;render()}
+});
+
+loadDB();
+const h=location.hash.slice(1);
+if(PAGES.some(p=>p.id===h))page=h;
+render();
+dirty=false;setStatus();
+</script>
+</body>
+</html>
