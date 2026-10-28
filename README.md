@@ -9,6 +9,7 @@ a nič sa nekompiluje.
 | GoMerch — obsahový hub | `index.html` | `/` |
 | Riadiaci panel Kolektívu | `kolektiv/index.html` | `/kolektiv/` |
 | Minifestival — plán stanovíšť | `minifestival/index.html` | `/minifestival/` |
+| Helper Model RV2 — produktová stránka | `helper-rv2/index.html` | `/helper-rv2/` |
 
 ---
 

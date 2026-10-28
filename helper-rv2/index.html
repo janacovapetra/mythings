@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Helper Model RV2</title>
+<meta name="description" content="Helper Model RV2 — an autonomous electric delivery vehicle.">
+<meta name="theme-color" content="#000000">
+<meta name="color-scheme" content="dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" href="rv2.mp4" as="fetch" type="video/mp4" crossorigin>
+<style>
+/* ---------- tokens ---------- */
+:root{
+  --bg:#000;
+  --ink:#fff;
+  --ink-2:rgba(255,255,255,.72);
+  --ink-3:rgba(255,255,255,.5);
+  --line:rgba(255,255,255,.22);
+  --glass:rgba(18,18,20,.55);
+  --glass-line:rgba(255,255,255,.16);
+
+  --f-head:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+
+  /* one gutter for header and sections, so right-side content lines up with the nav pill */
+  --gx:clamp(16px,3.2vw,44px);
+  --gy:clamp(16px,3vw,32px);
+  --header-h:56px;
+
+  --ease:cubic-bezier(.76,0,.24,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --snap:1.15s;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden;overscroll-behavior:none}
+body{font-family:var(--f-head);-webkit-font-smoothing:antialiased;touch-action:none}
+button,a{font:inherit;color:inherit;text-decoration:none}
+button{background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+h1,h2,h3,.num{font-family:var(--f-head);font-weight:600}
+.mono{font-family:var(--f-mono);font-weight:400;text-transform:uppercase;letter-spacing:.14em;font-size:11px}
+
+/* ---------- background video ---------- */
+.stage{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg)}
+.stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.stage::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.1) 32%,rgba(0,0,0,.18) 58%,rgba(0,0,0,.82) 100%),
+    radial-gradient(120% 90% at 50% 45%,rgba(0,0,0,0) 40%,rgba(0,0,0,.55) 100%);
+}
+
+/* ---------- header ---------- */
+.header{
+  position:fixed;z-index:20;top:var(--gy);left:var(--gx);right:var(--gx);
+  display:flex;align-items:center;justify-content:space-between;height:var(--header-h);
+  pointer-events:none;
+}
+.header > *{pointer-events:auto}
+.logo{
+  width:44px;height:44px;border-radius:12px;background:var(--ink);color:var(--bg);
+  display:grid;place-items:center;flex:none;
+}
+.logo svg{width:22px;height:22px}
+.nav{
+  display:flex;align-items:center;gap:6px;background:var(--ink);color:var(--bg);
+  border-radius:999px;padding:5px 5px 5px 8px;height:52px;
+}
+.burger{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:var(--bg);transition:background .2s}
+.burger:hover{background:rgba(0,0,0,.07)}
+.burger span{display:block;width:18px;height:1.5px;background:currentColor;position:relative;transition:transform .35s var(--ease-out),background .2s}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:1.5px;background:currentColor;transition:transform .35s var(--ease-out)}
+.burger span::before{transform:translateY(-6px)}
+.burger span::after{transform:translateY(6px)}
+.menu-open .burger span{background:transparent}
+.menu-open .burger span::before{transform:rotate(45deg)}
+.menu-open .burger span::after{transform:rotate(-45deg)}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  height:44px;padding:0 22px;border-radius:999px;white-space:nowrap;
+  font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+  transition:transform .3s var(--ease-out),background .25s,border-color .25s,color .25s;
+}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-solid{background:var(--ink);color:var(--bg)}
+.btn-solid:hover{background:#e6e6e6}
+.btn-glass{
+  background:var(--glass);color:var(--ink);border:1px solid var(--glass-line);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);backdrop-filter:blur(16px) saturate(140%);
+}
+.btn-glass:hover{background:rgba(40,40,44,.65);border-color:rgba(255,255,255,.3)}
+.nav .btn-glass{background:rgba(12,12,14,.88);border-color:rgba(0,0,0,.2);height:42px}
+.nav .btn-glass:hover{background:rgba(12,12,14,.76)}
+.btn .arrow{width:12px;height:12px}
+
+/* ---------- menu overlay ---------- */
+.menu{
+  position:fixed;inset:0;z-index:15;display:flex;flex-direction:column;justify-content:center;
+  padding:calc(var(--gy) + var(--header-h) + 24px) var(--gx) var(--gy);
+  background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);
+  opacity:0;visibility:hidden;transition:opacity .45s var(--ease-out),visibility 0s linear .45s;
+}
+.menu-open .menu{opacity:1;visibility:visible;transition:opacity .45s var(--ease-out)}
+.menu ol{list-style:none;display:flex;flex-direction:column;gap:6px}
+.menu a{
+  display:flex;align-items:baseline;gap:18px;font-weight:600;
+  font-size:clamp(40px,8vw,96px);line-height:1.02;letter-spacing:-.04em;
+  opacity:0;transform:translateY(24px);transition:opacity .5s var(--ease-out),transform .6s var(--ease-out),color .2s;
+}
+.menu a .mono{color:var(--ink-3);letter-spacing:.14em}
+.menu a:hover{color:var(--ink-2)}
+.menu-open .menu a{opacity:1;transform:none}
+.menu-open .menu li:nth-child(2) a{transition-delay:.06s}
+.menu-open .menu li:nth-child(3) a{transition-delay:.12s}
+
+/* ---------- section track ---------- */
+.track{position:fixed;inset:0;z-index:5;transition:transform var(--snap) var(--ease);will-change:transform}
+.panel{
+  position:absolute;left:0;right:0;height:100%;
+  padding:calc(var(--gy) + var(--header-h) + 28px) var(--gx) var(--gy);
+}
+.panel:nth-child(1){top:0}
+.panel:nth-child(2){top:100%}
+.panel:nth-child(3){top:200%}
+
+/* arrival reveal: fade + slight upward slide, staggered with --d */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .5s var(--ease-out),transform .6s var(--ease-out)}
+.panel.is-active .rv{
+  opacity:1;transform:none;
+  transition:opacity 1s var(--ease-out) calc(.45s + var(--d,0) * .09s),transform 1.2s var(--ease-out) calc(.45s + var(--d,0) * .09s);
+}
+.panel .mono{text-shadow:0 1px 14px rgba(0,0,0,.7)}
+.panel.is-first .rv{transition-delay:calc(.15s + var(--d,0) * .09s)}
+
+/* ---------- 1 · hero ---------- */
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center}
+.hero .eyebrow{margin-top:clamp(8px,4vh,48px);color:var(--ink-2)}
+.hero h1{
+  margin-top:clamp(14px,2.4vh,24px);
+  font-size:clamp(56px,13.2vw,208px);line-height:.86;letter-spacing:-.055em;
+}
+.hero h1 span{display:block}
+.hero .cta{margin-top:auto;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.scroll{
+  margin-top:clamp(18px,3.4vh,34px);display:flex;flex-direction:column;align-items:center;gap:10px;
+  color:var(--ink-3);
+}
+.scroll i{display:block;width:1px;height:26px;background:linear-gradient(var(--ink-3),transparent);transform-origin:top;animation:drip 2.2s var(--ease) infinite}
+@keyframes drip{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+
+/* ---------- 2 · technology ---------- */
+.tech{display:flex;align-items:flex-end;justify-content:space-between;gap:48px}
+.label{color:var(--ink-2);display:flex;align-items:center;gap:12px}
+.label::before{content:"";width:18px;height:1px;background:currentColor}
+.tech h2{
+  margin-top:18px;font-size:clamp(40px,6.4vw,104px);line-height:.94;letter-spacing:-.045em;
+}
+.tech h2 span{display:block}
+.stats{display:flex;gap:clamp(24px,4vw,64px);text-align:left;flex:none}
+.stat .num{font-size:clamp(36px,4.6vw,72px);line-height:1;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.stat .num small{font-size:.5em;letter-spacing:-.02em;margin-left:2px;vertical-align:.62em}
+.stat .mono{display:block;margin-top:12px;color:var(--ink-3);line-height:1.6}
+
+/* ---------- 3 · architecture ---------- */
+.arch{display:flex;flex-direction:column;justify-content:space-between}
+.arch-top{align-self:flex-end;display:flex;align-items:flex-start;gap:clamp(24px,3.4vw,52px);max-width:840px}
+.arch-top h2{font-size:clamp(30px,3.6vw,54px);line-height:1;letter-spacing:-.04em;max-width:9.5em;text-align:left}
+.pct{display:flex;flex-direction:column;gap:12px;padding-top:4px;flex:none}
+.pct .num{font-size:clamp(44px,5vw,80px);line-height:.9;letter-spacing:-.05em}
+.pct p{color:var(--ink-2);line-height:1.65;font-size:11px}
+.arch-bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:40px}
+.specs{display:flex;gap:clamp(24px,4vw,64px)}
+.spec .num{font-size:clamp(40px,5.4vw,88px);line-height:.9;letter-spacing:-.05em;white-space:nowrap}
+.spec .num small{font-size:.36em;letter-spacing:-.01em;margin-left:4px;color:var(--ink-2)}
+.spec .mono{display:block;margin-top:12px;color:var(--ink-3)}
+.arch-right{display:flex;flex-direction:column;align-items:flex-end;gap:16px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;list-style:none}
+.chip{
+  border:1px solid var(--line);border-radius:8px;padding:8px 12px;
+  font-family:var(--f-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);
+  background:rgba(0,0,0,.25);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.arch-right .cta{display:flex;gap:10px}
+
+/* ---------- section index (right edge) ---------- */
+.pager{
+  position:fixed;z-index:10;right:var(--gx);top:50%;transform:translateY(-50%);
+  display:flex;flex-direction:column;gap:10px;
+}
+.pager button{width:22px;height:22px;display:grid;place-items:center}
+.pager button::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--ink-3);transition:all .4s var(--ease-out)}
+.pager button[aria-current="true"]::before{background:var(--ink);height:18px;border-radius:3px}
+
+/* ---------- small screens ---------- */
+@media (max-width:900px){
+  .tech{flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:36px}
+  .arch-top{align-self:stretch;flex-direction:column;gap:18px}
+  .arch-bottom{flex-direction:column;align-items:stretch;gap:24px}
+  .arch-right{align-items:flex-start}
+  .chips{justify-content:flex-start}
+  .pager{display:none}
+}
+@media (max-width:560px){
+  :root{--header-h:48px}
+  .logo{width:40px;height:40px;border-radius:11px}
+  .nav{height:48px;padding:4px 4px 4px 6px}
+  .nav .btn-glass{height:40px;padding:0 16px}
+  .burger{width:38px;height:38px}
+  .hero .cta .btn,.arch-right .cta .btn{flex:1;padding:0 14px}
+  .hero .cta,.arch-right .cta{width:100%}
+  .stats{width:100%;justify-content:space-between;gap:12px}
+  .specs{justify-content:space-between;gap:12px}
+  .stat .mono,.spec .mono{font-size:9.5px;letter-spacing:.1em}
+  .arch-top h2{max-width:none}
+  .hero h1{font-size:22vw}
+  .pct{flex-direction:row;align-items:center;gap:16px}
+  .panel{padding-top:calc(var(--gy) + var(--header-h) + 20px)}
+}
+@media (max-height:640px) and (max-width:560px){
+  .arch-top h2{font-size:26px}
+  .pct .num{font-size:38px}
+  .spec .num{font-size:34px}
+  .chips{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  :root{--snap:.01s}
+  .rv,.panel.is-active .rv{transition:opacity .3s linear;transform:none}
+  .scroll i{animation:none}
+}
+</style>
+</head>
+<body>
+
+<div class="stage" aria-hidden="true">
+  <video id="bg" muted playsinline preload="auto" poster="poster.jpg"></video>
+</div>
+
+<header class="header">
+  <a class="logo" href="#hero" data-go="0" aria-label="Helper — home">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5 3.5v17M19 3.5v17M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+  </a>
+  <nav class="nav" aria-label="Main">
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span></button>
+    <a class="btn btn-glass" href="#join">Join the club</a>
+  </nav>
+</header>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <ol>
+    <li><a href="#hero" data-go="0"><span class="mono">01</span>Model RV2</a></li>
+    <li><a href="#technology" data-go="1"><span class="mono">02</span>Technology</a></li>
+    <li><a href="#architecture" data-go="2"><span class="mono">03</span>Architecture</a></li>
+  </ol>
+</div>
+
+<nav class="pager" aria-label="Sections">
+  <button data-go="0" aria-label="Hero" aria-current="true"></button>
+  <button data-go="1" aria-label="Technology"></button>
+  <button data-go="2" aria-label="Architecture"></button>
+</nav>
+
+<main class="track" id="track">
+
+  <section class="panel hero is-active is-first" id="hero" aria-label="Helper Model RV2">
+    <p class="mono eyebrow rv" style="--d:0">Autonomous electric delivery</p>
+    <h1 class="rv" style="--d:1"><span>Helper</span><span>Model</span><span>RV2</span></h1>
+    <div class="cta rv" style="--d:3">
+      <a class="btn btn-solid" href="#reserve">Reserve now</a>
+      <a class="btn btn-glass" href="#film">
+        <svg class="arrow" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.8v8.4L10 6z" fill="currentColor"/></svg>
+        Watch the film
+      </a>
+    </div>
+    <button class="scroll mono rv" style="--d:4" data-go="1" aria-label="Scroll to next section">Scroll<i></i></button>
+  </section>
+
+  <section class="panel tech" id="technology" aria-label="Technology">
+    <div>
+      <p class="mono label rv" style="--d:0">02 — Technology</p>
+      <h2 class="rv" style="--d:1"><span>Sees every street.</span><span>Drives itself home.</span></h2>
+    </div>
+    <div class="stats">
+      <div class="stat rv" style="--d:2">
+        <div class="num"><span data-count="360">0</span><small>°</small></div>
+        <span class="mono">Lidar field<br>of view</span>
+      </div>
+      <div class="stat rv" style="--d:3">
+        <div class="num"><span data-count="14">0</span></div>
+        <span class="mono">Cameras &amp;<br>radar units</span>
+      </div>
+      <div class="stat rv" style="--d:4">
+        <div class="num"><span data-count="99.8" data-decimals="1">0</span><small>%</small></div>
+        <span class="mono">On-time<br>deliveries</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel arch" id="architecture" aria-label="Architecture">
+    <div class="arch-top">
+      <h2 class="rv" style="--d:0">Engineered from the ground up.</h2>
+      <div class="pct rv" style="--d:1">
+        <div class="num"><span data-count="92">0</span>%</div>
+        <p class="mono">Recyclable aluminium body<br>on a modular skateboard chassis</p>
+      </div>
+    </div>
+    <div class="arch-bottom">
+      <div class="specs">
+        <div class="spec rv" style="--d:2"><div class="num">240<small>km</small></div><span class="mono">Range</span></div>
+        <div class="spec rv" style="--d:3"><div class="num">450<small>kg</small></div><span class="mono">Payload</span></div>
+        <div class="spec rv" style="--d:4"><div class="num">45<small>km/h</small></div><span class="mono">Top speed</span></div>
+      </div>
+      <div class="arch-right">
+        <ul class="chips rv" style="--d:3">
+          <li class="chip">Level 4</li>
+          <li class="chip">IP67</li>
+          <li class="chip">800V</li>
+          <li class="chip">OTA</li>
+        </ul>
+        <div class="cta rv" style="--d:4">
+          <a class="btn btn-solid" href="#configure">Configure RV2</a>
+          <a class="btn btn-glass" href="#specs">Full spec sheet</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(() => {
+  const VIDEO_SRC = 'rv2.mp4';
+  const panels = [...document.querySelectorAll('.panel')];
+  const track = document.getElementById('track');
+  const pagerBtns = [...document.querySelectorAll('.pager button')];
+  const video = document.getElementById('bg');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SNAP_MS = reduced ? 50 : 1150;
+
+  let index = 0;
+  let lockedUntil = 0;
+
+  /* ---------- video scrubbing ---------- */
+  // Load the whole file as a blob so every frame is seekable without range requests.
+  fetch(VIDEO_SRC).then(r => r.ok ? r.blob() : Promise.reject())
+    .then(b => { video.src = URL.createObjectURL(b); })
+    .catch(() => { video.src = VIDEO_SRC; });
+
+  let vTarget = 0, vCurrent = 0, vLast = performance.now();
+  video.addEventListener('loadedmetadata', () => { vCurrent = vTarget * video.duration; video.currentTime = vCurrent; });
+
+  function tick(now) {
+    const dt = Math.min(64, now - vLast); vLast = now;
+    const dur = video.duration;
+    if (dur && isFinite(dur)) {
+      const goal = vTarget * (dur - 0.05);
+      // critically damped approach: slow, cinematic drift towards the section's frame
+      const k = reduced ? 1 : 1 - Math.exp(-dt / 420);
+      vCurrent += (goal - vCurrent) * k;
+      if (Math.abs(goal - vCurrent) < 0.002) vCurrent = goal;
+      if (!video.seeking && Math.abs(video.currentTime - vCurrent) > 0.008) video.currentTime = vCurrent;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  /* ---------- counters ---------- */
+  function runCounters(panel) {
+    panel.querySelectorAll('[data-count]').forEach((el, i) => {
+      const end = parseFloat(el.dataset.count);
+      const dec = +(el.dataset.decimals || 0);
+      const start = performance.now() + (reduced ? 0 : 550 + i * 90);
+      const dur = reduced ? 1 : 1600;
+      el.textContent = (0).toFixed(dec);
+      const step = now => {
+        const t = Math.min(1, Math.max(0, (now - start) / dur));
+        const e = 1 - Math.pow(1 - t, 4);
+        el.textContent = (end * e).toFixed(dec);
+        if (t < 1 && panel.classList.contains('is-active')) requestAnimationFrame(step);
+        else if (t >= 1) el.textContent = end.toFixed(dec);
+      };
+      requestAnimationFrame(step);
+    });
+  }
+
+  /* ---------- navigation ---------- */
+  function go(i, force) {
+    i = Math.max(0, Math.min(panels.length - 1, i));
+    if (i === index && !force) return;
+    index = i;
+    lockedUntil = performance.now() + SNAP_MS;
+    track.style.transform = `translate3d(0, ${-i * 100}%, 0)`;
+    panels.forEach((p, n) => {
+      p.classList.toggle('is-active', n === i);
+      p.classList.remove('is-first');
+      p.toggleAttribute('inert', n !== i);
+    });
+    pagerBtns.forEach((b, n) => b.setAttribute('aria-current', n === i ? 'true' : 'false'));
+    vTarget = i / (panels.length - 1);
+    runCounters(panels[i]);
+    history.replaceState(null, '', '#' + panels[i].id);
+  }
+  const step = dir => { if (performance.now() >= lockedUntil) go(index + dir); };
+
+  // Wheel / trackpad: one gesture = one section. Ignore the decaying inertia tail.
+  let lastDelta = 0, lastWheel = 0;
+  addEventListener('wheel', e => {
+    e.preventDefault();
+    if (menuOpen()) return;
+    const now = performance.now();
+    const d = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    const decaying = now - lastWheel < 120 && Math.abs(d) <= Math.abs(lastDelta);
+    lastDelta = d; lastWheel = now;
+    if (Math.abs(d) < 6 || decaying) return;
+    step(d > 0 ? 1 : -1);
+  }, { passive: false });
+
+  // Touch swipe
+  let ty = null;
+  addEventListener('touchstart', e => { ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchmove', e => { if (!e.target.closest('.menu')) e.preventDefault(); }, { passive: false });
+  addEventListener('touchend', e => {
+    if (ty == null || menuOpen()) return;
+    const dy = ty - e.changedTouches[0].clientY; ty = null;
+    if (Math.abs(dy) > 40) step(dy > 0 ? 1 : -1);
+  });
+
+  // Keyboard
+  addEventListener('keydown', e => {
+    if (e.key === 'Escape' && menuOpen()) return setMenu(false);
+    if (menuOpen() || e.target.closest('input,textarea')) return;
+    const k = e.key;
+    if (['ArrowDown', 'PageDown', ' '].includes(k)) { e.preventDefault(); step(e.shiftKey && k === ' ' ? -1 : 1); }
+    else if (['ArrowUp', 'PageUp'].includes(k)) { e.preventDefault(); step(-1); }
+    else if (k === 'Home') { e.preventDefault(); go(0); }
+    else if (k === 'End') { e.preventDefault(); go(panels.length - 1); }
+  });
+
+  // Anything with data-go (logo, pager, menu links, scroll cue)
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-go]');
+    if (!t) return;
+    e.preventDefault();
+    setMenu(false);
+    go(+t.dataset.go);
+  });
+
+  // Focus moving into a hidden section (tabbing) brings it into view
+  panels.forEach((p, n) => p.addEventListener('focusin', () => go(n)));
+
+  /* ---------- menu ---------- */
+  const burger = document.getElementById('burger');
+  const menu = document.getElementById('menu');
+  const menuOpen = () => document.body.classList.contains('menu-open');
+  function setMenu(open) {
+    document.body.classList.toggle('menu-open', open);
+    burger.setAttribute('aria-expanded', open);
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menu.setAttribute('aria-hidden', !open);
+  }
+  burger.addEventListener('click', () => setMenu(!menuOpen()));
+
+  /* ---------- start ---------- */
+  const startAt = panels.findIndex(p => '#' + p.id === location.hash);
+  if (startAt > 0) {
+    track.style.transition = 'none';
+    go(startAt, true);
+    track.offsetHeight; track.style.transition = '';
+  } else {
+    runCounters(panels[0]);
+    panels.forEach((p, n) => p.toggleAttribute('inert', n !== 0));
+  }
+})();
+</script>
+</body>
+</html>
